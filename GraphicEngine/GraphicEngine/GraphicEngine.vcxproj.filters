@@ -13,5 +13,42 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Math">
+      <UniqueIdentifier>{92fa2af9-97c3-450c-b962-23b61c92be81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Math">
+      <UniqueIdentifier>{2394b27a-0c52-4558-a109-9ad4c80c561a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Math\Matrix3.h">
+      <Filter>Fichiers d%27en-tête\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Math\Matrix4.h">
+      <Filter>Fichiers d%27en-tête\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Math\Quaternion.h">
+      <Filter>Fichiers d%27en-tête\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Math\Vector2.h">
+      <Filter>Fichiers d%27en-tête\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Math\Vector3.h">
+      <Filter>Fichiers d%27en-tête\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\config.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prerequisites.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Math\Math.h">
+      <Filter>Fichiers d%27en-tête\Math</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Math\Vector3.cpp">
+      <Filter>Fichiers sources\Math</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
