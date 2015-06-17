@@ -6,6 +6,7 @@
 
 class Matrix3
 {
+public:
 	Matrix3(const float* data = nullptr);
 	Matrix3(const Matrix3&);
 	~Matrix3();

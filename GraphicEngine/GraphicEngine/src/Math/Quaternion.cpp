@@ -1,5 +1,7 @@
 #include "Math/Quaternion.h"
 
+#include <cmath>
+
 Quaternion::Quaternion() : w(1), x(0), y(0), z(0){}
 Quaternion::Quaternion(float fW, float fX, float fY, float fZ) : w(fW), x(fX), y(fY), z(fZ){}
 Quaternion::Quaternion(const Matrix3& rot){ this->FromRotationMatrix(rot); }
@@ -49,7 +51,7 @@ void Quaternion::FromRotationMatrix(const Matrix3& kRot){
 		size_t k = s_iNext[j];
 
 		fRoot = sqrt(kRot[i][i] - kRot[j][j] - kRot[k][k] + 1.0f);
-		Real* apkQuat[3] = { &x, &y, &z };
+		float* apkQuat[3] = { &x, &y, &z };
 		*apkQuat[i] = 0.5f*fRoot;
 		fRoot = 0.5f / fRoot;
 		w = (kRot[k][j] - kRot[j][k])*fRoot;
@@ -288,10 +290,10 @@ Quaternion Quaternion::Log() const{
 	if (abs(w) < 1.0)
 	{
 		float fAngle = acos(w);
-		Real fSin = sin(fAngle);
+		float fSin = sin(fAngle);
 		if (abs(fSin) >= msEpsilon)
 		{
-			Real fCoeff = fAngle / fSin;
+			float fCoeff = fAngle / fSin;
 			kResult.x = fCoeff*x;
 			kResult.y = fCoeff*y;
 			kResult.z = fCoeff*z;
@@ -321,7 +323,7 @@ float Quaternion::getRoll(bool reprojectAxis = true) const{
 	{
 		// roll = atan2(localx.y, localx.x)
 		// pick parts of xAxis() implementation that we need
-		//			Real fTx  = 2.0*x;
+		//			float fTx  = 2.0*x;
 		float fTy = 2.0f*y;
 		float fTz = 2.0f*z;
 		float fTwz = fTz*w;
@@ -345,7 +347,7 @@ float Quaternion::getPitch(bool reprojectAxis = true) const{
 		// pitch = atan2(localy.z, localy.y)
 		// pick parts of yAxis() implementation that we need
 		float fTx = 2.0f*x;
-		//			Real fTy  = 2.0f*y;
+		//			float fTy  = 2.0f*y;
 		float fTz = 2.0f*z;
 		float fTwx = fTx*w;
 		float fTxx = fTx*x;
@@ -390,7 +392,7 @@ bool Quaternion::equals(const Quaternion& rhs, const float& tolerance) const{
 	float angle = acos(fCos);
 
 	return (abs(angle) <= tolerance)
-		|| ((angle - PI) < tolerance);
+		|| ((angle - M_PI) < tolerance);
 }
 static Quaternion Slerp(float fT, const Quaternion& rkP, const Quaternion& rkQ, bool shortestPath = false){
 	float fCos = rkP.Dot(rkQ);
@@ -412,9 +414,9 @@ static Quaternion Slerp(float fT, const Quaternion& rkP, const Quaternion& rkQ, 
 		// Standard case (slerp)
 		float fSin = sqrt(1 - pow(fCos, 2));
 		float fAngle = atan2(fSin, fCos);
-		Real fInvSin = 1.0f / fSin;
-		Real fCoeff0 = sin((1.0f - fT) * fAngle) * fInvSin;
-		Real fCoeff1 = sin(fT * fAngle) * fInvSin;
+		float fInvSin = 1.0f / fSin;
+		float fCoeff0 = sin((1.0f - fT) * fAngle) * fInvSin;
+		float fCoeff1 = sin(fT * fAngle) * fInvSin;
 		return fCoeff0 * rkP + fCoeff1 * rkT;
 	}
 	else
@@ -439,7 +441,7 @@ static Quaternion SlerpExtraSpins(float fT, const Quaternion& rkP, const Quatern
 		return rkP;
 
 	float fSin = sin(fAngle);
-	float fPhase = PI*iExtraSpins*fT;
+	float fPhase = M_PI*iExtraSpins*fT;
 	float fInvSin = 1.0f / fSin;
 	float fCoeff0 = sin((1.0f - fT)*fAngle - fPhase)*fInvSin;
 	float fCoeff1 = sin(fT*fAngle + fPhase)*fInvSin;
