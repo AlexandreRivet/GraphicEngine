@@ -3,6 +3,9 @@
 
 #include "prerequisites.h"
 
+#include "Matrix3.h"
+#include "Vector3.h"
+
 class Quaternion
 {
 	public:
@@ -26,7 +29,6 @@ class Quaternion
 		void FromRotationMatrix(const Matrix3& kRot);
 		void ToRotationMatrix(Matrix3& kRot) const;
 		void FromAngleAxis(const float& rfAngle, const Vector3& rkAxis);
-		void ToAngleAxis(float& rfAngle, Vector3& rkAxis) const;
 		void ToAngleAxis(float& dAngle, Vector3& rkAxis) const;
 		void FromAxes(const Vector3* akAxis);
 		void FromAxes(const Vector3& xAxis, const Vector3& yAxis, const Vector3& zAxis);
