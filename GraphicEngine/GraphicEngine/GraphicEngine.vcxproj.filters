@@ -42,6 +42,9 @@
     <ClInclude Include="include\prerequisites.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="include\Math\Math.h">
+      <Filter>Fichiers d%27en-tête\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Math\Vector3.cpp">

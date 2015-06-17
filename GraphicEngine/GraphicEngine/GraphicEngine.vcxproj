@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\config.h" />
+    <ClInclude Include="include\Math\Math.h" />
     <ClInclude Include="include\Math\Matrix3.h" />
     <ClInclude Include="include\Math\Matrix4.h" />
     <ClInclude Include="include\Math\Quaternion.h" />
