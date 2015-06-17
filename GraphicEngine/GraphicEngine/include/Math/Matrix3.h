@@ -13,9 +13,6 @@ public:
 
 	Matrix3& operator = (const Matrix3&);
 
-
-
-
 	static Matrix3 getIdentity();
 	static Matrix3 getZero();
 	void identity();
