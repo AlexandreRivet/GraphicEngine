@@ -1,6 +1,6 @@
 #include "Math/Vector3.h"
 
-Vector3::Vector3(float _x = 0.0f, float _y = 0.0f, float _z = 0.0f) : x(_x), y(_y), z(_z)
+Vector3::Vector3(float _x, float _y, float _zs) : x(_x), y(_y), z(_z)
 {
 }
 
