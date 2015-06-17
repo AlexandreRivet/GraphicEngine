@@ -42,12 +42,21 @@
     <ClInclude Include="include\prerequisites.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="include\Math\Math.h">
-      <Filter>Fichiers d%27en-tête\Math</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Math\Vector3.cpp">
+      <Filter>Fichiers sources\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\Quaternion.cpp">
+      <Filter>Fichiers sources\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\Matrix3.cpp">
+      <Filter>Fichiers sources\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\Matrix4.cpp">
+      <Filter>Fichiers sources\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\Vector2.cpp">
       <Filter>Fichiers sources\Math</Filter>
     </ClCompile>
   </ItemGroup>

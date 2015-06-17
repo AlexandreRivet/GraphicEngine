@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\config.h" />
-    <ClInclude Include="include\Math\Math.h" />
     <ClInclude Include="include\Math\Matrix3.h" />
     <ClInclude Include="include\Math\Matrix4.h" />
     <ClInclude Include="include\Math\Quaternion.h" />
@@ -21,6 +20,10 @@
     <ClInclude Include="include\prerequisites.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Math\Matrix3.cpp" />
+    <ClCompile Include="src\Math\Matrix4.cpp" />
+    <ClCompile Include="src\Math\Quaternion.cpp" />
+    <ClCompile Include="src\Math\Vector2.cpp" />
     <ClCompile Include="src\Math\Vector3.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
