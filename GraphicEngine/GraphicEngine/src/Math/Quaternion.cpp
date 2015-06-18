@@ -127,7 +127,7 @@ void Quaternion::FromAxes(const Vector3* akAxis){
 
 	FromRotationMatrix(kRot);
 }
-void Quaternion::FromAxes(const Vector3& xAxis, const Vector3& yAxis, const Vector3& zAxis){
+void Quaternion::FromAxes(const Vector3& xaxis, const Vector3& yaxis, const Vector3& zaxis){
 	Matrix3 kRot;
 
 	kRot[0][0] = xaxis.x;
@@ -156,7 +156,7 @@ void Quaternion::ToAxes(Vector3* akAxis) const{
 		akAxis[iCol].z = kRot[2][iCol];
 	}
 }
-void Quaternion::ToAxes(Vector3& xAxis, Vector3& yAxis, Vector3& zAxis) const{
+void Quaternion::ToAxes(Vector3& xaxis, Vector3& yaxis, Vector3& zaxis) const{
 	Matrix3 kRot;
 
 	ToRotationMatrix(kRot);
@@ -455,7 +455,7 @@ static void Intermediate(const Quaternion& rkQ0, const Quaternion& rkQ1, const Q
 	Quaternion kArg = 0.25*(rkP0.Log() - rkP1.Log());
 	Quaternion kMinusArg = -kArg;
 
-	rkA = rkQ1*kArg.Exp();
+	rka = rkQ1*kArg.Exp();
 	rkB = rkQ1*kMinusArg.Exp();
 }
 static Quaternion Squad(float fT, const Quaternion& rkP, const Quaternion& rkA, const Quaternion& rkB, const Quaternion& rkQ, bool shortestPath = false){
