@@ -45,6 +45,9 @@
     <ClInclude Include="include\Math\Math.h">
       <Filter>Fichiers d%27en-tête\Math</Filter>
     </ClInclude>
+    <ClInclude Include="include\shaderManager.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Math\Vector3.cpp">
@@ -64,6 +67,9 @@
     </ClCompile>
     <ClCompile Include="src\Math\Math.cpp">
       <Filter>Fichiers sources\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shaderManager.cpp">
+      <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

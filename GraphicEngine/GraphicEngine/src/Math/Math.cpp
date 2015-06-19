@@ -6,6 +6,6 @@ namespace Math
 
     float UnitRandom()
     {
-        static unsigned __int64 q = time(NULL);
+        //static unsigned __int64 q = time(NULL);
     }
 }
