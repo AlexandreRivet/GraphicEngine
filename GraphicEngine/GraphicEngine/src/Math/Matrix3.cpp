@@ -162,24 +162,15 @@ Matrix3 Matrix3::Transpose() const
 //-----------------------------------------------------------------------
 bool Matrix3::Inverse(Matrix3& rkInverse, float fTolerance) const
 {
-    rkInverse[0][0] = m[1][1] * m[2][2] -
-        m[1][2] * m[2][1];
-    rkInverse[0][1] = m[0][2] * m[2][1] -
-        m[0][1] * m[2][2];
-    rkInverse[0][2] = m[0][1] * m[1][2] -
-        m[0][2] * m[1][1];
-    rkInverse[1][0] = m[1][2] * m[2][0] -
-        m[1][0] * m[2][2];
-    rkInverse[1][1] = m[0][0] * m[2][2] -
-        m[0][2] * m[2][0];
-    rkInverse[1][2] = m[0][2] * m[1][0] -
-        m[0][0] * m[1][2];
-    rkInverse[2][0] = m[1][0] * m[2][1] -
-        m[1][1] * m[2][0];
-    rkInverse[2][1] = m[0][1] * m[2][0] -
-        m[0][0] * m[2][1];
-    rkInverse[2][2] = m[0][0] * m[1][1] -
-        m[0][1] * m[1][0];
+    rkInverse[0][0] = m[1][1] * m[2][2] - m[1][2] * m[2][1];
+    rkInverse[0][1] = m[0][2] * m[2][1] - m[0][1] * m[2][2];
+    rkInverse[0][2] = m[0][1] * m[1][2] - m[0][2] * m[1][1];
+    rkInverse[1][0] = m[1][2] * m[2][0] - m[1][0] * m[2][2];
+    rkInverse[1][1] = m[0][0] * m[2][2] - m[0][2] * m[2][0];
+    rkInverse[1][2] = m[0][2] * m[1][0] - m[0][0] * m[1][2];
+    rkInverse[2][0] = m[1][0] * m[2][1] - m[1][1] * m[2][0];
+    rkInverse[2][1] = m[0][1] * m[2][0] - m[0][0] * m[2][1];
+    rkInverse[2][2] = m[0][0] * m[1][1] - m[0][1] * m[1][0];
 
     float fDet =
         m[0][0] * rkInverse[0][0] +
@@ -223,14 +214,12 @@ float Matrix3::Determinant() const
     return fDet;
 }
 //-----------------------------------------------------------------------
-void Matrix3::Bidiagonalize(Matrix3& kA, Matrix3& kL,
-    Matrix3& kR)
+void Matrix3::Bidiagonalize(Matrix3& kA, Matrix3& kL, Matrix3& kR)
 {
     float afV[3], afW[3];
     float fLength, fSign, fT1, fInvT1, fT2;
     bool bIdentity;
 
-    // map first column to (*,0,0)
     fLength = sqrt(kA[0][0] * kA[0][0] + kA[1][0] * kA[1][0] +
         kA[2][0] * kA[2][0]);
     if (fLength > 0.0)
@@ -267,7 +256,6 @@ void Matrix3::Bidiagonalize(Matrix3& kA, Matrix3& kL,
         bIdentity = true;
     }
 
-    // map first row to (*,*,0)
     fLength = sqrt(kA[0][1] * kA[0][1] + kA[0][2] * kA[0][2]);
     if (fLength > 0.0)
     {
@@ -297,7 +285,6 @@ void Matrix3::Bidiagonalize(Matrix3& kA, Matrix3& kL,
         kR = Matrix3::IDENTITY;
     }
 
-    // map second column to (*,*,0)
     fLength = sqrt(kA[1][1] * kA[1][1] + kA[2][1] * kA[2][1]);
     if (fLength > 0.0)
     {
@@ -338,8 +325,7 @@ void Matrix3::Bidiagonalize(Matrix3& kA, Matrix3& kL,
     }
 }
 //-----------------------------------------------------------------------
-void Matrix3::GolubKahanStep(Matrix3& kA, Matrix3& kL,
-    Matrix3& kR)
+void Matrix3::GolubKahanStep(Matrix3& kA, Matrix3& kL, Matrix3& kR)
 {
     float fT11 = kA[0][1] * kA[0][1] + kA[1][1] * kA[1][1];
     float fT22 = kA[1][2] * kA[1][2] + kA[2][2] * kA[2][2];
@@ -350,9 +336,7 @@ void Matrix3::GolubKahanStep(Matrix3& kA, Matrix3& kL,
     float fRoot1 = 0.5f*(fTrace + fDiscr);
     float fRoot2 = 0.5f*(fTrace - fDiscr);
 
-    // adjust right
-    float fY = kA[0][0] - (std::abs(fRoot1 - fT22) <=
-        std::abs(fRoot2 - fT22) ? fRoot1 : fRoot2);
+    float fY = kA[0][0] - (std::abs(fRoot1 - fT22) <= std::abs(fRoot2 - fT22) ? fRoot1 : fRoot2);
     float fZ = kA[0][1];
     float fInvLength = Math::invSqrt(fY*fY + fZ*fZ);
     float fSin = fZ*fInvLength;
@@ -374,7 +358,6 @@ void Matrix3::GolubKahanStep(Matrix3& kA, Matrix3& kL,
         kR[1][iRow] = fSin*fTmp0 + fCos*fTmp1;
     }
 
-    // adjust left
     fY = kA[0][0];
     fZ = kA[1][0];
     fInvLength = Math::invSqrt(fY*fY + fZ*fZ);
@@ -398,7 +381,6 @@ void Matrix3::GolubKahanStep(Matrix3& kA, Matrix3& kL,
         kL[iCol][1] = fSin*fTmp0 + fCos*fTmp1;
     }
 
-    // adjust right
     fY = kA[0][1];
     fZ = kA[0][2];
     fInvLength = Math::invSqrt(fY*fY + fZ*fZ);
@@ -421,7 +403,6 @@ void Matrix3::GolubKahanStep(Matrix3& kA, Matrix3& kL,
         kR[2][iRow] = fSin*fTmp0 + fCos*fTmp1;
     }
 
-    // adjust left
     fY = kA[1][1];
     fZ = kA[2][1];
     fInvLength = Math::invSqrt(fY*fY + fZ*fZ);
@@ -443,11 +424,8 @@ void Matrix3::GolubKahanStep(Matrix3& kA, Matrix3& kL,
     }
 }
 //-----------------------------------------------------------------------
-void Matrix3::SingularValueDecomposition(Matrix3& kL, Vector3& kS,
-    Matrix3& kR) const
+void Matrix3::SingularValueDecomposition(Matrix3& kL, Vector3& kS, Matrix3& kR) const
 {
-    // temas: currently unused
-    //const int iMax = 16;
     size_t iRow, iCol;
 
     Matrix3 kA = *this;
@@ -459,10 +437,8 @@ void Matrix3::SingularValueDecomposition(Matrix3& kL, Vector3& kS,
         float fSin0, fCos0, fTan0;
         float fSin1, fCos1, fTan1;
 
-        bool bTest1 = (std::abs(kA[0][1]) <=
-            msSvdEpsilon*(std::abs(kA[0][0]) + std::abs(kA[1][1])));
-        bool bTest2 = (std::abs(kA[1][2]) <=
-            msSvdEpsilon*(std::abs(kA[1][1]) + std::abs(kA[2][2])));
+        bool bTest1 = (std::abs(kA[0][1]) <= msSvdEpsilon*(std::abs(kA[0][0]) + std::abs(kA[1][1])));
+        bool bTest2 = (std::abs(kA[1][2]) <= msSvdEpsilon*(std::abs(kA[1][1]) + std::abs(kA[2][2])));
         if (bTest1)
         {
             if (bTest2)
@@ -474,9 +450,7 @@ void Matrix3::SingularValueDecomposition(Matrix3& kL, Vector3& kS,
             }
             else
             {
-                // 2x2 closed form factorization
-                fTmp = (kA[1][1] * kA[1][1] - kA[2][2] * kA[2][2] +
-                    kA[1][2] * kA[1][2]) / (kA[1][2] * kA[2][2]);
+                fTmp = (kA[1][1] * kA[1][1] - kA[2][2] * kA[2][2] + kA[1][2] * kA[1][2]) / (kA[1][2] * kA[2][2]);
                 fTan0 = 0.5f*(fTmp + sqrt(fTmp*fTmp + 4.0f));
                 fCos0 = Math::invSqrt(1.0f + fTan0*fTan0);
                 fSin0 = fTan0*fCos0;
@@ -502,10 +476,8 @@ void Matrix3::SingularValueDecomposition(Matrix3& kL, Vector3& kS,
                 }
 
                 kS[0] = kA[0][0];
-                kS[1] = fCos0*fCos1*kA[1][1] -
-                    fSin1*(fCos0*kA[1][2] - fSin0*kA[2][2]);
-                kS[2] = fSin0*fSin1*kA[1][1] +
-                    fCos1*(fSin0*kA[1][2] + fCos0*kA[2][2]);
+                kS[1] = fCos0*fCos1*kA[1][1] - fSin1*(fCos0*kA[1][2] - fSin0*kA[2][2]);
+                kS[2] = fSin0*fSin1*kA[1][1] + fCos1*(fSin0*kA[1][2] + fCos0*kA[2][2]);
                 break;
             }
         }
@@ -513,9 +485,7 @@ void Matrix3::SingularValueDecomposition(Matrix3& kL, Vector3& kS,
         {
             if (bTest2)
             {
-                // 2x2 closed form factorization
-                fTmp = (kA[0][0] * kA[0][0] + kA[1][1] * kA[1][1] -
-                    kA[0][1] * kA[0][1]) / (kA[0][1] * kA[1][1]);
+                fTmp = (kA[0][0] * kA[0][0] + kA[1][1] * kA[1][1] - kA[0][1] * kA[0][1]) / (kA[0][1] * kA[1][1]);
                 fTan0 = 0.5f*(-fTmp + sqrt(fTmp*fTmp + 4.0f));
                 fCos0 = Math::invSqrt(1.0f + fTan0*fTan0);
                 fSin0 = fTan0*fCos0;
@@ -540,10 +510,8 @@ void Matrix3::SingularValueDecomposition(Matrix3& kL, Vector3& kS,
                     kR[1][iRow] = fSin1*fTmp0 + fCos1*fTmp1;
                 }
 
-                kS[0] = fCos0*fCos1*kA[0][0] -
-                    fSin1*(fCos0*kA[0][1] - fSin0*kA[1][1]);
-                kS[1] = fSin0*fSin1*kA[0][0] +
-                    fCos1*(fSin0*kA[0][1] + fCos0*kA[1][1]);
+                kS[0] = fCos0*fCos1*kA[0][0] - fSin1*(fCos0*kA[0][1] - fSin0*kA[1][1]);
+                kS[1] = fSin0*fSin1*kA[0][0] + fCos1*(fSin0*kA[0][1] + fCos0*kA[1][1]);
                 kS[2] = kA[2][2];
                 break;
             }
@@ -554,7 +522,6 @@ void Matrix3::SingularValueDecomposition(Matrix3& kL, Vector3& kS,
         }
     }
 
-    // positize diagonal
     for (iRow = 0; iRow < 3; iRow++)
     {
         if (kS[iRow] < 0.0)
@@ -572,14 +539,12 @@ void Matrix3::SingularValueComposition(const Matrix3& kL,
     size_t iRow, iCol;
     Matrix3 kTmp;
 
-    // product S*R
     for (iRow = 0; iRow < 3; iRow++)
     {
         for (iCol = 0; iCol < 3; iCol++)
             kTmp[iRow][iCol] = kS[iRow] * kR[iRow][iCol];
     }
 
-    // product L*S*R
     for (iRow = 0; iRow < 3; iRow++)
     {
         for (iCol = 0; iCol < 3; iCol++)
@@ -593,124 +558,67 @@ void Matrix3::SingularValueComposition(const Matrix3& kL,
 //-----------------------------------------------------------------------
 void Matrix3::Orthonormalize()
 {
-    // Algorithm uses Gram-Schmidt orthogonalization.  If 'this' matrix is
-    // M = [m0|m1|m2], then orthonormal output matrix is Q = [q0|q1|q2],
-    //
-    //   q0 = m0/|m0|
-    //   q1 = (m1-(q0*m1)q0)/|m1-(q0*m1)q0|
-    //   q2 = (m2-(q0*m2)q0-(q1*m2)q1)/|m2-(q0*m2)q0-(q1*m2)q1|
-    //
-    // where |V| indicates length of vector V and A*B indicates dot
-    // product of vectors A and B.
-
-    // compute q0
-    float fInvLength = Math::invSqrt(m[0][0] * m[0][0]
-        + m[1][0] * m[1][0] +
-        m[2][0] * m[2][0]);
+    float fInvLength = Math::invSqrt(m[0][0] * m[0][0] + m[1][0] * m[1][0] + m[2][0] * m[2][0]);
 
     m[0][0] *= fInvLength;
     m[1][0] *= fInvLength;
     m[2][0] *= fInvLength;
 
-    // compute q1
-    float fDot0 =
-        m[0][0] * m[0][1] +
-        m[1][0] * m[1][1] +
-        m[2][0] * m[2][1];
+    float fDot0 = m[0][0] * m[0][1] + m[1][0] * m[1][1] + m[2][0] * m[2][1];
 
     m[0][1] -= fDot0*m[0][0];
     m[1][1] -= fDot0*m[1][0];
     m[2][1] -= fDot0*m[2][0];
 
-    fInvLength = Math::invSqrt(m[0][1] * m[0][1] +
-        m[1][1] * m[1][1] +
-        m[2][1] * m[2][1]);
+    fInvLength = Math::invSqrt(m[0][1] * m[0][1] + m[1][1] * m[1][1] + m[2][1] * m[2][1]);
 
     m[0][1] *= fInvLength;
     m[1][1] *= fInvLength;
     m[2][1] *= fInvLength;
 
-    // compute q2
-    float fDot1 =
-        m[0][1] * m[0][2] +
-        m[1][1] * m[1][2] +
-        m[2][1] * m[2][2];
+    float fDot1 = m[0][1] * m[0][2] + m[1][1] * m[1][2] + m[2][1] * m[2][2];
 
-    fDot0 =
-        m[0][0] * m[0][2] +
-        m[1][0] * m[1][2] +
-        m[2][0] * m[2][2];
+    fDot0 = m[0][0] * m[0][2] + m[1][0] * m[1][2] + m[2][0] * m[2][2];
 
     m[0][2] -= fDot0*m[0][0] + fDot1*m[0][1];
     m[1][2] -= fDot0*m[1][0] + fDot1*m[1][1];
     m[2][2] -= fDot0*m[2][0] + fDot1*m[2][1];
 
-    fInvLength = Math::invSqrt(m[0][2] * m[0][2] +
-        m[1][2] * m[1][2] +
-        m[2][2] * m[2][2]);
+    fInvLength = Math::invSqrt(m[0][2] * m[0][2] + m[1][2] * m[1][2] + m[2][2] * m[2][2]);
 
     m[0][2] *= fInvLength;
     m[1][2] *= fInvLength;
     m[2][2] *= fInvLength;
 }
 //-----------------------------------------------------------------------
-void Matrix3::QDUDecomposition(Matrix3& kQ,
-    Vector3& kD, Vector3& kU) const
+void Matrix3::QDUDecomposition(Matrix3& kQ, Vector3& kD, Vector3& kU) const
 {
-    // Factor M = QR = QDU where Q is orthogonal, D is diagonal,
-    // and U is upper triangular with ones on its diagonal.  Algorithm uses
-    // Gram-Schmidt orthogonalization (the QR algorithm).
-    //
-    // If M = [ m0 | m1 | m2 ] and Q = [ q0 | q1 | q2 ], then
-    //
-    //   q0 = m0/|m0|
-    //   q1 = (m1-(q0*m1)q0)/|m1-(q0*m1)q0|
-    //   q2 = (m2-(q0*m2)q0-(q1*m2)q1)/|m2-(q0*m2)q0-(q1*m2)q1|
-    //
-    // where |V| indicates length of vector V and A*B indicates dot
-    // product of vectors A and B.  The matrix R has entries
-    //
-    //   r00 = q0*m0  r01 = q0*m1  r02 = q0*m2
-    //   r10 = 0      r11 = q1*m1  r12 = q1*m2
-    //   r20 = 0      r21 = 0      r22 = q2*m2
-    //
-    // so D = diag(r00,r11,r22) and U has entries u01 = r01/r00,
-    // u02 = r02/r00, and u12 = r12/r11.
-
-    // Q = rotation
-    // D = scaling
-    // U = shear
-
-    // D stores the three diagonal entries r00, r11, r22
-    // U stores the entries U[0] = u01, U[1] = u02, U[2] = u12
-
-    // build orthogonal matrix Q
     float fInvLength = m[0][0] * m[0][0] + m[1][0] * m[1][0] + m[2][0] * m[2][0];
-    if (!Math::FloatEqual(fInvLength, 0)) fInvLength = Math::invSqrt(fInvLength);
+    if (!Math::FloatEqual(fInvLength, 0))
+        fInvLength = Math::invSqrt(fInvLength);
 
     kQ[0][0] = m[0][0] * fInvLength;
     kQ[1][0] = m[1][0] * fInvLength;
     kQ[2][0] = m[2][0] * fInvLength;
 
-    float fDot = kQ[0][0] * m[0][1] + kQ[1][0] * m[1][1] +
-        kQ[2][0] * m[2][1];
+    float fDot = kQ[0][0] * m[0][1] + kQ[1][0] * m[1][1] + kQ[2][0] * m[2][1];
     kQ[0][1] = m[0][1] - fDot*kQ[0][0];
     kQ[1][1] = m[1][1] - fDot*kQ[1][0];
     kQ[2][1] = m[2][1] - fDot*kQ[2][0];
     fInvLength = kQ[0][1] * kQ[0][1] + kQ[1][1] * kQ[1][1] + kQ[2][1] * kQ[2][1];
-    if (!Math::FloatEqual(fInvLength, 0)) fInvLength = Math::invSqrt(fInvLength);
+    
+    if (!Math::FloatEqual(fInvLength, 0))
+        fInvLength = Math::invSqrt(fInvLength);
 
     kQ[0][1] *= fInvLength;
     kQ[1][1] *= fInvLength;
     kQ[2][1] *= fInvLength;
 
-    fDot = kQ[0][0] * m[0][2] + kQ[1][0] * m[1][2] +
-        kQ[2][0] * m[2][2];
+    fDot = kQ[0][0] * m[0][2] + kQ[1][0] * m[1][2] + kQ[2][0] * m[2][2];
     kQ[0][2] = m[0][2] - fDot*kQ[0][0];
     kQ[1][2] = m[1][2] - fDot*kQ[1][0];
     kQ[2][2] = m[2][2] - fDot*kQ[2][0];
-    fDot = kQ[0][1] * m[0][2] + kQ[1][1] * m[1][2] +
-        kQ[2][1] * m[2][2];
+    fDot = kQ[0][1] * m[0][2] + kQ[1][1] * m[1][2] + kQ[2][1] * m[2][2];
     kQ[0][2] -= fDot*kQ[0][1];
     kQ[1][2] -= fDot*kQ[1][1];
     kQ[2][2] -= fDot*kQ[2][1];
@@ -721,7 +629,6 @@ void Matrix3::QDUDecomposition(Matrix3& kQ,
     kQ[1][2] *= fInvLength;
     kQ[2][2] *= fInvLength;
 
-    // guarantee that orthogonal matrix has determinant 1 (no reflections)
     float fDet = kQ[0][0] * kQ[1][1] * kQ[2][2] + kQ[0][1] * kQ[1][2] * kQ[2][0] +
         kQ[0][2] * kQ[1][0] * kQ[2][1] - kQ[0][2] * kQ[1][1] * kQ[2][0] -
         kQ[0][1] * kQ[1][0] * kQ[2][2] - kQ[0][0] * kQ[1][2] * kQ[2][1];
@@ -733,27 +640,18 @@ void Matrix3::QDUDecomposition(Matrix3& kQ,
                 kQ[iRow][iCol] = -kQ[iRow][iCol];
     }
 
-    // build "right" matrix R
     Matrix3 kR;
-    kR[0][0] = kQ[0][0] * m[0][0] + kQ[1][0] * m[1][0] +
-        kQ[2][0] * m[2][0];
-    kR[0][1] = kQ[0][0] * m[0][1] + kQ[1][0] * m[1][1] +
-        kQ[2][0] * m[2][1];
-    kR[1][1] = kQ[0][1] * m[0][1] + kQ[1][1] * m[1][1] +
-        kQ[2][1] * m[2][1];
-    kR[0][2] = kQ[0][0] * m[0][2] + kQ[1][0] * m[1][2] +
-        kQ[2][0] * m[2][2];
-    kR[1][2] = kQ[0][1] * m[0][2] + kQ[1][1] * m[1][2] +
-        kQ[2][1] * m[2][2];
-    kR[2][2] = kQ[0][2] * m[0][2] + kQ[1][2] * m[1][2] +
-        kQ[2][2] * m[2][2];
+    kR[0][0] = kQ[0][0] * m[0][0] + kQ[1][0] * m[1][0] + kQ[2][0] * m[2][0];
+    kR[0][1] = kQ[0][0] * m[0][1] + kQ[1][0] * m[1][1] + kQ[2][0] * m[2][1];
+    kR[1][1] = kQ[0][1] * m[0][1] + kQ[1][1] * m[1][1] + kQ[2][1] * m[2][1];
+    kR[0][2] = kQ[0][0] * m[0][2] + kQ[1][0] * m[1][2] + kQ[2][0] * m[2][2];
+    kR[1][2] = kQ[0][1] * m[0][2] + kQ[1][1] * m[1][2] + kQ[2][1] * m[2][2];
+    kR[2][2] = kQ[0][2] * m[0][2] + kQ[1][2] * m[1][2] + kQ[2][2] * m[2][2];
 
-    // the scaling component
     kD[0] = kR[0][0];
     kD[1] = kR[1][1];
     kD[2] = kR[2][2];
 
-    // the shear component
     float fInvD0 = 1.0f / kD[0];
     kU[0] = kR[0][1] * fInvD0;
     kU[1] = kR[0][2] * fInvD0;
@@ -762,24 +660,16 @@ void Matrix3::QDUDecomposition(Matrix3& kQ,
 //-----------------------------------------------------------------------
 float Matrix3::MaxCubicRoot(float afCoeff[3])
 {
-    // Spectral norm is for A^T*A, so characteristic polynomial
-    // P(x) = c[0]+c[1]*x+c[2]*x^2+x^3 has three positive float roots.
-    // This yields the assertions c[0] < 0 and c[2]*c[2] >= 3*c[1].
-
-    // quick out for uniform scale (triple root)
     const float fOneThird = 1.0 / 3.0;
     const float fEpsilon = 1e-06;
     float fDiscr = afCoeff[2] * afCoeff[2] - 3.0f*afCoeff[1];
     if (fDiscr <= fEpsilon)
         return -fOneThird*afCoeff[2];
 
-    // Compute an upper bound on roots of P(x).  This assumes that A^T*A
-    // has been scaled by its largest entry.
     float fX = 1.0;
     float fPoly = afCoeff[0] + fX*(afCoeff[1] + fX*(afCoeff[2] + fX));
     if (fPoly < 0.0)
     {
-        // uses a matrix norm to find an upper bound on maximum root
         fX = std::abs(afCoeff[0]);
         float fTmp = 1.0f + std::abs(afCoeff[1]);
         if (fTmp > fX)
@@ -789,7 +679,6 @@ float Matrix3::MaxCubicRoot(float afCoeff[3])
             fX = fTmp;
     }
 
-    // Newton's method to find root
     float fTwoC2 = 2.0f*afCoeff[2];
     for (int i = 0; i < 16; i++)
     {
@@ -847,31 +736,9 @@ float Matrix3::SpectralNorm() const
 //-----------------------------------------------------------------------
 void Matrix3::ToAngleAxis(Vector3& rkAxis, float& rffloats) const
 {
-    // Let (x,y,z) be the unit-length axis and let A be an angle of rotation.
-    // The rotation matrix is R = I + sin(A)*P + (1-cos(A))*P^2 where
-    // I is the identity and
-    //
-    //       +-        -+
-    //   P = |  0 -z +y |
-    //       | +z  0 -x |
-    //       | -y +x  0 |
-    //       +-        -+
-    //
-    // If A > 0, R represents a counterclockwise rotation about the axis in
-    // the sense of looking from the tip of the axis vector towards the
-    // origin.  Some algebra will show that
-    //
-    //   cos(A) = (trace(R)-1)/2  and  R - R^t = 2*sin(A)*P
-    //
-    // In the event that A = pi, R-R^t = 0 which prevents us from extracting
-    // the axis through P.  Instead note that R = I+2*P^2 when A = pi, so
-    // P^2 = (R-I)/2.  The diagonal entries of P^2 are x^2-1, y^2-1, and
-    // z^2-1.  We can solve these for axis (x,y,z).  Because the angle is pi,
-    // it does not matter which sign you choose on the square roots.
-
     float fTrace = m[0][0] + m[1][1] + m[2][2];
     float fCos = 0.5f*(fTrace - 1.0f);
-    rffloats = acos(fCos);  // in [0,PI]
+    rffloats = acos(fCos);
 
     if (rffloats > float(0.0))
     {
@@ -884,14 +751,12 @@ void Matrix3::ToAngleAxis(Vector3& rkAxis, float& rffloats) const
         }
         else
         {
-            // angle is PI
             float fHalfInverse;
+
             if (m[0][0] >= m[1][1])
             {
-                // r00 >= r11
                 if (m[0][0] >= m[2][2])
                 {
-                    // r00 is maximum diagonal term
                     rkAxis.x = 0.5f*sqrt(m[0][0] -
                         m[1][1] - m[2][2] + 1.0f);
                     fHalfInverse = 0.5f / rkAxis.x;
@@ -900,7 +765,6 @@ void Matrix3::ToAngleAxis(Vector3& rkAxis, float& rffloats) const
                 }
                 else
                 {
-                    // r22 is maximum diagonal term
                     rkAxis.z = 0.5f*sqrt(m[2][2] -
                         m[0][0] - m[1][1] + 1.0f);
                     fHalfInverse = 0.5f / rkAxis.z;
@@ -910,10 +774,8 @@ void Matrix3::ToAngleAxis(Vector3& rkAxis, float& rffloats) const
             }
             else
             {
-                // r11 > r00
                 if (m[1][1] >= m[2][2])
                 {
-                    // r11 is maximum diagonal term
                     rkAxis.y = 0.5f*sqrt(m[1][1] -
                         m[0][0] - m[2][2] + 1.0f);
                     fHalfInverse = 0.5f / rkAxis.y;
@@ -922,7 +784,6 @@ void Matrix3::ToAngleAxis(Vector3& rkAxis, float& rffloats) const
                 }
                 else
                 {
-                    // r22 is maximum diagonal term
                     rkAxis.z = 0.5f*sqrt(m[2][2] -
                         m[0][0] - m[1][1] + 1.0f);
                     fHalfInverse = 0.5f / rkAxis.z;
@@ -934,8 +795,6 @@ void Matrix3::ToAngleAxis(Vector3& rkAxis, float& rffloats) const
     }
     else
     {
-        // The angle is 0 and the matrix is the identity.  Any axis will
-        // work, so just use the x-axis.
         rkAxis.x = 1.0;
         rkAxis.y = 0.0;
         rkAxis.z = 0.0;
@@ -971,10 +830,6 @@ void Matrix3::FromAngleAxis(const Vector3& rkAxis, const float& ffloats)
 bool Matrix3::ToEulerAnglesXYZ(float& rfYAngle, float& rfPAngle,
     float& rfRAngle) const
 {
-    // rot =  cy*cz          -cy*sz           sy
-    //        cz*sx*sy+cx*sz  cx*cz-sx*sy*sz -cy*sx
-    //       -cx*cz*sy+sx*sz  cz*sx+cx*sy*sz  cx*cy
-
     rfPAngle = float(asin(m[0][2]));
     if (rfPAngle < float(Math::HALF_PI))
     {
@@ -986,18 +841,16 @@ bool Matrix3::ToEulerAnglesXYZ(float& rfYAngle, float& rfPAngle,
         }
         else
         {
-            // WARNING.  Not a unique solution.
             float fRmY = atan2(m[1][0], m[1][1]);
-            rfRAngle = float(0.0);  // any angle works
+            rfRAngle = float(0.0);
             rfYAngle = rfRAngle - fRmY;
             return false;
         }
     }
     else
     {
-        // WARNING.  Not a unique solution.
         float fRpY = atan2(m[1][0], m[1][1]);
-        rfRAngle = float(0.0);  // any angle works
+        rfRAngle = float(0.0);
         rfYAngle = fRpY - rfRAngle;
         return false;
     }
@@ -1006,10 +859,6 @@ bool Matrix3::ToEulerAnglesXYZ(float& rfYAngle, float& rfPAngle,
 bool Matrix3::ToEulerAnglesXZY(float& rfYAngle, float& rfPAngle,
     float& rfRAngle) const
 {
-    // rot =  cy*cz          -sz              cz*sy
-    //        sx*sy+cx*cy*sz  cx*cz          -cy*sx+cx*sy*sz
-    //       -cx*sy+cy*sx*sz  cz*sx           cx*cy+sx*sy*sz
-
     rfPAngle = asin(-m[0][1]);
     if (rfPAngle < float(Math::HALF_PI))
     {
@@ -1021,29 +870,23 @@ bool Matrix3::ToEulerAnglesXZY(float& rfYAngle, float& rfPAngle,
         }
         else
         {
-            // WARNING.  Not a unique solution.
             float fRmY = atan2(-m[2][0], m[2][2]);
-            rfRAngle = float(0.0);  // any angle works
+            rfRAngle = float(0.0);
             rfYAngle = rfRAngle - fRmY;
             return false;
         }
     }
     else
     {
-        // WARNING.  Not a unique solution.
         float fRpY = atan2(-m[2][0], m[2][2]);
-        rfRAngle = float(0.0);  // any angle works
+        rfRAngle = float(0.0);
         rfYAngle = fRpY - rfRAngle;
         return false;
     }
 }
 //-----------------------------------------------------------------------
-bool Matrix3::ToEulerAnglesYXZ(float& rfYAngle, float& rfPAngle,
-    float& rfRAngle) const
+bool Matrix3::ToEulerAnglesYXZ(float& rfYAngle, float& rfPAngle, float& rfRAngle) const
 {
-    // rot =  cy*cz+sx*sy*sz  cz*sx*sy-cy*sz  cx*sy
-    //        cx*sz           cx*cz          -sx
-    //       -cz*sy+cy*sx*sz  cy*cz*sx+sy*sz  cx*cy
 
     rfPAngle = asin(-m[1][2]);
     if (rfPAngle < float(Math::HALF_PI))
@@ -1056,29 +899,23 @@ bool Matrix3::ToEulerAnglesYXZ(float& rfYAngle, float& rfPAngle,
         }
         else
         {
-            // WARNING.  Not a unique solution.
             float fRmY = atan2(-m[0][1], m[0][0]);
-            rfRAngle = float(0.0);  // any angle works
+            rfRAngle = float(0.0);
             rfYAngle = rfRAngle - fRmY;
             return false;
         }
     }
     else
     {
-        // WARNING.  Not a unique solution.
         float fRpY = atan2(-m[0][1], m[0][0]);
-        rfRAngle = float(0.0);  // any angle works
+        rfRAngle = float(0.0);
         rfYAngle = fRpY - rfRAngle;
         return false;
     }
 }
 //-----------------------------------------------------------------------
-bool Matrix3::ToEulerAnglesYZX(float& rfYAngle, float& rfPAngle,
-    float& rfRAngle) const
+bool Matrix3::ToEulerAnglesYZX(float& rfYAngle, float& rfPAngle, float& rfRAngle) const
 {
-    // rot =  cy*cz           sx*sy-cx*cy*sz  cx*sy+cy*sx*sz
-    //        sz              cx*cz          -cz*sx
-    //       -cz*sy           cy*sx+cx*sy*sz  cx*cy-sx*sy*sz
 
     rfPAngle = asin(m[1][0]);
     if (rfPAngle < float(Math::HALF_PI))
@@ -1091,30 +928,23 @@ bool Matrix3::ToEulerAnglesYZX(float& rfYAngle, float& rfPAngle,
         }
         else
         {
-            // WARNING.  Not a unique solution.
             float fRmY = atan2(m[2][1], m[2][2]);
-            rfRAngle = float(0.0);  // any angle works
+            rfRAngle = float(0.0);
             rfYAngle = rfRAngle - fRmY;
             return false;
         }
     }
     else
     {
-        // WARNING.  Not a unique solution.
         float fRpY = atan2(m[2][1], m[2][2]);
-        rfRAngle = float(0.0);  // any angle works
+        rfRAngle = float(0.0);
         rfYAngle = fRpY - rfRAngle;
         return false;
     }
 }
 //-----------------------------------------------------------------------
-bool Matrix3::ToEulerAnglesZXY(float& rfYAngle, float& rfPAngle,
-    float& rfRAngle) const
+bool Matrix3::ToEulerAnglesZXY(float& rfYAngle, float& rfPAngle, float& rfRAngle) const
 {
-    // rot =  cy*cz-sx*sy*sz -cx*sz           cz*sy+cy*sx*sz
-    //        cz*sx*sy+cy*sz  cx*cz          -cy*cz*sx+sy*sz
-    //       -cx*sy           sx              cx*cy
-
     rfPAngle = asin(m[2][1]);
     if (rfPAngle < float(Math::HALF_PI))
     {
@@ -1126,29 +956,23 @@ bool Matrix3::ToEulerAnglesZXY(float& rfYAngle, float& rfPAngle,
         }
         else
         {
-            // WARNING.  Not a unique solution.
             float fRmY = atan2(m[0][2], m[0][0]);
-            rfRAngle = float(0.0);  // any angle works
+            rfRAngle = float(0.0);
             rfYAngle = rfRAngle - fRmY;
             return false;
         }
     }
     else
     {
-        // WARNING.  Not a unique solution.
         float fRpY = atan2(m[0][2], m[0][0]);
-        rfRAngle = float(0.0);  // any angle works
+        rfRAngle = float(0.0);
         rfYAngle = fRpY - rfRAngle;
         return false;
     }
 }
 //-----------------------------------------------------------------------
-bool Matrix3::ToEulerAnglesZYX(float& rfYAngle, float& rfPAngle,
-    float& rfRAngle) const
+bool Matrix3::ToEulerAnglesZYX(float& rfYAngle, float& rfPAngle, float& rfRAngle) const
 {
-    // rot =  cy*cz           cz*sx*sy-cx*sz  cx*cz*sy+sx*sz
-    //        cy*sz           cx*cz+sx*sy*sz -cz*sx+cx*sy*sz
-    //       -sy              cy*sx           cx*cy
 
     rfPAngle = asin(-m[2][0]);
     if (rfPAngle < float(Math::HALF_PI))
@@ -1161,7 +985,6 @@ bool Matrix3::ToEulerAnglesZYX(float& rfYAngle, float& rfPAngle,
         }
         else
         {
-            // WARNING.  Not a unique solution.
             float fRmY = atan2(-m[0][1], m[0][2]);
             rfRAngle = float(0.0);  // any angle works
             rfYAngle = rfRAngle - fRmY;
@@ -1170,7 +993,6 @@ bool Matrix3::ToEulerAnglesZYX(float& rfYAngle, float& rfPAngle,
     }
     else
     {
-        // WARNING.  Not a unique solution.
         float fRpY = atan2(-m[0][1], m[0][2]);
         rfRAngle = float(0.0);  // any angle works
         rfYAngle = fRpY - rfRAngle;
@@ -1440,7 +1262,6 @@ void Matrix3::EigenSolveSymmetric(float afEigenvalue[3],
         akEigenvector[i][2] = kMatrix[2][i];
     }
 
-    // make eigenvectors form a right--handed system
     Vector3 kCross = akEigenvector[1].crossProduct(akEigenvector[2]);
     float fDet = akEigenvector[0].dotProduct(kCross);
     if (fDet < 0.0)
