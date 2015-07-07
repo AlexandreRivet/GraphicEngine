@@ -105,9 +105,6 @@ class Matrix3
 
 		void FromAngleAxis(const Vector3& rkAxis, const float& fRadians);
 
-		// The matrix must be orthonormal.  The decomposition is yaw*pitch*roll
-		// where yaw is rotation about the Up vector, pitch is rotation about the
-		// Right axis, and roll is rotation about the Direction axis.
 		bool ToEulerAnglesXYZ(float& rfYAngle, float& rfPAngle,
 			float& rfRAngle) const;
 		bool ToEulerAnglesXZY(float& rfYAngle, float& rfPAngle,
@@ -126,33 +123,29 @@ class Matrix3
 		void FromEulerAnglesYZX(const float& fYAngle, const float& fPAngle, const float& fRAngle);
 		void FromEulerAnglesZXY(const float& fYAngle, const float& fPAngle, const float& fRAngle);
 		void FromEulerAnglesZYX(const float& fYAngle, const float& fPAngle, const float& fRAngle);
-		/// Eigensolver, matrix must be symmetric
+
 		void EigenSolveSymmetric(float afEigenvalue[3],
 			Vector3 akEigenvector[3]) const;
 
 		static void TensorProduct(const Vector3& rkU, const Vector3& rkV,
 			Matrix3& rkProduct);
 
-		/** Determines if this matrix involves a scaling. */
 		inline bool hasScale() const
 		{
-			// check magnitude of column vectors (==local axes)
 			float t = m[0][0] * m[0][0] + m[1][0] * m[1][0] + m[2][0] * m[2][0];
-			if (!Math::floatEqual(t, 1.0, (float)1e-04))
+			if (!Math::FloatEqual(t, 1.0, (float)1e-04))
 				return true;
 			t = m[0][1] * m[0][1] + m[1][1] * m[1][1] + m[2][1] * m[2][1];
-			if (!Math::floatEqual(t, 1.0, (float)1e-04))
+			if (!Math::FloatEqual(t, 1.0, (float)1e-04))
 				return true;
 			t = m[0][2] * m[0][2] + m[1][2] * m[1][2] + m[2][2] * m[2][2];
-			if (!Math::floatEqual(t, 1.0, (float)1e-04))
+			if (!Math::FloatEqual(t, 1.0, (float)1e-04))
 				return true;
 
 			return false;
 		}
 
-		/** Function for writing to a stream.
-		*/
-		inline _OgreExport friend std::ostream& operator <<
+		inline friend std::ostream& operator <<
 			(std::ostream& o, const Matrix3& mat)
 		{
 			o << "Matrix3(" << mat[0][0] << ", " << mat[0][1] << ", " << mat[0][2] << ", "
@@ -166,11 +159,9 @@ class Matrix3
 		static const Matrix3 IDENTITY;
 
 	protected:
-		// support for eigensolver
 		void Tridiagonal(float afDiag[3], float afSubDiag[3]);
 		bool QLAlgorithm(float afDiag[3], float afSubDiag[3]);
 
-		// support for singular value decomposition
 		static const float msSvdEpsilon;
 		static const unsigned int msSvdMaxIterations;
 		static void Bidiagonalize(Matrix3& kA, Matrix3& kL,
@@ -178,16 +169,12 @@ class Matrix3
 		static void GolubKahanStep(Matrix3& kA, Matrix3& kL,
 			Matrix3& kR);
 
-		// support for spectral norm
 		static float MaxCubicRoot(float afCoeff[3]);
 
 		float m[3][3];
 
-		// for faster access
 		friend class Matrix4;
-	};
-	/** @} */
-	/** @} */
-}
+};
+
 
 #endif
