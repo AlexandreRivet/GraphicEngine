@@ -72,6 +72,7 @@ class Quaternion
 		bool isNaN() const;
 
 		friend std::ostream& operator << (std::ostream& o, const Quaternion& q);
+		friend Quaternion operator* (float fScalar, const Quaternion& rkQ);
 };
 
 

@@ -105,18 +105,12 @@ class Matrix3
 
 		void FromAngleAxis(const Vector3& rkAxis, const float& fRadians);
 
-		bool ToEulerAnglesXYZ(float& rfYAngle, float& rfPAngle,
-			float& rfRAngle) const;
-		bool ToEulerAnglesXZY(float& rfYAngle, float& rfPAngle,
-			float& rfRAngle) const;
-		bool ToEulerAnglesYXZ(float& rfYAngle, float& rfPAngle,
-			float& rfRAngle) const;
-		bool ToEulerAnglesYZX(float& rfYAngle, float& rfPAngle,
-			float& rfRAngle) const;
-		bool ToEulerAnglesZXY(float& rfYAngle, float& rfPAngle,
-			float& rfRAngle) const;
-		bool ToEulerAnglesZYX(float& rfYAngle, float& rfPAngle,
-			float& rfRAngle) const;
+		bool ToEulerAnglesXYZ(float& rfYAngle, float& rfPAngle, float& rfRAngle) const;
+		bool ToEulerAnglesXZY(float& rfYAngle, float& rfPAngle, float& rfRAngle) const;
+		bool ToEulerAnglesYXZ(float& rfYAngle, float& rfPAngle, float& rfRAngle) const;
+		bool ToEulerAnglesYZX(float& rfYAngle, float& rfPAngle, float& rfRAngle) const;
+		bool ToEulerAnglesZXY(float& rfYAngle, float& rfPAngle, float& rfRAngle) const;
+		bool ToEulerAnglesZYX(float& rfYAngle, float& rfPAngle, float& rfRAngle) const;
 		void FromEulerAnglesXYZ(const float& fYAngle, const float& fPAngle, const float& fRAngle);
 		void FromEulerAnglesXZY(const float& fYAngle, const float& fPAngle, const float& fRAngle);
 		void FromEulerAnglesYXZ(const float& fYAngle, const float& fPAngle, const float& fRAngle);
