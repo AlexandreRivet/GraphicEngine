@@ -657,13 +657,12 @@ void Matrix3::QDUDecomposition(Matrix3& kQ,
 	kQ[1][2] -= fDot*kQ[1][1];
 	kQ[2][2] -= fDot*kQ[2][1];
 	fInvLength = kQ[0][2] * kQ[0][2] + kQ[1][2] * kQ[1][2] + kQ[2][2] * kQ[2][2];
-	if (!Ogre::Math::floatEqual(fInvLength, 0)) fInvLength = Math::InvSqrt(fInvLength);
+	if (!Math::FloatEqual(fInvLength, 0)) fInvLength = Math::invSqrt(fInvLength);
 
 	kQ[0][2] *= fInvLength;
 	kQ[1][2] *= fInvLength;
 	kQ[2][2] *= fInvLength;
 
-	// guarantee that orthogonal matrix has determinant 1 (no reflections)
 	float fDet = kQ[0][0] * kQ[1][1] * kQ[2][2] + kQ[0][1] * kQ[1][2] * kQ[2][0] +
 		kQ[0][2] * kQ[1][0] * kQ[2][1] - kQ[0][2] * kQ[1][1] * kQ[2][0] -
 		kQ[0][1] * kQ[1][0] * kQ[2][2] - kQ[0][0] * kQ[1][2] * kQ[2][1];
@@ -675,7 +674,6 @@ void Matrix3::QDUDecomposition(Matrix3& kQ,
 			kQ[iRow][iCol] = -kQ[iRow][iCol];
 	}
 
-	// build "right" matrix R
 	Matrix3 kR;
 	kR[0][0] = kQ[0][0] * m[0][0] + kQ[1][0] * m[1][0] +
 		kQ[2][0] * m[2][0];
@@ -690,53 +688,43 @@ void Matrix3::QDUDecomposition(Matrix3& kQ,
 	kR[2][2] = kQ[0][2] * m[0][2] + kQ[1][2] * m[1][2] +
 		kQ[2][2] * m[2][2];
 
-	// the scaling component
 	kD[0] = kR[0][0];
 	kD[1] = kR[1][1];
 	kD[2] = kR[2][2];
 
-	// the shear component
 	float fInvD0 = 1.0f / kD[0];
 	kU[0] = kR[0][1] * fInvD0;
 	kU[1] = kR[0][2] * fInvD0;
 	kU[2] = kR[1][2] / kD[1];
 }
-//-----------------------------------------------------------------------
+
 float Matrix3::MaxCubicRoot(float afCoeff[3])
 {
-	// Spectral norm is for A^T*A, so characteristic polynomial
-	// P(x) = c[0]+c[1]*x+c[2]*x^2+x^3 has three positive float roots.
-	// This yields the assertions c[0] < 0 and c[2]*c[2] >= 3*c[1].
 
-	// quick out for uniform scale (triple root)
 	const float fOneThird = 1.0 / 3.0;
 	const float fEpsilon = 1e-06;
 	float fDiscr = afCoeff[2] * afCoeff[2] - 3.0f*afCoeff[1];
 	if (fDiscr <= fEpsilon)
 		return -fOneThird*afCoeff[2];
 
-	// Compute an upper bound on roots of P(x).  This assumes that A^T*A
-	// has been scaled by its largest entry.
 	float fX = 1.0;
 	float fPoly = afCoeff[0] + fX*(afCoeff[1] + fX*(afCoeff[2] + fX));
 	if (fPoly < 0.0)
 	{
-		// uses a matrix norm to find an upper bound on maximum root
-		fX = Math::Abs(afCoeff[0]);
-		float fTmp = 1.0f + Math::Abs(afCoeff[1]);
+		fX = std::abs(afCoeff[0]);
+		float fTmp = 1.0f + std::abs(afCoeff[1]);
 		if (fTmp > fX)
 			fX = fTmp;
-		fTmp = 1.0f + Math::Abs(afCoeff[2]);
+		fTmp = 1.0f + std::abs(afCoeff[2]);
 		if (fTmp > fX)
 			fX = fTmp;
 	}
 
-	// Newton's method to find root
 	float fTwoC2 = 2.0f*afCoeff[2];
 	for (int i = 0; i < 16; i++)
 	{
 		fPoly = afCoeff[0] + fX*(afCoeff[1] + fX*(afCoeff[2] + fX));
-		if (Math::Abs(fPoly) <= fEpsilon)
+		if (std::abs(fPoly) <= fEpsilon)
 			return fX;
 
 		float fDeriv = afCoeff[1] + fX*(fTwoC2 + 3.0f*fX);
@@ -745,7 +733,7 @@ float Matrix3::MaxCubicRoot(float afCoeff[3])
 
 	return fX;
 }
-//-----------------------------------------------------------------------
+
 float Matrix3::SpectralNorm() const
 {
 	Matrix3 kP;
@@ -783,41 +771,20 @@ float Matrix3::SpectralNorm() const
 	afCoeff[2] = -(kP[0][0] + kP[1][1] + kP[2][2]);
 
 	float fRoot = MaxCubicRoot(afCoeff);
-	float fNorm = Math::Sqrt(fPmax*fRoot);
+	float fNorm = std::sqrt(fPmax*fRoot);
 	return fNorm;
 }
-//-----------------------------------------------------------------------
-void Matrix3::ToAngleAxis(Vector3& rkAxis, Radian& rfRadians) const
+
+void Matrix3::ToAngleAxis(Vector3& rkAxis, float& rfAngle) const
 {
-	// Let (x,y,z) be the unit-length axis and let A be an angle of rotation.
-	// The rotation matrix is R = I + sin(A)*P + (1-cos(A))*P^2 where
-	// I is the identity and
-	//
-	//       +-        -+
-	//   P = |  0 -z +y |
-	//       | +z  0 -x |
-	//       | -y +x  0 |
-	//       +-        -+
-	//
-	// If A > 0, R represents a counterclockwise rotation about the axis in
-	// the sense of looking from the tip of the axis vector towards the
-	// origin.  Some algebra will show that
-	//
-	//   cos(A) = (trace(R)-1)/2  and  R - R^t = 2*sin(A)*P
-	//
-	// In the event that A = pi, R-R^t = 0 which prevents us from extracting
-	// the axis through P.  Instead note that R = I+2*P^2 when A = pi, so
-	// P^2 = (R-I)/2.  The diagonal entries of P^2 are x^2-1, y^2-1, and
-	// z^2-1.  We can solve these for axis (x,y,z).  Because the angle is pi,
-	// it does not matter which sign you choose on the square roots.
 
 	float fTrace = m[0][0] + m[1][1] + m[2][2];
 	float fCos = 0.5f*(fTrace - 1.0f);
-	rfRadians = Math::ACos(fCos);  // in [0,PI]
+	rfAngle = std::acos(fCos); 
 
-	if (rfRadians > Radian(0.0))
+	if (rfAngle > 0.0)
 	{
-		if (rfRadians < Radian(Math::PI))
+		if (rfAngle < M_PI)
 		{
 			rkAxis.x = m[2][1] - m[1][2];
 			rkAxis.y = m[0][2] - m[2][0];
@@ -826,15 +793,12 @@ void Matrix3::ToAngleAxis(Vector3& rkAxis, Radian& rfRadians) const
 		}
 		else
 		{
-			// angle is PI
 			float fHalfInverse;
 			if (m[0][0] >= m[1][1])
 			{
-				// r00 >= r11
 				if (m[0][0] >= m[2][2])
 				{
-					// r00 is maximum diagonal term
-					rkAxis.x = 0.5f*Math::Sqrt(m[0][0] -
+					rkAxis.x = 0.5f * std::sqrt(m[0][0] -
 						m[1][1] - m[2][2] + 1.0f);
 					fHalfInverse = 0.5f / rkAxis.x;
 					rkAxis.y = fHalfInverse*m[0][1];
@@ -842,8 +806,7 @@ void Matrix3::ToAngleAxis(Vector3& rkAxis, Radian& rfRadians) const
 				}
 				else
 				{
-					// r22 is maximum diagonal term
-					rkAxis.z = 0.5f*Math::Sqrt(m[2][2] -
+					rkAxis.z = 0.5f*std::sqrt(m[2][2] -
 						m[0][0] - m[1][1] + 1.0f);
 					fHalfInverse = 0.5f / rkAxis.z;
 					rkAxis.x = fHalfInverse*m[0][2];
@@ -852,11 +815,9 @@ void Matrix3::ToAngleAxis(Vector3& rkAxis, Radian& rfRadians) const
 			}
 			else
 			{
-				// r11 > r00
 				if (m[1][1] >= m[2][2])
 				{
-					// r11 is maximum diagonal term
-					rkAxis.y = 0.5f*Math::Sqrt(m[1][1] -
+					rkAxis.y = 0.5f*std::sqrt(m[1][1] -
 						m[0][0] - m[2][2] + 1.0f);
 					fHalfInverse = 0.5f / rkAxis.y;
 					rkAxis.x = fHalfInverse*m[0][1];
@@ -864,8 +825,7 @@ void Matrix3::ToAngleAxis(Vector3& rkAxis, Radian& rfRadians) const
 				}
 				else
 				{
-					// r22 is maximum diagonal term
-					rkAxis.z = 0.5f*Math::Sqrt(m[2][2] -
+					rkAxis.z = 0.5f*std::sqrt(m[2][2] -
 						m[0][0] - m[1][1] + 1.0f);
 					fHalfInverse = 0.5f / rkAxis.z;
 					rkAxis.x = fHalfInverse*m[0][2];
@@ -876,18 +836,16 @@ void Matrix3::ToAngleAxis(Vector3& rkAxis, Radian& rfRadians) const
 	}
 	else
 	{
-		// The angle is 0 and the matrix is the identity.  Any axis will
-		// work, so just use the x-axis.
 		rkAxis.x = 1.0;
 		rkAxis.y = 0.0;
 		rkAxis.z = 0.0;
 	}
 }
-//-----------------------------------------------------------------------
-void Matrix3::FromAngleAxis(const Vector3& rkAxis, const Radian& fRadians)
+
+void Matrix3::FromAngleAxis(const Vector3& rkAxis, const float& fRadians)
 {
-	float fCos = Math::Cos(fRadians);
-	float fSin = Math::Sin(fRadians);
+	float fCos = std::cos(fRadians);
+	float fSin = std::sin(fRadians);
 	float fOneMinusCos = 1.0f - fCos;
 	float fX2 = rkAxis.x*rkAxis.x;
 	float fY2 = rkAxis.y*rkAxis.y;
@@ -909,347 +867,294 @@ void Matrix3::FromAngleAxis(const Vector3& rkAxis, const Radian& fRadians)
 	m[2][1] = fYZM + fXSin;
 	m[2][2] = fZ2*fOneMinusCos + fCos;
 }
-//-----------------------------------------------------------------------
-bool Matrix3::ToEulerAnglesXYZ(Radian& rfYAngle, Radian& rfPAngle,
-	Radian& rfRAngle) const
-{
-	// rot =  cy*cz          -cy*sz           sy
-	//        cz*sx*sy+cx*sz  cx*cz-sx*sy*sz -cy*sx
-	//       -cx*cz*sy+sx*sz  cz*sx+cx*sy*sz  cx*cy
 
-	rfPAngle = Radian(Math::ASin(m[0][2]));
-	if (rfPAngle < Radian(Math::HALF_PI))
+bool Matrix3::ToEulerAnglesXYZ(float& rfYAngle, float& rfPAngle, float& rfRAngle) const
+{
+
+	rfPAngle = std::asin(m[0][2]);
+	if (rfPAngle < Math::HALF_PI)
 	{
-		if (rfPAngle > Radian(-Math::HALF_PI))
+		if (rfPAngle > -Math::HALF_PI)
 		{
-			rfYAngle = Math::ATan2(-m[1][2], m[2][2]);
-			rfRAngle = Math::ATan2(-m[0][1], m[0][0]);
+			rfYAngle = std::atan2(-m[1][2], m[2][2]);
+			rfRAngle = std::atan2(-m[0][1], m[0][0]);
 			return true;
 		}
 		else
 		{
-			// WARNING.  Not a unique solution.
-			Radian fRmY = Math::ATan2(m[1][0], m[1][1]);
-			rfRAngle = Radian(0.0);  // any angle works
+			float fRmY = std::atan2(m[1][0], m[1][1]);
+			rfRAngle = 0.0;
 			rfYAngle = rfRAngle - fRmY;
 			return false;
 		}
 	}
 	else
 	{
-		// WARNING.  Not a unique solution.
-		Radian fRpY = Math::ATan2(m[1][0], m[1][1]);
-		rfRAngle = Radian(0.0);  // any angle works
+		float fRpY = std::atan2(m[1][0], m[1][1]);
+		rfRAngle = 0.0; 
 		rfYAngle = fRpY - rfRAngle;
 		return false;
 	}
 }
-//-----------------------------------------------------------------------
-bool Matrix3::ToEulerAnglesXZY(Radian& rfYAngle, Radian& rfPAngle,
-	Radian& rfRAngle) const
-{
-	// rot =  cy*cz          -sz              cz*sy
-	//        sx*sy+cx*cy*sz  cx*cz          -cy*sx+cx*sy*sz
-	//       -cx*sy+cy*sx*sz  cz*sx           cx*cy+sx*sy*sz
 
-	rfPAngle = Math::ASin(-m[0][1]);
-	if (rfPAngle < Radian(Math::HALF_PI))
+bool Matrix3::ToEulerAnglesXZY(float& rfYAngle, float& rfPAngle, float& rfRAngle) const
+{
+
+	rfPAngle = std::asin(-m[0][1]);
+	if (rfPAngle < Math::HALF_PI)
 	{
-		if (rfPAngle > Radian(-Math::HALF_PI))
+		if (rfPAngle > -Math::HALF_PI)
 		{
-			rfYAngle = Math::ATan2(m[2][1], m[1][1]);
-			rfRAngle = Math::ATan2(m[0][2], m[0][0]);
+			rfYAngle = std::atan2(m[2][1], m[1][1]);
+			rfRAngle = std::atan2(m[0][2], m[0][0]);
 			return true;
 		}
 		else
 		{
-			// WARNING.  Not a unique solution.
-			Radian fRmY = Math::ATan2(-m[2][0], m[2][2]);
-			rfRAngle = Radian(0.0);  // any angle works
+			float fRmY = std::atan2(-m[2][0], m[2][2]);
+			rfRAngle = 0.0;  
 			rfYAngle = rfRAngle - fRmY;
 			return false;
 		}
 	}
 	else
 	{
-		// WARNING.  Not a unique solution.
-		Radian fRpY = Math::ATan2(-m[2][0], m[2][2]);
-		rfRAngle = Radian(0.0);  // any angle works
+		float fRpY = std::atan2(-m[2][0], m[2][2]);
+		rfRAngle = 0.0; 
 		rfYAngle = fRpY - rfRAngle;
 		return false;
 	}
 }
-//-----------------------------------------------------------------------
-bool Matrix3::ToEulerAnglesYXZ(Radian& rfYAngle, Radian& rfPAngle,
-	Radian& rfRAngle) const
-{
-	// rot =  cy*cz+sx*sy*sz  cz*sx*sy-cy*sz  cx*sy
-	//        cx*sz           cx*cz          -sx
-	//       -cz*sy+cy*sx*sz  cy*cz*sx+sy*sz  cx*cy
 
-	rfPAngle = Math::ASin(-m[1][2]);
-	if (rfPAngle < Radian(Math::HALF_PI))
+bool Matrix3::ToEulerAnglesYXZ(float& rfYAngle, float& rfPAngle, float& rfRAngle) const
+{
+	rfPAngle = std::asin(-m[1][2]);
+	if (rfPAngle < Math::HALF_PI)
 	{
-		if (rfPAngle > Radian(-Math::HALF_PI))
+		if (rfPAngle > -Math::HALF_PI)
 		{
-			rfYAngle = Math::ATan2(m[0][2], m[2][2]);
-			rfRAngle = Math::ATan2(m[1][0], m[1][1]);
+			rfYAngle = std::atan2(m[0][2], m[2][2]);
+			rfRAngle = std::atan2(m[1][0], m[1][1]);
 			return true;
 		}
 		else
 		{
-			// WARNING.  Not a unique solution.
-			Radian fRmY = Math::ATan2(-m[0][1], m[0][0]);
-			rfRAngle = Radian(0.0);  // any angle works
+			float fRmY = std::atan2(-m[0][1], m[0][0]);
+			rfRAngle = 0.0; 
 			rfYAngle = rfRAngle - fRmY;
 			return false;
 		}
 	}
 	else
 	{
-		// WARNING.  Not a unique solution.
-		Radian fRpY = Math::ATan2(-m[0][1], m[0][0]);
-		rfRAngle = Radian(0.0);  // any angle works
+		float fRpY = std::atan2(-m[0][1], m[0][0]);
+		rfRAngle = 0.0; 
 		rfYAngle = fRpY - rfRAngle;
 		return false;
 	}
 }
-//-----------------------------------------------------------------------
-bool Matrix3::ToEulerAnglesYZX(Radian& rfYAngle, Radian& rfPAngle,
-	Radian& rfRAngle) const
-{
-	// rot =  cy*cz           sx*sy-cx*cy*sz  cx*sy+cy*sx*sz
-	//        sz              cx*cz          -cz*sx
-	//       -cz*sy           cy*sx+cx*sy*sz  cx*cy-sx*sy*sz
 
-	rfPAngle = Math::ASin(m[1][0]);
-	if (rfPAngle < Radian(Math::HALF_PI))
+bool Matrix3::ToEulerAnglesYZX(float& rfYAngle, float& rfPAngle, float& rfRAngle) const
+{
+	rfPAngle = std::asin(m[1][0]);
+	if (rfPAngle < Math::HALF_PI)
 	{
-		if (rfPAngle > Radian(-Math::HALF_PI))
+		if (rfPAngle > -Math::HALF_PI)
 		{
-			rfYAngle = Math::ATan2(-m[2][0], m[0][0]);
-			rfRAngle = Math::ATan2(-m[1][2], m[1][1]);
+			rfYAngle = std::atan2(-m[2][0], m[0][0]);
+			rfRAngle = std::atan2(-m[1][2], m[1][1]);
 			return true;
 		}
 		else
 		{
-			// WARNING.  Not a unique solution.
-			Radian fRmY = Math::ATan2(m[2][1], m[2][2]);
-			rfRAngle = Radian(0.0);  // any angle works
+			float fRmY = std::atan2(m[2][1], m[2][2]);
+			rfRAngle = 0.0;
 			rfYAngle = rfRAngle - fRmY;
 			return false;
 		}
 	}
 	else
 	{
-		// WARNING.  Not a unique solution.
-		Radian fRpY = Math::ATan2(m[2][1], m[2][2]);
-		rfRAngle = Radian(0.0);  // any angle works
+		float fRpY = std::atan2(m[2][1], m[2][2]);
+		rfRAngle = 0.0;
 		rfYAngle = fRpY - rfRAngle;
 		return false;
 	}
 }
-//-----------------------------------------------------------------------
-bool Matrix3::ToEulerAnglesZXY(Radian& rfYAngle, Radian& rfPAngle,
-	Radian& rfRAngle) const
-{
-	// rot =  cy*cz-sx*sy*sz -cx*sz           cz*sy+cy*sx*sz
-	//        cz*sx*sy+cy*sz  cx*cz          -cy*cz*sx+sy*sz
-	//       -cx*sy           sx              cx*cy
 
-	rfPAngle = Math::ASin(m[2][1]);
-	if (rfPAngle < Radian(Math::HALF_PI))
+bool Matrix3::ToEulerAnglesZXY(float& rfYAngle, float& rfPAngle, float& rfRAngle) const
+{
+
+	rfPAngle = std::asin(m[2][1]);
+	if (rfPAngle < Math::HALF_PI)
 	{
-		if (rfPAngle > Radian(-Math::HALF_PI))
+		if (rfPAngle > -Math::HALF_PI)
 		{
-			rfYAngle = Math::ATan2(-m[0][1], m[1][1]);
-			rfRAngle = Math::ATan2(-m[2][0], m[2][2]);
+			rfYAngle = std::atan2(-m[0][1], m[1][1]);
+			rfRAngle = std::atan2(-m[2][0], m[2][2]);
 			return true;
 		}
 		else
 		{
-			// WARNING.  Not a unique solution.
-			Radian fRmY = Math::ATan2(m[0][2], m[0][0]);
-			rfRAngle = Radian(0.0);  // any angle works
+			float fRmY = std::atan2(m[0][2], m[0][0]);
+			rfRAngle = 0.0;
 			rfYAngle = rfRAngle - fRmY;
 			return false;
 		}
 	}
 	else
 	{
-		// WARNING.  Not a unique solution.
-		Radian fRpY = Math::ATan2(m[0][2], m[0][0]);
-		rfRAngle = Radian(0.0);  // any angle works
+		float fRpY = std::atan2(m[0][2], m[0][0]);
+		rfRAngle = 0.0;
 		rfYAngle = fRpY - rfRAngle;
 		return false;
 	}
 }
-//-----------------------------------------------------------------------
-bool Matrix3::ToEulerAnglesZYX(Radian& rfYAngle, Radian& rfPAngle,
-	Radian& rfRAngle) const
-{
-	// rot =  cy*cz           cz*sx*sy-cx*sz  cx*cz*sy+sx*sz
-	//        cy*sz           cx*cz+sx*sy*sz -cz*sx+cx*sy*sz
-	//       -sy              cy*sx           cx*cy
 
-	rfPAngle = Math::ASin(-m[2][0]);
-	if (rfPAngle < Radian(Math::HALF_PI))
+bool Matrix3::ToEulerAnglesZYX(float& rfYAngle, float& rfPAngle, float& rfRAngle) const
+{
+	rfPAngle = std::asin(-m[2][0]);
+	if (rfPAngle < Math::HALF_PI)
 	{
-		if (rfPAngle > Radian(-Math::HALF_PI))
+		if (rfPAngle > -Math::HALF_PI)
 		{
-			rfYAngle = Math::ATan2(m[1][0], m[0][0]);
-			rfRAngle = Math::ATan2(m[2][1], m[2][2]);
+			rfYAngle = std::atan2(m[1][0], m[0][0]);
+			rfRAngle = std::atan2(m[2][1], m[2][2]);
 			return true;
 		}
 		else
 		{
-			// WARNING.  Not a unique solution.
-			Radian fRmY = Math::ATan2(-m[0][1], m[0][2]);
-			rfRAngle = Radian(0.0);  // any angle works
+			float fRmY = std::atan2(-m[0][1], m[0][2]);
+			rfRAngle = 0.0;
 			rfYAngle = rfRAngle - fRmY;
 			return false;
 		}
 	}
 	else
 	{
-		// WARNING.  Not a unique solution.
-		Radian fRpY = Math::ATan2(-m[0][1], m[0][2]);
-		rfRAngle = Radian(0.0);  // any angle works
+		float fRpY = std::atan2(-m[0][1], m[0][2]);
+		rfRAngle = 0.0;
 		rfYAngle = fRpY - rfRAngle;
 		return false;
 	}
 }
-//-----------------------------------------------------------------------
-void Matrix3::FromEulerAnglesXYZ(const Radian& fYAngle, const Radian& fPAngle,
-	const Radian& fRAngle)
+
+void Matrix3::FromEulerAnglesXYZ(const float& fYAngle, const float& fPAngle, const float& fRAngle)
 {
 	float fCos, fSin;
 
-	fCos = Math::Cos(fYAngle);
-	fSin = Math::Sin(fYAngle);
+	fCos = std::cos(fYAngle);
+	fSin = std::sin(fYAngle);
 	Matrix3 kXMat(1.0, 0.0, 0.0, 0.0, fCos, -fSin, 0.0, fSin, fCos);
 
-	fCos = Math::Cos(fPAngle);
-	fSin = Math::Sin(fPAngle);
+	fCos = std::cos(fPAngle);
+	fSin = std::sin(fPAngle);
 	Matrix3 kYMat(fCos, 0.0, fSin, 0.0, 1.0, 0.0, -fSin, 0.0, fCos);
 
-	fCos = Math::Cos(fRAngle);
-	fSin = Math::Sin(fRAngle);
+	fCos = std::cos(fRAngle);
+	fSin = std::sin(fRAngle);
 	Matrix3 kZMat(fCos, -fSin, 0.0, fSin, fCos, 0.0, 0.0, 0.0, 1.0);
 
 	*this = kXMat*(kYMat*kZMat);
 }
-//-----------------------------------------------------------------------
-void Matrix3::FromEulerAnglesXZY(const Radian& fYAngle, const Radian& fPAngle,
-	const Radian& fRAngle)
+
+void Matrix3::FromEulerAnglesXZY(const float& fYAngle, const float& fPAngle, const float& fRAngle)
 {
 	float fCos, fSin;
 
-	fCos = Math::Cos(fYAngle);
-	fSin = Math::Sin(fYAngle);
+	fCos = std::cos(fYAngle);
+	fSin = std::sin(fYAngle);
 	Matrix3 kXMat(1.0, 0.0, 0.0, 0.0, fCos, -fSin, 0.0, fSin, fCos);
 
-	fCos = Math::Cos(fPAngle);
-	fSin = Math::Sin(fPAngle);
+	fCos = std::cos(fPAngle);
+	fSin = std::sin(fPAngle);
 	Matrix3 kZMat(fCos, -fSin, 0.0, fSin, fCos, 0.0, 0.0, 0.0, 1.0);
 
-	fCos = Math::Cos(fRAngle);
-	fSin = Math::Sin(fRAngle);
+	fCos = std::cos(fRAngle);
+	fSin = std::sin(fRAngle);
 	Matrix3 kYMat(fCos, 0.0, fSin, 0.0, 1.0, 0.0, -fSin, 0.0, fCos);
 
 	*this = kXMat*(kZMat*kYMat);
 }
-//-----------------------------------------------------------------------
-void Matrix3::FromEulerAnglesYXZ(const Radian& fYAngle, const Radian& fPAngle,
-	const Radian& fRAngle)
+
+void Matrix3::FromEulerAnglesYXZ(const float& fYAngle, const float& fPAngle, const float& fRAngle)
 {
 	float fCos, fSin;
 
-	fCos = Math::Cos(fYAngle);
-	fSin = Math::Sin(fYAngle);
+	fCos = std::cos(fYAngle);
+	fSin = std::sin(fYAngle);
 	Matrix3 kYMat(fCos, 0.0, fSin, 0.0, 1.0, 0.0, -fSin, 0.0, fCos);
 
-	fCos = Math::Cos(fPAngle);
-	fSin = Math::Sin(fPAngle);
+	fCos = std::cos(fPAngle);
+	fSin = std::sin(fPAngle);
 	Matrix3 kXMat(1.0, 0.0, 0.0, 0.0, fCos, -fSin, 0.0, fSin, fCos);
 
-	fCos = Math::Cos(fRAngle);
-	fSin = Math::Sin(fRAngle);
+	fCos = std::cos(fRAngle);
+	fSin = std::sin(fRAngle);
 	Matrix3 kZMat(fCos, -fSin, 0.0, fSin, fCos, 0.0, 0.0, 0.0, 1.0);
 
 	*this = kYMat*(kXMat*kZMat);
 }
-//-----------------------------------------------------------------------
-void Matrix3::FromEulerAnglesYZX(const Radian& fYAngle, const Radian& fPAngle,
-	const Radian& fRAngle)
+
+void Matrix3::FromEulerAnglesYZX(const float& fYAngle, const float& fPAngle, const float& fRAngle)
 {
 	float fCos, fSin;
 
-	fCos = Math::Cos(fYAngle);
-	fSin = Math::Sin(fYAngle);
+	fCos = std::cos(fYAngle);
+	fSin = std::sin(fYAngle);
 	Matrix3 kYMat(fCos, 0.0, fSin, 0.0, 1.0, 0.0, -fSin, 0.0, fCos);
 
-	fCos = Math::Cos(fPAngle);
-	fSin = Math::Sin(fPAngle);
+	fCos = std::cos(fPAngle);
+	fSin = std::sin(fPAngle);
 	Matrix3 kZMat(fCos, -fSin, 0.0, fSin, fCos, 0.0, 0.0, 0.0, 1.0);
 
-	fCos = Math::Cos(fRAngle);
-	fSin = Math::Sin(fRAngle);
+	fCos = std::cos(fRAngle);
+	fSin = std::sin(fRAngle);
 	Matrix3 kXMat(1.0, 0.0, 0.0, 0.0, fCos, -fSin, 0.0, fSin, fCos);
 
 	*this = kYMat*(kZMat*kXMat);
 }
-//-----------------------------------------------------------------------
-void Matrix3::FromEulerAnglesZXY(const Radian& fYAngle, const Radian& fPAngle,
-	const Radian& fRAngle)
+
+void Matrix3::FromEulerAnglesZXY(const float& fYAngle, const float& fPAngle, const float& fRAngle)
 {
 	float fCos, fSin;
 
-	fCos = Math::Cos(fYAngle);
-	fSin = Math::Sin(fYAngle);
+	fCos = std::cos(fYAngle);
+	fSin = std::sin(fYAngle);
 	Matrix3 kZMat(fCos, -fSin, 0.0, fSin, fCos, 0.0, 0.0, 0.0, 1.0);
 
-	fCos = Math::Cos(fPAngle);
-	fSin = Math::Sin(fPAngle);
+	fCos = std::cos(fPAngle);
+	fSin = std::sin(fPAngle);
 	Matrix3 kXMat(1.0, 0.0, 0.0, 0.0, fCos, -fSin, 0.0, fSin, fCos);
 
-	fCos = Math::Cos(fRAngle);
-	fSin = Math::Sin(fRAngle);
+	fCos = std::cos(fRAngle);
+	fSin = std::sin(fRAngle);
 	Matrix3 kYMat(fCos, 0.0, fSin, 0.0, 1.0, 0.0, -fSin, 0.0, fCos);
 
 	*this = kZMat*(kXMat*kYMat);
 }
-//-----------------------------------------------------------------------
-void Matrix3::FromEulerAnglesZYX(const Radian& fYAngle, const Radian& fPAngle,
-	const Radian& fRAngle)
+
+void Matrix3::FromEulerAnglesZYX(const float& fYAngle, const float& fPAngle, const float& fRAngle)
 {
 	float fCos, fSin;
 
-	fCos = Math::Cos(fYAngle);
-	fSin = Math::Sin(fYAngle);
+	fCos = std::cos(fYAngle);
+	fSin = std::sin(fYAngle);
 	Matrix3 kZMat(fCos, -fSin, 0.0, fSin, fCos, 0.0, 0.0, 0.0, 1.0);
 
-	fCos = Math::Cos(fPAngle);
-	fSin = Math::Sin(fPAngle);
+	fCos = std::cos(fPAngle);
+	fSin = std::sin(fPAngle);
 	Matrix3 kYMat(fCos, 0.0, fSin, 0.0, 1.0, 0.0, -fSin, 0.0, fCos);
 
-	fCos = Math::Cos(fRAngle);
-	fSin = Math::Sin(fRAngle);
+	fCos = std::cos(fRAngle);
+	fSin = std::sin(fRAngle);
 	Matrix3 kXMat(1.0, 0.0, 0.0, 0.0, fCos, -fSin, 0.0, fSin, fCos);
 
 	*this = kZMat*(kYMat*kXMat);
 }
-//-----------------------------------------------------------------------
+
 void Matrix3::Tridiagonal(float afDiag[3], float afSubDiag[3])
 {
-	// Householder reduction T = Q^t M Q
-	//   Input:
-	//     mat, symmetric 3x3 matrix M
-	//   Output:
-	//     mat, orthogonal matrix Q
-	//     diag, diagonal entries of T
-	//     subd, subdiagonal entries of T (T is symmetric)
-
 	float fA = m[0][0];
 	float fB = m[0][1];
 	float fC = m[0][2];
@@ -1259,9 +1164,9 @@ void Matrix3::Tridiagonal(float afDiag[3], float afSubDiag[3])
 
 	afDiag[0] = fA;
 	afSubDiag[2] = 0.0;
-	if (Math::Abs(fC) >= EPSILON)
+	if (std::abs(fC) >= EPSILON)
 	{
-		float fLength = Math::Sqrt(fB*fB + fC*fC);
+		float fLength = std::sqrt(fB*fB + fC*fC);
 		float fInvLength = 1.0f / fLength;
 		fB *= fInvLength;
 		fC *= fInvLength;
@@ -1297,12 +1202,9 @@ void Matrix3::Tridiagonal(float afDiag[3], float afSubDiag[3])
 		m[2][2] = 1.0;
 	}
 }
-//-----------------------------------------------------------------------
+
 bool Matrix3::QLAlgorithm(float afDiag[3], float afSubDiag[3])
 {
-	// QL iteration with implicit shifting to reduce matrix from tridiagonal
-	// to diagonal
-
 	for (int i0 = 0; i0 < 3; i0++)
 	{
 		const unsigned int iMaxIter = 32;

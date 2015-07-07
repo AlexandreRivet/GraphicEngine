@@ -45,9 +45,12 @@
     <ClInclude Include="include\Math\Math.h">
       <Filter>Fichiers d%27en-tête\Math</Filter>
     </ClInclude>
+<<<<<<< HEAD
+=======
     <ClInclude Include="include\shaderManager.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+>>>>>>> 01d211de41a42c391f211bfb8b71eb6634527ad0
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Math\Vector3.cpp">

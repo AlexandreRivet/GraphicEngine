@@ -30,17 +30,15 @@ void Quaternion::FromRotationMatrix(const Matrix3& kRot){
 
 	if (fTrace > 0.0)
 	{
-		// |w| > 1/2, may as well choose w > 1/2
-		fRoot = sqrt(fTrace + 1.0f);  // 2w
+		fRoot = sqrt(fTrace + 1.0f); 
 		w = 0.5f*fRoot;
-		fRoot = 0.5f / fRoot;  // 1/(4w)
+		fRoot = 0.5f / fRoot; 
 		x = (kRot[2][1] - kRot[1][2])*fRoot;
 		y = (kRot[0][2] - kRot[2][0])*fRoot;
 		z = (kRot[1][0] - kRot[0][1])*fRoot;
 	}
 	else
 	{
-		// |w| <= 1/2
 		static size_t s_iNext[3] = { 1, 2, 0 };
 		size_t i = 0;
 		if (kRot[1][1] > kRot[0][0])
@@ -103,7 +101,6 @@ void Quaternion::ToAngleAxis(float& rfAngle, Vector3& rkAxis) const{
 	}
 	else
 	{
-		// angle is 0 (mod 2*pi), so any axis will do
 		rfAngle = 0.0;
 		rkAxis.x = 1.0;
 		rkAxis.y = 0.0;
@@ -127,7 +124,7 @@ void Quaternion::FromAxes(const Vector3* akAxis){
 
 	FromRotationMatrix(kRot);
 }
-void Quaternion::FromAxes(const Vector3& xAxis, const Vector3& yAxis, const Vector3& zAxis){
+void Quaternion::FromAxes(const Vector3& xaxis, const Vector3& yaxis, const Vector3& zaxis){
 	Matrix3 kRot;
 
 	kRot[0][0] = xaxis.x;
@@ -156,7 +153,7 @@ void Quaternion::ToAxes(Vector3* akAxis) const{
 		akAxis[iCol].z = kRot[2][iCol];
 	}
 }
-void Quaternion::ToAxes(Vector3& xAxis, Vector3& yAxis, Vector3& zAxis) const{
+void Quaternion::ToAxes(Vector3& xaxis, Vector3& yaxis, Vector3& zaxis) const{
 	Matrix3 kRot;
 
 	ToRotationMatrix(kRot);
@@ -255,7 +252,6 @@ Quaternion Quaternion::Inverse() const{
 	}
 	else
 	{
-		// return an invalid result to flag the error
 		return ZERO;
 	}
 }
@@ -311,27 +307,24 @@ Quaternion Quaternion::Log() const{
 Vector3 Quaternion::operator* (const Vector3& rkVector) const{
 	Vector3 uv, uuv;
 	Vector3 qvec(x, y, z);
-	uv = qvec.crossProduct(v);
+	uv = qvec.crossProduct(rkVector);
 	uuv = qvec.crossProduct(uv);
 	uv *= (2.0f * w);
 	uuv *= 2.0f;
 
-	return v + uv + uuv;
+	return rkVector + uv + uuv;
 }
-float Quaternion::getRoll(bool reprojectAxis = true) const{
+float Quaternion::getRoll(bool reprojectAxis = true) const
+{
 	if (reprojectAxis)
 	{
-		// roll = atan2(localx.y, localx.x)
-		// pick parts of xAxis() implementation that we need
-		//			float fTx  = 2.0*x;
+
 		float fTy = 2.0f*y;
 		float fTz = 2.0f*z;
 		float fTwz = fTz*w;
 		float fTxy = fTy*x;
 		float fTyy = fTy*y;
 		float fTzz = fTz*z;
-
-		// Vector3(1.0-(fTyy+fTzz), fTxy+fTwz, fTxz-fTwy);
 
 		return atan2(fTxy + fTwz, 1.0f - (fTyy + fTzz));
 
@@ -344,30 +337,24 @@ float Quaternion::getRoll(bool reprojectAxis = true) const{
 float Quaternion::getPitch(bool reprojectAxis = true) const{
 	if (reprojectAxis)
 	{
-		// pitch = atan2(localy.z, localy.y)
-		// pick parts of yAxis() implementation that we need
 		float fTx = 2.0f*x;
-		//			float fTy  = 2.0f*y;
+	
 		float fTz = 2.0f*z;
 		float fTwx = fTx*w;
 		float fTxx = fTx*x;
 		float fTyz = fTz*y;
 		float fTzz = fTz*z;
 
-		// Vector3(fTxy-fTwz, 1.0-(fTxx+fTzz), fTyz+fTwx);
 		return atan2(fTyz + fTwx, 1.0f - (fTxx + fTzz));
 	}
 	else
 	{
-		// internal version
 		return atan2(2 * (y*z + w*x), w*w - x*x - y*y + z*z);
 	}
 }
 float Quaternion::getYaw(bool reprojectAxis = true) const{
 	if (reprojectAxis)
 	{
-		// yaw = atan2(localz.x, localz.z)
-		// pick parts of zAxis() implementation that we need
 		float fTx = 2.0f*x;
 		float fTy = 2.0f*y;
 		float fTz = 2.0f*z;
@@ -376,14 +363,11 @@ float Quaternion::getYaw(bool reprojectAxis = true) const{
 		float fTxz = fTz*x;
 		float fTyy = fTy*y;
 
-		// Vector3(fTxz+fTwy, fTyz-fTwx, 1.0-(fTxx+fTyy));
-
 		return atan2(fTxz + fTwy, 1.0f - (fTxx + fTyy));
 
 	}
 	else
 	{
-		// internal version
 		return asin(-2 * (x*z - w*y));
 	}
 }
@@ -398,7 +382,6 @@ static Quaternion Slerp(float fT, const Quaternion& rkP, const Quaternion& rkQ, 
 	float fCos = rkP.Dot(rkQ);
 	Quaternion rkT;
 
-	// Do we need to invert rotation?
 	if (fCos < 0.0f && shortestPath)
 	{
 		fCos = -fCos;
@@ -411,7 +394,6 @@ static Quaternion Slerp(float fT, const Quaternion& rkP, const Quaternion& rkQ, 
 
 	if (abs(fCos) < 1 - msEpsilon)
 	{
-		// Standard case (slerp)
 		float fSin = sqrt(1 - pow(fCos, 2));
 		float fAngle = atan2(fSin, fCos);
 		float fInvSin = 1.0f / fSin;
@@ -421,14 +403,7 @@ static Quaternion Slerp(float fT, const Quaternion& rkP, const Quaternion& rkQ, 
 	}
 	else
 	{
-		// There are two situations:
-		// 1. "rkP" and "rkQ" are very close (fCos ~= +1), so we can do a linear
-		//    interpolation safely.
-		// 2. "rkP" and "rkQ" are almost inverse of each other (fCos ~= -1), there
-		//    are an infinite number of possibilities interpolation. but we haven't
-		//    have method to fix this case, so just use linear interpolation here.
 		Quaternion t = (1.0f - fT) * rkP + fT * rkT;
-		// taking the complement requires renormalisation
 		t.normalise();
 		return t;
 	}
@@ -455,7 +430,7 @@ static void Intermediate(const Quaternion& rkQ0, const Quaternion& rkQ1, const Q
 	Quaternion kArg = 0.25*(rkP0.Log() - rkP1.Log());
 	Quaternion kMinusArg = -kArg;
 
-	rkA = rkQ1*kArg.Exp();
+	rka = rkQ1*kArg.Exp();
 	rkB = rkQ1*kMinusArg.Exp();
 }
 static Quaternion Squad(float fT, const Quaternion& rkP, const Quaternion& rkA, const Quaternion& rkB, const Quaternion& rkQ, bool shortestPath = false){
@@ -485,4 +460,9 @@ static const Quaternion IDENTITY;
 std::ostream& operator << (std::ostream& o, const Quaternion& q){
 	o << "Quaternion(" << q.w << ", " << q.x << ", " << q.y << ", " << q.z << ")";
 	return o;
+}
+
+Quaternion operator* (float fScalar, const Quaternion& rkQ)
+{
+	return Quaternion(fScalar*rkQ.w, fScalar*rkQ.x, fScalar*rkQ.y, fScalar*rkQ.z);
 }
