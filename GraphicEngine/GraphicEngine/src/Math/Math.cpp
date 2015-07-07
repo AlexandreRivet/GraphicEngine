@@ -2,8 +2,8 @@
 
 namespace Math
 {
-    static const float TWO_PI = M_PI * 2.0f;
-    static const float HALF_PI = 0.5f * M_PI;
+    static const float TWO_PI = static_cast<float>(M_PI) * 2.0f;
+    static const float HALF_PI = 0.5f * static_cast<float>(M_PI);
 
     float UnitRandom()
     {
