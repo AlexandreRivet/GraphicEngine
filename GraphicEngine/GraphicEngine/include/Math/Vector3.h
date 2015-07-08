@@ -62,4 +62,6 @@ public:
 
 };
 
+typedef std::vector<Vector3> Vector3Vector;
+
 #endif
