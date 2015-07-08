@@ -766,10 +766,7 @@ public:
 		return o;
 	}
 };
-<<<<<<< HEAD
 
 typedef std::vector<Vector3> Vector3Vector;
 
-=======
->>>>>>> 434ba674a3a2e7af2f47e7b2bddf6057b6633ee8
 #endif
