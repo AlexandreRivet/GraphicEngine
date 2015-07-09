@@ -11,24 +11,40 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\config.h" />
+    <ClInclude Include="include\Cameras\Camera.h" />
+    <ClInclude Include="include\Cameras\PerspectiveCamera.h" />
+    <ClInclude Include="include\Materials\BasicMaterial.h" />
+    <ClInclude Include="include\Materials\Material.h" />
+    <ClInclude Include="include\Materials\Shader.h" />
+    <ClInclude Include="include\Materials\ShaderLoader.h" />
     <ClInclude Include="include\Math\Math.h" />
     <ClInclude Include="include\Math\Matrix3.h" />
     <ClInclude Include="include\Math\Matrix4.h" />
     <ClInclude Include="include\Math\Quaternion.h" />
     <ClInclude Include="include\Math\Vector2.h" />
     <ClInclude Include="include\Math\Vector3.h" />
+    <ClInclude Include="include\Objects\Geometry.h" />
+    <ClInclude Include="include\Objects\Mesh.h" />
+    <ClInclude Include="include\Objects\Object3D.h" />
     <ClInclude Include="include\prerequisites.h" />
-    <ClInclude Include="include\shaderManager.h" />
+    <ClInclude Include="include\Utils\Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\Cameras\Camera.cpp" />
+    <ClCompile Include="src\Materials\BasicMaterial.cpp" />
+    <ClCompile Include="src\Materials\Material.cpp" />
+    <ClCompile Include="src\Materials\Shader.cpp" />
+    <ClCompile Include="src\Materials\ShaderLoader.cpp" />
     <ClCompile Include="src\Math\Math.cpp" />
     <ClCompile Include="src\Math\Matrix3.cpp" />
     <ClCompile Include="src\Math\Matrix4.cpp" />
     <ClCompile Include="src\Math\Quaternion.cpp" />
     <ClCompile Include="src\Math\Vector2.cpp" />
     <ClCompile Include="src\Math\Vector3.cpp" />
-    <ClCompile Include="src\shaderManager.cpp" />
+    <ClCompile Include="src\Objects\Geometry.cpp" />
+    <ClCompile Include="src\Objects\Object3D.cpp" />
+    <ClCompile Include="src\Utils\Utils.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{56E312C7-33C9-4C37-B927-1AACE8D5CE25}</ProjectGuid>
@@ -76,7 +92,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_USE_MATH_DEFINES;WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.\include;$(Lib_FreeGLUT)/include;$(Lib_Glew)/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\include;$(Lib_FreeGLUT)\include;$(Lib_Glew)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -96,7 +112,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_USE_MATH_DEFINES;WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.\include;$(Lib_FreeGLUT)/include;$(Lib_Glew)/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\include;$(Lib_FreeGLUT)\include;$(Lib_Glew)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

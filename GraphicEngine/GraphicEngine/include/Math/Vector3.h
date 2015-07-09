@@ -2,6 +2,8 @@
 #define _VECTOR3_H_
 
 #include "prerequisites.h"
+#include "Math/Quaternion.h"
+#include "Math/Math.h"
 
 class Vector3
 {

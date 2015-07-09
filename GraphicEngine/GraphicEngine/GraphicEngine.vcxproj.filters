@@ -19,6 +19,30 @@
     <Filter Include="Fichiers sources\Math">
       <UniqueIdentifier>{2394b27a-0c52-4558-a109-9ad4c80c561a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Objects">
+      <UniqueIdentifier>{3ee4f217-0d78-4165-a316-5f8c177d4c20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Objects">
+      <UniqueIdentifier>{826f61db-79ca-462a-884f-61692de6b4d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Materials">
+      <UniqueIdentifier>{cb0b9610-3b40-46fd-af91-64ee1b700c8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Materials">
+      <UniqueIdentifier>{77cb1295-2482-44bd-9540-b4b4f910068a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Utils">
+      <UniqueIdentifier>{4a96cdc9-99a8-4ad5-a87a-18ec3c566982}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Utils">
+      <UniqueIdentifier>{7d7e678b-4611-4ebb-85f6-4b5d81792ed1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Cameras">
+      <UniqueIdentifier>{b55209b5-845a-4c89-92e8-8ed82e6b4dcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Cameras">
+      <UniqueIdentifier>{4db23616-a73c-4667-9274-017315d541dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Math\Matrix3.h">
@@ -36,17 +60,41 @@
     <ClInclude Include="include\Math\Vector3.h">
       <Filter>Fichiers d%27en-tête\Math</Filter>
     </ClInclude>
-    <ClInclude Include="include\config.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="include\prerequisites.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="include\Math\Math.h">
       <Filter>Fichiers d%27en-tête\Math</Filter>
     </ClInclude>
-    <ClInclude Include="include\shaderManager.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="include\Objects\Mesh.h">
+      <Filter>Fichiers d%27en-tête\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Objects\Geometry.h">
+      <Filter>Fichiers d%27en-tête\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Materials\Shader.h">
+      <Filter>Fichiers d%27en-tête\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utils\Utils.h">
+      <Filter>Fichiers d%27en-tête\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Materials\Material.h">
+      <Filter>Fichiers d%27en-tête\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Materials\ShaderLoader.h">
+      <Filter>Fichiers d%27en-tête\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Materials\BasicMaterial.h">
+      <Filter>Fichiers d%27en-tête\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Objects\Object3D.h">
+      <Filter>Fichiers d%27en-tête\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Cameras\Camera.h">
+      <Filter>Fichiers d%27en-tête\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Cameras\PerspectiveCamera.h">
+      <Filter>Fichiers d%27en-tête\Cameras</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -68,8 +116,32 @@
     <ClCompile Include="src\Math\Math.cpp">
       <Filter>Fichiers sources\Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\shaderManager.cpp">
+    <ClCompile Include="src\Utils\Utils.cpp">
+      <Filter>Fichiers sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Materials\Shader.cpp">
+      <Filter>Fichiers sources\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Materials\ShaderLoader.cpp">
+      <Filter>Fichiers sources\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Materials\Material.cpp">
+      <Filter>Fichiers sources\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Materials\BasicMaterial.cpp">
+      <Filter>Fichiers sources\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cameras\Camera.cpp">
+      <Filter>Fichiers sources\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Objects\Geometry.cpp">
+      <Filter>Fichiers sources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Objects\Object3D.cpp">
+      <Filter>Fichiers sources\Objects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
