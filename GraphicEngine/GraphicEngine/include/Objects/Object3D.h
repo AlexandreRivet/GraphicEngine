@@ -42,11 +42,11 @@ public:
 	void remove(const Object3DSPtr& object);
 
 	Vector3& getPosition();
-	Vector3& getWorldPosition();
+	Vector3 getWorldPosition();
 	Quaternion& getRotation();
-	Quaternion& getWorldRotation();
+	Quaternion getWorldRotation();
 	Vector3& getScale();
-	Vector3& getWorldScale();
+	Vector3 getWorldScale();
 
 	Matrix4& getMatrix();
 	Matrix4& getWorldMatrix();
@@ -56,7 +56,6 @@ public:
 
 	void setVisible(bool visible, bool cascade = true);
 	bool isVisble() const;
-
 
 protected:
 

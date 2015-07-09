@@ -23,6 +23,10 @@ namespace Math
 
 	inline float Sqr(float v);
 
+	inline float degToRad(float d);
+
+	inline float radToDeg(float r);
+
     float UnitRandom();
 }
 

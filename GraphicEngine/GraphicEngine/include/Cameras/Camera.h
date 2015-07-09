@@ -9,9 +9,8 @@ public:
 
 	Camera();
 
-	virtual Matrix4& getProjectionMatrix();
-
-	Vector3& getWorldDirection() const;
+	Matrix4& getProjectionMatrix();
+	Vector3 getWorldDirection();
 
 protected:
 

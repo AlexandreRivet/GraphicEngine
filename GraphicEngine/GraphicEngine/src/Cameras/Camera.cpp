@@ -11,7 +11,11 @@ Matrix4& Camera::getProjectionMatrix()
 	return mProjectionMatrix;
 }
 
-Vector3& Camera::getWorldDirection() const
+Vector3 Camera::getWorldDirection()
 {
 
+
+
+
+	return Vector3();
 }

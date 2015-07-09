@@ -30,6 +30,16 @@ namespace Math
 		return v * v;
 	}
 
+	inline float degToRad(float d)
+	{
+		return d * M_PI / 180.0f;
+	}
+
+	inline float radToDeg(float r)
+	{
+		return r * 180 / M_PI;
+	}
+
     float UnitRandom()
     {
 		return float(rand()) / float(RAND_MAX);

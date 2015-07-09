@@ -127,8 +127,6 @@ void Object3D::remove(const Object3DSPtr& object)
 			break;
 		}
 	}
-
-	object->setParent(this);
 }
 
 Vector3& Object3D::getPosition()
@@ -136,7 +134,7 @@ Vector3& Object3D::getPosition()
 	return mPosition;
 }
 
-Vector3& Object3D::getWorldPosition()
+Vector3 Object3D::getWorldPosition()
 {
 	updateWorldMatrix(true);
 
@@ -150,7 +148,7 @@ Quaternion& Object3D::getRotation()
 	return mRotation;
 }
 
-Quaternion& Object3D::getWorldRotation()
+Quaternion Object3D::getWorldRotation()
 {
 	updateWorldMatrix(true);
 
@@ -162,7 +160,7 @@ Vector3& Object3D::getScale()
 	return mScale;
 }
 
-Vector3& Object3D::getWorldScale()
+Vector3 Object3D::getWorldScale()
 {
 	updateWorldMatrix(true);
 
