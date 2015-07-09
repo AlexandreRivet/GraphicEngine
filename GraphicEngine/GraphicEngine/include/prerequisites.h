@@ -22,4 +22,6 @@ class Matrix3;
 
 typedef std::vector<float> floatVector;
 typedef std::vector<uint> uintVector;
-typedef std::vector<int> intVector;#endif
+typedef std::vector<int> intVector;
+
+#endif

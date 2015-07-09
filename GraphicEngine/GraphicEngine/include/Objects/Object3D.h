@@ -8,6 +8,10 @@
 #include "Math/Quaternion.h"
 #include "Math/Matrix4.h"
 
+class Object3D;
+
+typedef std::shared_ptr<Object3D> Object3DSPtr;
+
 class Object3D
 {
 public:
@@ -70,7 +74,5 @@ protected:
 	bool mVisible;
 
 };
-
-typedef std::shared_ptr<Object3D> Object3DSPtr;
 
 #endif
