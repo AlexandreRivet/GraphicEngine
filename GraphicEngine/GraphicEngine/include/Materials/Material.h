@@ -22,4 +22,6 @@ protected:
 
 };
 
+typedef std::shared_ptr<Material> MaterialSPtr;
+
 #endif

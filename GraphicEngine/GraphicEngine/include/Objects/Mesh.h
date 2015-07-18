@@ -10,7 +10,7 @@ class Mesh: public Object3D
 public:
 
 	Mesh();
-	Mesh(Geometry* geo, Material* mat);
+	Mesh(Geometry geo, MaterialSPtr mat, bool useVBO = true);
 	~Mesh();
 
 	void initVBO();
@@ -23,18 +23,18 @@ public:
 
 protected:
 
-	Geometry* mGeometry;
-	Material* mMaterial;
+	Geometry mGeometry;
+	MaterialSPtr mMaterial;
 
 	GLuint mVerticesBuffer;
 	GLuint mIndicesBuffer;
 	GLuint mUvsBuffer;
 	GLuint mNormalsBuffer;
 
-	bool useVBO;
+	bool mUseVBO;
 
-	bool hasNormals;
-	bool hasUvs;
+	bool mHasNormals;
+	bool mHasUvs;
 
 };
 

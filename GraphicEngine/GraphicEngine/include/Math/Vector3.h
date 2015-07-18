@@ -147,7 +147,7 @@ public:
 
 	inline Vector3 operator / (const float fScalar) const
 	{
-		assert(fScalar != 0.0);
+		// assert(fScalar != 0.0);
 
 		float fInv = 1.0f / fScalar;
 

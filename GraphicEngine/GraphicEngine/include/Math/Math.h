@@ -4,6 +4,8 @@
 #include <cmath>
 #include <algorithm>
 
+#define M_PI 3.14159265358979323846
+
 namespace Math
 {
     extern const float TWO_PI;
