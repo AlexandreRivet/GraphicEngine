@@ -28,11 +28,10 @@
     <ClInclude Include="include\Objects\Mesh.h" />
     <ClInclude Include="include\Objects\Object3D.h" />
     <ClInclude Include="include\prerequisites.h" />
-    <ClInclude Include="include\Render\Render.h" />
+    <ClInclude Include="include\Render\Renderer.h" />
     <ClInclude Include="include\Utils\Utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Cameras\Camera.cpp" />
     <ClCompile Include="src\Cameras\PerspectiveCamera.cpp" />
     <ClCompile Include="src\Materials\BasicMaterial.cpp" />
@@ -117,7 +116,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_USE_MATH_DEFINES;WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.\include;$(Lib_FreeGLUT)\include;$(Lib_Glew)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\include;$(Lib_FreeGLUT)\include;$(Lib_Glew)\include;$(Lib_Stb);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
