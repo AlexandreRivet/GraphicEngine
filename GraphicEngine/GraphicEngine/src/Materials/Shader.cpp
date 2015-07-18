@@ -102,6 +102,14 @@ bool Shader::hasUniform(std::string name)
 	return true;
 }
 
+void Shader::setUniform(std::string name, Texture& tex)
+{
+	GLuint unif = uniform(name);
+
+	if (unif > 0)
+		glUniform1i(unif, tex.mIndex);
+}
+
 void Shader::setUniform(std::string name, int val)
 {
 	GLuint unif = uniform(name);

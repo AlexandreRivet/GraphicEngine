@@ -108,6 +108,16 @@ void Object3D::setParent(Object3D* object)
 	mParent = object;
 }
 
+Object3D* Object3D::getParent()
+{
+	return mParent;
+}
+
+std::vector<Object3DSPtr> Object3D::getChildren()
+{
+	return mChildren;
+}
+
 void Object3D::add(const Object3DSPtr& object)
 {
 	mChildren.push_back(object);

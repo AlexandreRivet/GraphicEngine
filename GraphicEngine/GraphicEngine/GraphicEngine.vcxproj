@@ -17,6 +17,7 @@
     <ClInclude Include="include\Materials\Material.h" />
     <ClInclude Include="include\Materials\Shader.h" />
     <ClInclude Include="include\Materials\ShaderLoader.h" />
+    <ClInclude Include="include\Materials\Texture.h" />
     <ClInclude Include="include\Math\Math.h" />
     <ClInclude Include="include\Math\Matrix3.h" />
     <ClInclude Include="include\Math\Matrix4.h" />
@@ -38,6 +39,7 @@
     <ClCompile Include="src\Materials\Material.cpp" />
     <ClCompile Include="src\Materials\Shader.cpp" />
     <ClCompile Include="src\Materials\ShaderLoader.cpp" />
+    <ClCompile Include="src\Materials\Texture.cpp" />
     <ClCompile Include="src\Math\Math.cpp" />
     <ClCompile Include="src\Math\Matrix3.cpp" />
     <ClCompile Include="src\Math\Matrix4.cpp" />
@@ -95,7 +97,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_USE_MATH_DEFINES;WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.\include;$(Lib_FreeGLUT)\include;$(Lib_Glew)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\include;$(Lib_FreeGLUT)\include;$(Lib_Glew)\include;$(Lib_Stb);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -1,5 +1,5 @@
-#ifndef _SHADERMANAGER_H_
-#define _SHADERMANAGER_H_
+#ifndef _SHADERLOADER_H_
+#define _SHADERLOADER_H_
 
 #include <string>
 #include <map>
@@ -34,4 +34,4 @@ private:
 	static std::map<std::string, ShaderSPtr> mShaders;
 };
 
-#endif //_SHADERMANAGER_H_
+#endif //_SHADERLOADER_H_

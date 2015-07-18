@@ -38,6 +38,9 @@ public:
 	void scaleZ(float scale);
 
 	void setParent(Object3D* object);
+	Object3D* getParent();
+	std::vector<Object3DSPtr> getChildren();
+
 	void add(const Object3DSPtr& object);
 	void remove(const Object3DSPtr& object);
 

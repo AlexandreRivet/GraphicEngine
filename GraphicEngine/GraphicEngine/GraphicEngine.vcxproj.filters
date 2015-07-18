@@ -105,6 +105,9 @@
     <ClInclude Include="include\Render\Render.h">
       <Filter>Fichiers d%27en-tête\Render</Filter>
     </ClInclude>
+    <ClInclude Include="include\Materials\Texture.h">
+      <Filter>Fichiers d%27en-tête\Materials</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Math\Vector3.cpp">
@@ -157,6 +160,9 @@
     </ClCompile>
     <ClCompile Include="src\Objects\Mesh.cpp">
       <Filter>Fichiers sources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Materials\Texture.cpp">
+      <Filter>Fichiers sources\Materials</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
