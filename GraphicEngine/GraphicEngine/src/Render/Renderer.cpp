@@ -46,7 +46,7 @@ void Renderer::render(Scene& s, Camera& c)
 	// Parcourir les objets
 	for (uint i = 0; i < objects.size(); ++i)
 	{
-
+		
 	}
 
 }

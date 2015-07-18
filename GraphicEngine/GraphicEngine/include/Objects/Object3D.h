@@ -8,9 +8,12 @@
 #include "Math/Quaternion.h"
 #include "Math/Matrix4.h"
 
+#include "Objects/Mesh.h"
+
 class Object3D;
 
 typedef std::shared_ptr<Object3D> Object3DSPtr;
+typedef std::unique_ptr<Object3D> Object3DUPtr;
 
 class Object3D
 {
@@ -41,9 +44,6 @@ public:
 	Object3D* getParent();
 	std::vector<Object3DSPtr> getChildren();
 
-	void add(const Object3DSPtr& object);
-	void remove(const Object3DSPtr& object);
-
 	Vector3& getPosition();
 	Vector3 getWorldPosition();
 	Quaternion& getRotation();
@@ -60,20 +60,26 @@ public:
 	void setVisible(bool visible, bool cascade = true);
 	bool isVisble() const;
 
+	void setActive(bool active);
+	bool isActive() const;
+
 protected:
 
-	Object3D* mParent;
-	std::vector<Object3DSPtr> mChildren;
+	MeshSPtr mMesh;
 
 	Vector3 mPosition;
 	Quaternion mRotation;
 	Vector3 mScale;
+
+	Object3D* mParent;
+	std::vector<Object3DSPtr> mChildren;
 
 	Matrix4 mMatrix;
 	Matrix4 mWorldMatrix;
 	bool mWorldMatrixNeedsUpdate;
 
 	bool mVisible;
+	bool mActive;
 
 };
 

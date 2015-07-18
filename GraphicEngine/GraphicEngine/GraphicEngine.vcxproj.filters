@@ -102,11 +102,14 @@
     <ClInclude Include="include\Cameras\PerspectiveCamera.h">
       <Filter>Fichiers d%27en-tête\Cameras</Filter>
     </ClInclude>
-    <ClInclude Include="include\Render\Render.h">
-      <Filter>Fichiers d%27en-tête\Render</Filter>
-    </ClInclude>
     <ClInclude Include="include\Materials\Texture.h">
       <Filter>Fichiers d%27en-tête\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Render\Renderer.h">
+      <Filter>Fichiers d%27en-tête\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Objects\Scene.h">
+      <Filter>Fichiers d%27en-tête\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +166,12 @@
     </ClCompile>
     <ClCompile Include="src\Materials\Texture.cpp">
       <Filter>Fichiers sources\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Objects\Scene.cpp">
+      <Filter>Fichiers sources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Render\Renderer.cpp">
+      <Filter>Fichiers sources\Render</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

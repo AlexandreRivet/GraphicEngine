@@ -1,6 +1,5 @@
 #include "Objects/Mesh.h"
 
-
 Mesh::Mesh(Geometry geo, MaterialSPtr mat, bool useVBO)
 	: mGeometry(geo),
 	mMaterial(mat),
@@ -9,7 +8,7 @@ Mesh::Mesh(Geometry geo, MaterialSPtr mat, bool useVBO)
 	mHasNormals(false)
 {
 	if (mUseVBO)
-		initVBO();
+		initBuffers();
 }
 
 Mesh::~Mesh()
@@ -18,7 +17,7 @@ Mesh::~Mesh()
 }
 
 
-void Mesh::initVBO()
+void Mesh::initBuffers()
 {
 	int nbVertices = mGeometry.getNbVertices();
 	int nbIndices = mGeometry.getNbIndices();
@@ -57,32 +56,4 @@ void Mesh::initVBO()
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
-
-void Mesh::checkUpdate()
-{
-
-}
-
-void Mesh::updateVBO()
-{
-
-}
-
-void Mesh::draw() const
-{
-	if (mUseVBO)
-		drawWithVBO();
-	else
-		drawWithoutVBO();
-}
-
-void Mesh::drawWithVBO() const
-{
-
-}
-
-void Mesh::drawWithoutVBO() const
-{
-
 }

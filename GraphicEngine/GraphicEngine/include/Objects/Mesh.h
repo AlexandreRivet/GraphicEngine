@@ -1,11 +1,10 @@
 #ifndef _MESH_H_
 #define _MESH_H_
 
-#include "Objects/Object3D.h"
 #include "Objects/Geometry.h"
 #include "Materials/Material.h"
 
-class Mesh: public Object3D
+class Mesh
 {
 public:
 
@@ -13,13 +12,7 @@ public:
 	Mesh(Geometry geo, MaterialSPtr mat, bool useVBO = true);
 	~Mesh();
 
-	void initVBO();
-	void checkUpdate();
-	void updateVBO();
-
-	void draw() const;
-	void drawWithVBO() const;
-	void drawWithoutVBO() const;
+	void initBuffers();
 
 protected:
 
@@ -38,5 +31,6 @@ protected:
 
 };
 
+typedef std::shared_ptr<Mesh> MeshSPtr;
 
 #endif
