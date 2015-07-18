@@ -8,6 +8,15 @@ Object3D::Object3D()
 	updateMatrix();
 }
 
+Object3D::Object3D(MeshSPtr m)
+	: mMesh(m),
+	mPosition(Vector3::ZERO),
+	mRotation(Quaternion::IDENTITY),
+	mScale(Vector3::UNIT_SCALE)
+{
+	updateMatrix();
+}
+
 void Object3D::setPosition(const Vector3& v)
 {
 	mPosition = v;
@@ -103,6 +112,11 @@ void Object3D::scaleZ(float scale)
 	scaleOnAxis(scale, Vector3::UNIT_Z);
 }
 
+void Object3D::setMesh(MeshSPtr m)
+{
+	mMesh = m;
+}
+
 void Object3D::setParent(Object3D* object)
 {
 	mParent = object;
@@ -116,27 +130,6 @@ Object3D* Object3D::getParent()
 std::vector<Object3DSPtr> Object3D::getChildren()
 {
 	return mChildren;
-}
-
-void Object3D::add(const Object3DSPtr& object)
-{
-	mChildren.push_back(object);
-	object->setParent(this);
-}
-
-void Object3D::remove(const Object3DSPtr& object)
-{
-	std::vector<Object3DSPtr>::iterator iter = mChildren.begin();
-	std::vector<Object3DSPtr>::iterator end = mChildren.end();
-
-	for (; iter != end; ++iter)
-	{
-		if (*iter == object)
-		{
-			mChildren.erase(iter);
-			break;
-		}
-	}
 }
 
 Vector3& Object3D::getPosition()

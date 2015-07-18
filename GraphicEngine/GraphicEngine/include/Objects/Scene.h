@@ -10,9 +10,14 @@ public:
 	Scene();
 
 	void add(Object3D obj, Object3D parent);
+	void remove();
 
 	void autoUpdate(bool update);
 	bool autoUpdate() const;
+
+	void needUpdate();				// callback à appeler
+	void updateObjectsList();
+	void addObjectInList(Object3DSPtr obj);
 
 private:
 	
@@ -20,7 +25,7 @@ private:
 	std::vector<Object3D> mObjects;
 
 	bool mAutoUpdate;
-
+	bool mObjectsListNeedsUpdate;
 };
 
 #endif

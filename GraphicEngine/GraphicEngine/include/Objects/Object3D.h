@@ -20,6 +20,7 @@ class Object3D
 public:
 	
 	Object3D();
+	Object3D(MeshSPtr m);
 
 	void setPosition(const Vector3& v);
 	void setRotation(const Quaternion& q);
@@ -39,6 +40,8 @@ public:
 	void scaleX(float scale);
 	void scaleY(float scale);
 	void scaleZ(float scale);
+
+	void setMesh(MeshSPtr m);
 
 	void setParent(Object3D* object);
 	Object3D* getParent();

@@ -19,15 +19,14 @@ Vector3& Renderer::getClearColor()
 
 void Renderer::render(Scene& s, Camera& c)
 {
-	if (s.autoUpdate() == true)
-		s.updateWorldMatrix();
+	/*if (s.autoUpdate() == true)*/
 
 	if (c.getParent() == nullptr)
 		c.updateWorldMatrix();
 
 	// Trier les objets
 	std::vector<Object3DSPtr> objects;
-	projectObjects(s.getChildren(), &objects);			// On fait juste une liste continue de tous les objets de la liste
+	// projectObjects(s.getChildren(), &objects);			// On fait juste une liste continue de tous les objets de la liste
 
 	std::sort(objects.begin(), objects.end(), [&c](const Object3DSPtr& a, Object3DSPtr& b)
 	{
