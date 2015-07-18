@@ -142,6 +142,15 @@ void Shader::setUniform(std::string name, float f1, float f2, float f3)
 		glUniform3f(unif, f1, f2, f3);
 }
 
+void Shader::setUniform(std::string name, float* ptr, uint size)
+{
+	GLuint unif = uniform(name);
+
+	if (unif > 0)
+		glUniform1fv(unif, size, ptr);
+}
+
+
 void Shader::setUniform(std::string name, const Vector3& v)
 {
 	GLuint unif = uniform(name);
