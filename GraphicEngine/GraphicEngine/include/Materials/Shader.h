@@ -35,6 +35,7 @@ public:
 	void setUniform(std::string name, float f);
 	void setUniform(std::string name, float f1, float f2);
 	void setUniform(std::string name, float f1, float f2, float f3);
+	void setUniform(std::string name, float* ptr, uint size);
 	void setUniform(std::string name, const Vector3& v);
 	void setUniform(std::string name, const Matrix3& m);
 	void setUniform(std::string name, const Matrix4& m);

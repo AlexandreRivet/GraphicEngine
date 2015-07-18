@@ -29,10 +29,13 @@ void Renderer::render(Scene& s, Camera& c)
 	std::vector<Object3DSPtr> objects;
 	projectObjects(s.getChildren(), &objects);			// On fait juste une liste continue de tous les objets de la liste
 
-	std::vector<Object3DSPtr> objectsSorted;
+	std::sort(objects.begin(), objects.end(), [&c](const Object3DSPtr& a, Object3DSPtr& b)
+	{
+		float distA = a->getWorldPosition().distance(c.getWorldPosition());
+		float distB = a->getWorldPosition().distance(c.getWorldPosition());
 
-
-
+		return distA < distB;
+	});
 
 	if (mAutoClear)
 	{
@@ -41,7 +44,10 @@ void Renderer::render(Scene& s, Camera& c)
 	}
 
 	// Parcourir les objets
+	for (uint i = 0; i < objects.size(); ++i)
+	{
 
+	}
 
 }
 
@@ -55,9 +61,4 @@ void Renderer::projectObjects(std::vector<Object3DSPtr>& objects, std::vector<Ob
 		out->push_back(objects[i]);
 		projectObjects(objects[i]->getChildren(), out);
 	}
-}
-
-void Renderer::sortObjectByDistance(std::vector<Object3DSPtr>& objects, Camera& c)
-{
-
 }
