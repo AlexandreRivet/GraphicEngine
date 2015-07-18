@@ -12,4 +12,24 @@ public:
 
 };
 
+namespace tools
+{
+    template <typename T>
+    void unusedArg(const T& value)
+    {
+        (void)value;
+    }
+
+    /**
+    * Variadic template uses for remove the warnings, unused parameter function
+    */
+    template < typename T, typename... TArgs >
+    void unusedArg(const T& value, TArgs... args)
+    {
+        (void)value;
+
+        unusedArg(args...);
+    }
+}
+
 #endif

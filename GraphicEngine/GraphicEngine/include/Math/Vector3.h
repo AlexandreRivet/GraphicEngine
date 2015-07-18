@@ -627,7 +627,7 @@ public:
 			if (fallbackAxis != Vector3::ZERO)
 			{
 				// rotate 180 degrees about the fallback axis
-				q.FromAngleAxis(M_PI, fallbackAxis);
+				q.FromAngleAxis(static_cast<float>(M_PI), fallbackAxis);
 			}
 			else
 			{
@@ -636,7 +636,7 @@ public:
 				if (axis.isZeroLength()) // pick another if colinear
 					axis = Vector3::UNIT_Y.crossProduct(*this);
 				axis.normalise();
-				q.FromAngleAxis(M_PI, axis);
+				q.FromAngleAxis(static_cast<float>(M_PI), axis);
 			}
 		}
 		else
