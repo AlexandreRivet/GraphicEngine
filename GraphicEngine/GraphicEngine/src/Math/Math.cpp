@@ -4,8 +4,8 @@
 
 namespace Math
 {
-    static const float TWO_PI = static_cast<float>(M_PI) * 2.0f;
-    static const float HALF_PI = 0.5f * static_cast<float>(M_PI);
+    const float TWO_PI = static_cast<float>(M_PI) * 2.0f;
+    const float HALF_PI = 0.5f * static_cast<float>(M_PI);
 
 	bool FloatEqual(float a, float b, float tolerance)
 	{
@@ -32,12 +32,12 @@ namespace Math
 
 	inline float degToRad(float d)
 	{
-		return d * M_PI / 180.0f;
+        return d * static_cast<float>(M_PI) / 180.0f;
 	}
 
 	inline float radToDeg(float r)
 	{
-		return r * 180 / M_PI;
+        return r * 180.0f / static_cast<float>(M_PI);
 	}
 
     float UnitRandom()

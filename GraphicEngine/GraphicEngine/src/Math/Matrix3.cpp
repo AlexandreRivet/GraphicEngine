@@ -1,10 +1,10 @@
 #include "Math/Matrix3.h"
 #include "Math/Math.h"
 
-const float Matrix3::EPSILON = 1e-06;
+const float Matrix3::EPSILON = 1e-06f;
 const Matrix3 Matrix3::ZERO(0, 0, 0, 0, 0, 0, 0, 0, 0);
 const Matrix3 Matrix3::IDENTITY(1, 0, 0, 0, 1, 0, 0, 0, 1);
-const float Matrix3::msSvdEpsilon = 1e-04;
+const float Matrix3::msSvdEpsilon = 1e-04f;
 const unsigned int Matrix3::msSvdMaxIterations = 32;
 
 Vector3 Matrix3::GetColumn(size_t iCol) const
@@ -701,8 +701,8 @@ void Matrix3::QDUDecomposition(Matrix3& kQ,
 float Matrix3::MaxCubicRoot(float afCoeff[3])
 {
 
-	const float fOneThird = 1.0 / 3.0;
-	const float fEpsilon = 1e-06;
+	const float fOneThird = 1.0f / 3.0f;
+	const float fEpsilon = 1e-06f;
 	float fDiscr = afCoeff[2] * afCoeff[2] - 3.0f*afCoeff[1];
 	if (fDiscr <= fEpsilon)
 		return -fOneThird*afCoeff[2];

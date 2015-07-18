@@ -1,5 +1,6 @@
 #include "Materials/Texture.h"
 
+#include "Utils/utils.h"
 
 Texture::Texture()
 	: mWidth(0),
@@ -73,7 +74,6 @@ void Texture::bind()
 
 void Texture::resize(uint w, uint h)
 {
-
 }
 
 void Texture::setFilters(uint min, uint mag)

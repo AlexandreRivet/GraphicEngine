@@ -5,7 +5,7 @@
 
 #include <cmath>
 
-const float Quaternion::msEpsilon = 1e-03;
+const float Quaternion::msEpsilon = 1e-03f;
 const Quaternion Quaternion::ZERO(0, 0, 0, 0);
 const Quaternion Quaternion::IDENTITY(1, 0, 0, 0);
 
@@ -84,7 +84,7 @@ void Quaternion::FromAngleAxis(const float& rfAngle,
 	// The quaternion representing the rotation is
 	//   q = cos(A/2)+sin(A/2)*(x*i+y*j+z*k)
 
-	float fHalfAngle(0.5*rfAngle);
+	float fHalfAngle(0.5f*rfAngle);
 	float fSin = std::sin(fHalfAngle);
 	w = std::cos(fHalfAngle);
 	x = fSin*rkAxis.x;
@@ -100,7 +100,7 @@ void Quaternion::ToAngleAxis(float& rfAngle, Vector3& rkAxis) const
 	float fSqrLength = x*x + y*y + z*z;
 	if (fSqrLength > 0.0)
 	{
-		rfAngle = 2.0*std::acos(w);
+		rfAngle = 2.0f*std::acos(w);
 		float fInvLength = Math::invSqrt(fSqrLength);
 		rkAxis.x = x*fInvLength;
 		rkAxis.y = y*fInvLength;
@@ -379,7 +379,7 @@ bool Quaternion::equals(const Quaternion& rhs, const float& tolerance) const
 	float angle = std::acos(fCos);
 
 	return (std::abs(angle) <= tolerance)
-		|| Math::FloatEqual(angle, M_PI, tolerance);
+        || Math::FloatEqual(angle, static_cast<float>(M_PI), tolerance);
 
 
 }
@@ -436,7 +436,7 @@ Quaternion Quaternion::SlerpExtraSpins(float fT,
 		return rkP;
 
 	float fSin = std::sin(fAngle);
-	float fPhase(M_PI*iExtraSpins*fT);
+    float fPhase(static_cast<float>(M_PI)*iExtraSpins*fT);
 	float fInvSin = 1.0f / fSin;
 	float fCoeff0 = std::sin((1.0f - fT)*fAngle - fPhase)*fInvSin;
 	float fCoeff1 = std::sin(fT*fAngle + fPhase)*fInvSin;
