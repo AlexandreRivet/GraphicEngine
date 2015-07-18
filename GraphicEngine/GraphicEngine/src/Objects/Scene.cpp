@@ -1,19 +1,39 @@
 #include "Objects/Scene.h"
 
 Scene::Scene()
-	: mAutoUpdate(true)
+	: mAutoUpdate(true),
+	mRoot()
 {
 
 }
 
-void Scene::add(Object3D obj, Object3D parent)
+void Scene::add(Object3DUPtr& obj, Object3D* parent)
 {
-	// TODO
+	if (parent == nullptr)
+		mRoot->addChild(obj);
+	else
+		parent->addChild(obj);
+
+	needUpdate();
 }
 
-void Scene::remove()
+void Scene::remove(Object3DUPtr& obj)
 {
-	// TODO
+	if (obj->getParent() == nullptr)		// ça veut dire qu'on est au root faut pas déconner on y touche pas à lui
+		return;
+
+	obj->getParent()->removeChild(obj);
+
+}
+
+Object3DUPtr& Scene::getRoot()
+{
+	return mRoot;
+}
+
+std::vector<Object3D*>& Scene::getObjects()
+{
+	return mObjects;
 }
 
 void Scene::autoUpdate(bool update)
@@ -38,23 +58,20 @@ void Scene::updateObjectsList()
 
 	mObjects.clear();
 
-	// Faut envoyer le root mais c'est unique_ptr
-	// addObjectInList(mRoot);
+	addObjectInList(mRoot);
 
 	mObjectsListNeedsUpdate = false;
 }
 
-void Scene::addObjectInList(Object3DSPtr obj)
+void Scene::addObjectInList(Object3DUPtr& obj)
 {
 	if (!obj->isActive())
 		return;
 
+	if (obj->isVisble() && obj->hasMesh())
+		mObjects.push_back(obj.get());
 
-	// faut push les objets mais que faire si on reçoit le root c'est un unique_ptr
-	// sinon ça peut être object3d simple ou un shared_ptr
-	// mObjects.push_back(obj);
-
-	std::vector<Object3DSPtr> children = obj->getChildren();
+	std::vector<Object3DUPtr>& children = obj->getChildren();
 
 	for (uint i = 0; i < children.size(); ++i)
 	{

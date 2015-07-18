@@ -42,10 +42,15 @@ public:
 	void scaleZ(float scale);
 
 	void setMesh(MeshSPtr m);
+	MeshSPtr& getMesh();
+	bool hasMesh() const;
+
+	void addChild(Object3DUPtr& child);
+	void removeChild(Object3DUPtr& child);
 
 	void setParent(Object3D* object);
 	Object3D* getParent();
-	std::vector<Object3DSPtr> getChildren();
+	std::vector<Object3DUPtr>& getChildren();
 
 	Vector3& getPosition();
 	Vector3 getWorldPosition();
@@ -75,12 +80,13 @@ protected:
 	Vector3 mScale;
 
 	Object3D* mParent;
-	std::vector<Object3DSPtr> mChildren;
+	std::vector<Object3DUPtr> mChildren;
 
 	Matrix4 mMatrix;
 	Matrix4 mWorldMatrix;
 	bool mWorldMatrixNeedsUpdate;
 
+	bool mHasMesh;
 	bool mVisible;
 	bool mActive;
 

@@ -14,6 +14,7 @@ public:
 	Vector3& getColor();
 
 	void bind();
+	void unbind();
 
 protected:
 

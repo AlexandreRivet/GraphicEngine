@@ -9,20 +9,23 @@ public:
 	
 	Scene();
 
-	void add(Object3D obj, Object3D parent);
-	void remove();
+	void add(Object3DUPtr& obj, Object3D* parent = nullptr);
+	void remove(Object3DUPtr& obj);
+
+	Object3DUPtr& getRoot();
+	std::vector<Object3D*>& getObjects();
 
 	void autoUpdate(bool update);
 	bool autoUpdate() const;
 
 	void needUpdate();				// callback à appeler
 	void updateObjectsList();
-	void addObjectInList(Object3DSPtr obj);
+	void addObjectInList(Object3DUPtr& obj);
 
 private:
 	
-	Object3DUPtr mRoot;
-	std::vector<Object3D> mObjects;
+	Object3DUPtr mRoot;								// Root de la scène 
+	std::vector<Object3D*> mObjects;				// Liste des objets à rendre pendant la frame
 
 	bool mAutoUpdate;
 	bool mObjectsListNeedsUpdate;

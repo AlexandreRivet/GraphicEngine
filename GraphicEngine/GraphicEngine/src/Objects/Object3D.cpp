@@ -1,9 +1,13 @@
 #include "Objects/Object3D.h"
 
 Object3D::Object3D()
-	: mPosition(Vector3::ZERO),
+	: mMesh(nullptr),
+	mPosition(Vector3::ZERO),
 	mRotation(Quaternion::IDENTITY),
-	mScale(Vector3::UNIT_SCALE)
+	mScale(Vector3::UNIT_SCALE),
+	mHasMesh(false),
+	mVisible(true),
+	mActive(true)
 {
 	updateMatrix();
 }
@@ -12,7 +16,10 @@ Object3D::Object3D(MeshSPtr m)
 	: mMesh(m),
 	mPosition(Vector3::ZERO),
 	mRotation(Quaternion::IDENTITY),
-	mScale(Vector3::UNIT_SCALE)
+	mScale(Vector3::UNIT_SCALE),
+	mHasMesh(true),
+	mVisible(true),
+	mActive(true)
 {
 	updateMatrix();
 }
@@ -117,6 +124,27 @@ void Object3D::setMesh(MeshSPtr m)
 	mMesh = m;
 }
 
+MeshSPtr& Object3D::getMesh()
+{
+	return mMesh;
+}
+
+bool Object3D::hasMesh() const
+{
+	return mMesh != nullptr;
+}
+
+void Object3D::addChild(Object3DUPtr& child)
+{
+	child->setParent(this);
+	mChildren.push_back(std::move(child));
+}
+
+void Object3D::removeChild(Object3DUPtr& child)
+{
+	mChildren.erase(std::find(mChildren.begin(), mChildren.end(), child));
+}
+
 void Object3D::setParent(Object3D* object)
 {
 	mParent = object;
@@ -127,7 +155,7 @@ Object3D* Object3D::getParent()
 	return mParent;
 }
 
-std::vector<Object3DSPtr> Object3D::getChildren()
+std::vector<Object3DUPtr>& Object3D::getChildren()
 {
 	return mChildren;
 }
@@ -216,8 +244,8 @@ void Object3D::setVisible(bool visible, bool cascade)
 
 	if (cascade)
 	{
-		std::vector<Object3DSPtr>::iterator iter = mChildren.begin();
-		std::vector<Object3DSPtr>::iterator end = mChildren.end();
+		std::vector<Object3DUPtr>::iterator iter = mChildren.begin();
+		std::vector<Object3DUPtr>::iterator end = mChildren.end();
 
 		for (; iter != end; ++iter)
 		{

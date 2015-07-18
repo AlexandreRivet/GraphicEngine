@@ -13,16 +13,18 @@ public:
 	~Mesh();
 
 	void initBuffers();
-
-protected:
-
-	Geometry mGeometry;
-	MaterialSPtr mMaterial;
+	Geometry& getGeometry();
+	MaterialSPtr& getMaterial();
 
 	GLuint mVerticesBuffer;
 	GLuint mIndicesBuffer;
 	GLuint mUvsBuffer;
 	GLuint mNormalsBuffer;
+
+protected:
+
+	Geometry mGeometry;
+	MaterialSPtr mMaterial;
 
 	bool mUseVBO;
 

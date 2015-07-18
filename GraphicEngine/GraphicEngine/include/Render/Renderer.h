@@ -18,9 +18,6 @@ public:
 
 	void render(Scene& s, Camera& c);
 
-	void projectObjects(std::vector<Object3DSPtr>& objects, std::vector<Object3DSPtr>* out);
-	void Renderer::sortObjectByDistance(std::vector<Object3DSPtr>& objects, Camera& c);
-
 private:
 
 	Vector3 mClearColor;

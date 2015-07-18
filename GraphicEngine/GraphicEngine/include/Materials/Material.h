@@ -15,6 +15,7 @@ public:
 	ShaderSPtr getShader();
 
 	virtual void bind() {}
+	virtual void unbind() {}
 
 protected:
 

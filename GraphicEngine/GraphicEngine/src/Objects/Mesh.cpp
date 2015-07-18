@@ -57,3 +57,13 @@ void Mesh::initBuffers()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
+
+Geometry& Mesh::getGeometry()
+{
+	return mGeometry;
+}
+
+MaterialSPtr& Mesh::getMaterial()
+{
+	return mMaterial;
+}
