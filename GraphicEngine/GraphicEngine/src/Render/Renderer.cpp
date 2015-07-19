@@ -3,6 +3,7 @@
 #include "GL/glew.h"
 
 Renderer::Renderer()
+: mClearColor(Vector3::ZERO)
 {
 
 }
@@ -15,6 +16,22 @@ void Renderer::setClearColor(const Vector3& color)
 Vector3& Renderer::getClearColor()
 {
 	return mClearColor;
+}
+
+void Renderer::setViewport(uint w, uint h)
+{
+	mViewportWidth = w;
+	mViewportHeight = h;
+}
+
+uint Renderer::getWidth() const
+{
+	return mViewportWidth;
+}
+
+uint Renderer::getHeight() const
+{
+	return mViewportHeight;
 }
 
 void Renderer::render(Scene& s, Camera& c)
@@ -36,7 +53,7 @@ void Renderer::render(Scene& s, Camera& c)
 		return distA < distB;
 	});
 
-	// glViewport(0, 0, mViewportWidth, mViewportHeight);
+	glViewport(0, 0, mViewportWidth, mViewportHeight);
 
 	if (mAutoClear)
 	{
@@ -46,7 +63,7 @@ void Renderer::render(Scene& s, Camera& c)
 	}
 
 	// Parcourir les objets et faire les draw
-	for (uint i = 0; i < objects.size(); ++i)
+	/*for (uint i = 0; i < objects.size(); ++i)
 	{
 		Object3D* obj = objects[i];
 		MeshSPtr mesh = obj->getMesh();
@@ -65,6 +82,16 @@ void Renderer::render(Scene& s, Camera& c)
 
 		// On envoie le reste des uniformes
 
+		// Proj matrix
+		mat->getShader()->setUniform("u_proj", c.getProjectionMatrix());
+
+		// View matriw
+		mat->getShader()->setUniform("u_view", c.getWorldMatrix());
+
+		// World matrix
+		mat->getShader()->setUniform("u_world", obj->getWorldMatrix());
+
+
 		// On dessine
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mIndicesBuffer);
 		glDrawElements(GL_TRIANGLES, geo.getNbIndices(), GL_UNSIGNED_SHORT, 0);
@@ -72,6 +99,6 @@ void Renderer::render(Scene& s, Camera& c)
 		// On unbind le material
 		mat->unbind();
 
-	}
+	}*/
 
 }

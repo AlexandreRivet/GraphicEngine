@@ -16,11 +16,18 @@ public:
 	void setClearColor(const Vector3& color);
 	Vector3& getClearColor();
 
+	void setViewport(uint w, uint h);
+	uint getWidth() const;
+	uint getHeight() const;
+
 	void render(Scene& s, Camera& c);
 
 private:
 
 	Vector3 mClearColor;
+	
+	uint mViewportWidth;
+	uint mViewportHeight;
 
 	bool mAutoClear;
 	
