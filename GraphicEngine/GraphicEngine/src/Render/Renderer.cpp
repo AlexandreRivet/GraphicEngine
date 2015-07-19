@@ -90,7 +90,7 @@ void Renderer::render(Scene& s, Camera& c)
 
 		// On configure le reste des attributes
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->mVerticesBuffer);
-		GLuint positionLocation = mat->getShader()->attribute("a_position");
+		GLint positionLocation = mat->getShader()->attribute("a_position");
 		glEnableVertexAttribArray(positionLocation);
 		glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(float)* 3, 0);
 

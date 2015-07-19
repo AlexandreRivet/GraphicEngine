@@ -23,8 +23,8 @@ public:
 	void bind() const;
 	void unbind() const;
 
-	GLuint attribute(std::string name);
-	GLuint uniform(std::string name);
+	GLint attribute(std::string name);
+	GLint uniform(std::string name);
 
 	bool hasAttribute(std::string name);
 	bool hasUniform(std::string name);
@@ -48,8 +48,8 @@ private:
 	GLuint mFragmentShaderId;
 	GLuint mGeometryShaderId;
 
-	std::map<std::string, GLuint> mUniforms;
-	std::map<std::string, GLuint> mAttributes;
+	std::map<std::string, GLint> mUniforms;
+	std::map<std::string, GLint> mAttributes;
 };
 
 typedef std::shared_ptr<Shader> ShaderSPtr;
