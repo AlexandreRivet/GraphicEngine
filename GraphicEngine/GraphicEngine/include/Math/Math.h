@@ -16,7 +16,7 @@ namespace Math
     template<typename T>
     inline T Clamp(T value, T min, T max)
     {
-        return std::min(max, std::max(value, min));
+        return std::min<T>(max, std::max<T>(value, min));
     }
 
 	inline bool isNaN(float f)
