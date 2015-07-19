@@ -12,10 +12,10 @@ class Texture
 public:
 
 	Texture();
-	Texture(std::string filename, uint index = 0);
+	Texture(const std::string& filename, uint index = 0);
 	~Texture();
 
-	void load(std::string filename);
+	void load(const std::string& filename);
 
 	void init();
 	void bind();

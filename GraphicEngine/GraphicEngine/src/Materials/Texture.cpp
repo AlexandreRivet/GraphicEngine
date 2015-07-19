@@ -20,7 +20,7 @@ Texture::Texture()
 
 }
 
-Texture::Texture(std::string filename, uint index)
+Texture::Texture(const std::string& filename, uint index)
 	: mWidth(0),
 	mHeight(0),
 	mHasImage(false),
@@ -40,7 +40,7 @@ Texture::~Texture()
 	glDeleteTextures(1, &mGLuid);
 }
 
-void Texture::load(std::string filename)
+void Texture::load(const std::string& filename)
 {
 	int n; // lol fallait un n
 	mData = stbi_load(filename.c_str(), &mWidth, &mHeight, &n, 4);
