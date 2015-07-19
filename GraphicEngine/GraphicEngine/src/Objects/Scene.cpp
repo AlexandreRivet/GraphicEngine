@@ -1,10 +1,9 @@
 #include "Objects/Scene.h"
 
 Scene::Scene()
-	: mAutoUpdate(true),
-	mRoot()
+	: mAutoUpdate(true)
 {
-
+	mRoot = std::unique_ptr<Object3D>(new Object3D());
 }
 
 void Scene::add(Object3DUPtr& obj, Object3D* parent)

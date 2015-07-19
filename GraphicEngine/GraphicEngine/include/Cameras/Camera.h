@@ -12,6 +12,8 @@ public:
     const Matrix4& getProjectionMatrix() const;
 	Vector3 getWorldDirection() const;
 
+	virtual void updateProjectionMatrix();
+
 protected:
 
 	Matrix4 mProjectionMatrix;

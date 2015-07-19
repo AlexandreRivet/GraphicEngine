@@ -1,9 +1,10 @@
 #include "Cameras/PerspectiveCamera.h"
 
-PerspectiveCamera::PerspectiveCamera(float fov, float aspect, float near, float far)
+PerspectiveCamera::PerspectiveCamera(float fov, float w, float h, float near, float far)
     : Camera(),
     mFov(fov),
-    mAspect(aspect),
+    mWidth(w),
+	mHeight(h),
     mNear(near),
     mFar(far)
 {
@@ -22,16 +23,23 @@ float PerspectiveCamera::getFov() const
     return mFov;
 }
 
-void PerspectiveCamera::setAspect(float aspect)
+void PerspectiveCamera::setWidth(float w)
 {
-    mAspect = aspect;
+	mWidth = w;
 
-    updateProjectionMatrix();
+	updateProjectionMatrix();
+}
+
+void PerspectiveCamera::setHeight(float h)
+{
+	mHeight = h;
+
+	updateProjectionMatrix();
 }
 
 float PerspectiveCamera::getAspect() const
 {
-    return mAspect;
+    return mWidth / mHeight;
 }
 
 void PerspectiveCamera::setNear(float near)
@@ -60,24 +68,26 @@ float PerspectiveCamera::getFar() const
 
 void PerspectiveCamera::updateProjectionMatrix()
 {
-    float top = mNear * std::tan(Math::degToRad(mFov * 0.5f));
-    float bottom = -top;
-    float left = bottom * mAspect;
-    float right = top * mAspect;
+	float aspect = mWidth / mHeight;
 
-    float x = 2 * mNear / (right - left);
-    float y = 2 * mNear / (top - bottom);
+	float xymax = mNear * std::tan(Math::degToRad(mFov * 0.5f));
+	float ymin = -xymax;
+	float xmin = -xymax;
+	float width = xymax - xmin;
+	float height = xymax - ymin;
+	float depth = mFar - mNear;
+	float q = -(mFar + mNear) / depth;
+	float qn = -2.0f * mFar * mNear / depth;
 
-    float a = (right + left) / (right - left);
-    float b = (top + bottom) / (top - bottom);
-    float c = -(mFar + mNear) / (mFar - mNear);
-    float d = -2.0f * mFar * mNear / (mFar - mNear);
+    float w = 2 * mNear / width;
+	w = w / aspect;
+    float h = 2 * mNear / height;
 
     mProjectionMatrix = Matrix4(
-        x,    0.0f, a,  0.0f,
-        0.0f, y,    b,  0.0f,
-        0.0f, 0.0f, c,  d,
-        0.0f, 0.0f, -1, 0.0f
-        );
+		w,    0.0f, 0.0f,  0.0f,
+        0.0f, h,    0.0f,  0.0f,
+        0.0f, 0.0f, q,  -1.0f,
+        0.0f, 0.0f, qn, 0.0f
+    );
 
 }

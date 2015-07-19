@@ -22,6 +22,9 @@ public:
 
 	void render(Scene& s, Camera& c);
 
+	void setAutoUpdate(bool update);
+	bool autoUpdate() const;
+
 private:
 
 	Vector3 mClearColor;
@@ -30,6 +33,7 @@ private:
 	uint mViewportHeight;
 
 	bool mAutoClear;
+	bool mAutoUpdate;
 	
 };
 

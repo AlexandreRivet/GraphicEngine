@@ -4,17 +4,15 @@
 #include <string>
 #include <map>
 
-#include "GL/glew.h"
-
-#include "Utils/Utils.h"
-#include "Materials/Shader.h"
+#include "Utils\Utils.h"
+#include "Materials\Shader.h"
 
 
 class ShaderLoader
 {
 public:
 
-	static ShaderSPtr loadShader(const std::string& name, const std::string& vs, const std::string& fs, const std::string& gs);
+	static ShaderSPtr loadShader(const std::string& name, const std::string& vs, const std::string& fs, const std::string& gs = std::string());
 	static ShaderSPtr getShader(const std::string& name);
  
 protected:

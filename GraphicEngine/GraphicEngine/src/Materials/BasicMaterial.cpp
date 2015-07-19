@@ -25,7 +25,7 @@ void BasicMaterial::bind()
 
 	mShader->bind();
 
-	mShader->setUniform("color", mColor);
+	mShader->setUniform("u_color", mColor);
 }
 
 void BasicMaterial::unbind()

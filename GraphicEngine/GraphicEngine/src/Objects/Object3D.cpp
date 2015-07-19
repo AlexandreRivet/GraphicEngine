@@ -2,9 +2,9 @@
 
 Object3D::Object3D()
 	: mMesh(nullptr),
-	mPosition(Vector3::ZERO),
-	mRotation(Quaternion::IDENTITY),
-	mScale(Vector3::UNIT_SCALE),
+	mPosition(Vector3(0, 0, 0)),
+	mRotation(Quaternion(1, 0, 0, 0)),
+	mScale(Vector3(1, 1, 1)),
 	mHasMesh(false),
 	mVisible(true),
 	mActive(true)

@@ -1,5 +1,7 @@
 #include "Materials/ShaderLoader.h"
 
+std::map<std::string, ShaderSPtr> ShaderLoader::mShaders;
+
 ShaderLoader::ShaderLoader()
 {}
 

@@ -14,3 +14,7 @@ Vector3 Camera::getWorldDirection() const
 {
 	return Vector3();
 }
+
+void Camera::updateProjectionMatrix()
+{
+}

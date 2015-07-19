@@ -430,6 +430,14 @@ public:
             m[1][0] * v.x + m[1][1] * v.y + m[1][2] * v.z + m[1][3],
             m[2][0] * v.x + m[2][1] * v.y + m[2][2] * v.z + m[2][3]);
     }
+
+	inline void toArray(float* arr) const
+	{
+		for (uint i = 0; i < 4; ++i)
+		{
+			memcpy(arr + i * 4, m[i], 4 * sizeof(float));
+		}
+	};
 };
 
 #endif

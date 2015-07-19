@@ -64,8 +64,8 @@ GLuint Shader::uniform(std::string name)
 	auto unif = mUniforms.find(name);
 	if (unif == mUniforms.end())
 	{
-		mUniforms[name] = glGetAttribLocation(mProgramId, name.data());
-	}
+		mUniforms[name] = glGetUniformLocation(mProgramId, name.data());
+	}	
 
 	return mUniforms[name];
 }
@@ -91,7 +91,7 @@ bool Shader::hasUniform(std::string name)
 	auto unif = mUniforms.find(name);
 	if (unif == mUniforms.end())
 	{
-		GLuint result = glGetAttribLocation(mProgramId, name.data());;
+		GLuint result = glGetUniformLocation(mProgramId, name.data());;
 		if (result == -1)
 		{
 			return false;
@@ -106,7 +106,7 @@ void Shader::setUniform(std::string name, Texture& tex)
 {
 	GLuint unif = uniform(name);
 
-	if (unif > 0)
+	if (unif >= 0)
 		glUniform1i(unif, tex.mIndex);
 }
 
@@ -114,7 +114,7 @@ void Shader::setUniform(std::string name, int val)
 {
 	GLuint unif = uniform(name);
 
-	if (unif > 0)
+	if (unif >= 0)
 		glUniform1i(unif, val);
 }
 
@@ -122,7 +122,7 @@ void Shader::setUniform(std::string name, float f)
 {
 	GLuint unif = uniform(name);
 
-	if (unif > 0)
+	if (unif >= 0)
 		glUniform1f(unif, f);
 }
 
@@ -130,7 +130,7 @@ void Shader::setUniform(std::string name, float f1, float f2)
 {
 	GLuint unif = uniform(name);
 
-	if (unif > 0)
+	if (unif >= 0)
 		glUniform2f(unif, f1, f2);
 }
 
@@ -138,7 +138,7 @@ void Shader::setUniform(std::string name, float f1, float f2, float f3)
 {
 	GLuint unif = uniform(name);
 
-	if (unif > 0)
+	if (unif >= 0)
 		glUniform3f(unif, f1, f2, f3);
 }
 
@@ -146,7 +146,7 @@ void Shader::setUniform(std::string name, float* ptr, uint size)
 {
 	GLuint unif = uniform(name);
 
-	if (unif > 0)
+	if (unif >= 0)
 		glUniform1fv(unif, size, ptr);
 }
 
@@ -155,7 +155,7 @@ void Shader::setUniform(std::string name, const Vector3& v)
 {
 	GLuint unif = uniform(name);
 
-	if (unif > 0)
+	if (unif >= 0)
 		glUniform3f(unif, v.x, v.y, v.z);
 }
 
@@ -163,22 +163,27 @@ void Shader::setUniform(std::string name, const Matrix3 &m)
 {
 	GLuint unif = uniform(name);
 
-	if (unif > 0)
-		glUniformMatrix3fv(unif, 1, GL_TRUE, NULL);				// TODO: faire m3.toArray
+	if (unif >= 0)
+		glUniformMatrix3fv(unif, 1, GL_FALSE, NULL);				// TODO: faire m3.toArray
 }
 
 void Shader::setUniform(std::string name, const Matrix4 &m)
 {
 	GLuint unif = uniform(name);
 
-	if (unif > 0)
-		glUniformMatrix4fv(unif, 1, GL_TRUE, NULL);				// TODO: faire m4.toArray
+	if (unif >= 0)
+	{
+		float arr[16];
+		m.toArray(arr);
+		glUniformMatrix4fv(unif, 1, GL_FALSE, arr);
+	}
+		
 }
 
 void Shader::setUniform(std::string name, bool b)
 {
 	GLuint unif = uniform(name);
 
-	if (unif > 0)
+	if (unif >= 0)
 		glUniform1i(unif, b?1:0);
 }
