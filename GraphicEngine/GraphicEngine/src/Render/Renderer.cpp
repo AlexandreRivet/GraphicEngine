@@ -103,7 +103,7 @@ void Renderer::render(Scene& s, Camera& c)
 		mat->getShader()->setUniform("u_view", c.getWorldMatrix().transpose());
 
 		// World matrix
-		mat->getShader()->setUniform("u_world", obj->getWorldMatrix());
+		mat->getShader()->setUniform("u_world", obj->getWorldMatrix().transpose());
 
 		// On dessine
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mIndicesBuffer);
