@@ -19,15 +19,30 @@ namespace Math
         return std::min(max, std::max(value, min));
     }
 
-	inline bool isNaN(float f);
+	inline bool isNaN(float f)
+    {
+        return f != f;
+    }
 
-	inline float invSqrt(float v);
+	inline float invSqrt(float v)
+    {
+        return 1.0f / sqrt(v);
+    }
 
-	inline float Sqr(float v);
+	inline float Sqr(float v)
+    {
+        return v * v;
+    }
 
-	inline float degToRad(float d);
+	inline float degToRad(float d)
+    {
+        return d * static_cast<float>(M_PI) / 180.0f;
+    }
 
-	inline float radToDeg(float r);
+	inline float radToDeg(float r)
+    {
+        return r * 180.0f / static_cast<float>(M_PI);
+    }
 
     float UnitRandom();
 }
