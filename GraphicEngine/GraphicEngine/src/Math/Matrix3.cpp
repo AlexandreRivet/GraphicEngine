@@ -1,5 +1,4 @@
 #include "Math/Matrix3.h"
-#include "Math/Math.h"
 
 const float Matrix3::EPSILON = 1e-06f;
 const Matrix3 Matrix3::ZERO(0, 0, 0, 0, 0, 0, 0, 0, 0);

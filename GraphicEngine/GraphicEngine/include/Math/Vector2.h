@@ -2,7 +2,7 @@
 #define _VECTOR2_H_
 
 #include "prerequisites.h"
-#include "Math.h"
+#include "Math/Math.h"
 
 class Vector2
 {

@@ -258,3 +258,13 @@ bool Object3D::isVisble() const
 {
 	return mVisible;
 }
+
+void Object3D::setActive(bool active)
+{
+	mActive = active;
+}
+
+bool Object3D::isActive() const
+{
+	return mActive;
+}

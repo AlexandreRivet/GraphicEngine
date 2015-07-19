@@ -228,6 +228,15 @@ void Quaternion::ToAxes(Vector3& xaxis, Vector3& yaxis, Vector3& zaxis) const
 	zaxis.z = kRot[2][2];
 }
 
+Quaternion& Quaternion::operator= (const Quaternion& rkQ)
+{
+	w = rkQ.w;
+	x = rkQ.x;
+	y = rkQ.y;
+	z = rkQ.z;
+	return *this;
+}
+
 //-----------------------------------------------------------------------
 Quaternion Quaternion::operator+ (const Quaternion& rkQ) const
 {
