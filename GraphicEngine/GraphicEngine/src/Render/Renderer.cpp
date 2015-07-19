@@ -3,7 +3,8 @@
 #include "GL/glew.h"
 
 Renderer::Renderer()
-: mClearColor(Vector3::ZERO)
+	: mClearColor(Vector3::ZERO),
+	mAutoClear(true)
 {
 
 }
