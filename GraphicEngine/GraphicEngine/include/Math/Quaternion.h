@@ -12,12 +12,35 @@ class Quaternion
 		float z;
 
 	public:
-		Quaternion();
-		Quaternion(float fW, float fX, float fY, float fZ);
-		Quaternion(const Matrix3& rot);
-		Quaternion(const float& rfAngle, const Vector3& rkAxis);
-		Quaternion(const Vector3& xaxis, const Vector3& yaxis, const Vector3& zaxis);
-		Quaternion(const Vector3* akAxis);
+		inline Quaternion()
+			:w(1), x(0), y(0), z(0)
+		{
+		}
+
+		inline Quaternion(float fW, float fX, float fY, float fZ)
+			:w(fW), x(fX), y(fY), z(fZ)
+		{
+		}
+
+		inline Quaternion(const Matrix3& rot)
+		{
+			this->FromRotationMatrix(rot);
+		}
+
+		inline Quaternion(const float& rfAngle, const Vector3& rkAxis)
+		{
+			this->FromAngleAxis(rfAngle, rkAxis);
+		}
+
+		inline Quaternion(const Vector3& xaxis, const Vector3& yaxis, const Vector3& zaxis)
+		{
+			this->FromAxes(xaxis, yaxis, zaxis);
+		}
+
+		inline Quaternion(const Vector3* akAxis)
+		{
+			this->FromAxes(akAxis);
+		}
 		
 		void swap(Quaternion& other);
 		float operator [] (const size_t i) const;
