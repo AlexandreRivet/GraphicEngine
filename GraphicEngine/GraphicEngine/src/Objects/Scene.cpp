@@ -3,10 +3,10 @@
 Scene::Scene()
 	: mAutoUpdate(true)
 {
-	mRoot = std::unique_ptr<Object3D>(new Object3D());
+	mRoot = new Object3D();
 }
 
-void Scene::add(Object3DUPtr& obj, Object3D* parent)
+void Scene::add(Object3D* obj, Object3D* parent)
 {
 	if (parent == nullptr)
 		mRoot->addChild(obj);
@@ -16,7 +16,7 @@ void Scene::add(Object3DUPtr& obj, Object3D* parent)
 	needUpdate();
 }
 
-void Scene::remove(Object3DUPtr& obj)
+void Scene::remove(Object3D* obj)
 {
 	if (obj->getParent() == nullptr)		// ça veut dire qu'on est au root faut pas déconner on y touche pas à lui
 		return;
@@ -25,7 +25,7 @@ void Scene::remove(Object3DUPtr& obj)
 
 }
 
-Object3DUPtr& Scene::getRoot()
+Object3D* Scene::getRoot()
 {
 	return mRoot;
 }
@@ -62,15 +62,15 @@ void Scene::updateObjectsList()
 	mObjectsListNeedsUpdate = false;
 }
 
-void Scene::addObjectInList(Object3DUPtr& obj)
+void Scene::addObjectInList(Object3D* obj)
 {
 	if (!obj->isActive())
 		return;
 
 	if (obj->isVisble() && obj->hasMesh())
-		mObjects.push_back(obj.get());
+		mObjects.push_back(obj);
 
-	std::vector<Object3DUPtr>& children = obj->getChildren();
+	std::vector<Object3D*>& children = obj->getChildren();
 
 	for (uint i = 0; i < children.size(); ++i)
 	{

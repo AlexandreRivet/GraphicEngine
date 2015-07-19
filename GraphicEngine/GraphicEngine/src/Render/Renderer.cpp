@@ -48,8 +48,6 @@ uint Renderer::getHeight() const
 
 void Renderer::render(Scene& s, Camera& c)
 {
-	std::cout << "Render" << std::endl;
-
 	// On met à jour la position de la cam dans le monde
 	c.updateWorldMatrix();
 

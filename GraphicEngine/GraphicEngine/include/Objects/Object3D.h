@@ -45,12 +45,12 @@ public:
 	MeshSPtr& getMesh();
 	bool hasMesh() const;
 
-	void addChild(Object3DUPtr& child);
-	void removeChild(Object3DUPtr& child);
+	void addChild(Object3D* child);
+	void removeChild(Object3D* child);
 
 	void setParent(Object3D* object);
 	Object3D* getParent();
-	std::vector<Object3DUPtr>& getChildren();
+	std::vector<Object3D*>& getChildren();
 
 	Vector3& getPosition();
 	Vector3 getWorldPosition();
@@ -80,7 +80,7 @@ protected:
 	Vector3 mScale;
 
 	Object3D* mParent;
-	std::vector<Object3DUPtr> mChildren;
+	std::vector<Object3D*> mChildren;
 
 	Matrix4 mMatrix;
 	Matrix4 mWorldMatrix;

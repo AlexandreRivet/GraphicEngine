@@ -134,13 +134,13 @@ bool Object3D::hasMesh() const
 	return mMesh != nullptr;
 }
 
-void Object3D::addChild(Object3DUPtr& child)
+void Object3D::addChild(Object3D* child)
 {
 	child->setParent(this);
-	mChildren.push_back(std::move(child));
+	mChildren.push_back(child);
 }
 
-void Object3D::removeChild(Object3DUPtr& child)
+void Object3D::removeChild(Object3D* child)
 {
 	mChildren.erase(std::find(mChildren.begin(), mChildren.end(), child));
 }
@@ -155,7 +155,7 @@ Object3D* Object3D::getParent()
 	return mParent;
 }
 
-std::vector<Object3DUPtr>& Object3D::getChildren()
+std::vector<Object3D*>& Object3D::getChildren()
 {
 	return mChildren;
 }
@@ -244,8 +244,8 @@ void Object3D::setVisible(bool visible, bool cascade)
 
 	if (cascade)
 	{
-		std::vector<Object3DUPtr>::iterator iter = mChildren.begin();
-		std::vector<Object3DUPtr>::iterator end = mChildren.end();
+		std::vector<Object3D*>::iterator iter = mChildren.begin();
+		std::vector<Object3D*>::iterator end = mChildren.end();
 
 		for (; iter != end; ++iter)
 		{
