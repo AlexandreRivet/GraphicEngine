@@ -2,6 +2,9 @@
 
 #include "Utils/utils.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 Texture::Texture()
 	: mWidth(0),
 	mHeight(0),
