@@ -181,7 +181,7 @@ ShaderSPtr ShaderLoader::loadShader(const std::string& name, const std::string& 
 		destroyShaders(vs, fs, gs);
 	}
 
-	std::shared_ptr<Shader> s(new Shader(prog, vs, gs, fs));
+	std::shared_ptr<Shader> s(new Shader(prog, vs, fs, gs));
 
 	mShaders[name] = s;
 

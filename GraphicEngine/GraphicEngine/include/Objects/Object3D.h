@@ -71,6 +71,9 @@ public:
 	void setActive(bool active);
 	bool isActive() const;
 
+	GLenum getRenderMode();
+	void setRenderMode(GLenum mode);
+
 protected:
 
 	MeshSPtr mMesh;
@@ -89,6 +92,8 @@ protected:
 	bool mHasMesh;
 	bool mVisible;
 	bool mActive;
+
+	GLenum mRenderMode;
 
 };
 

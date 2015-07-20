@@ -75,7 +75,7 @@ bool Shader::hasAttribute(const std::string& name)
 	auto attr = mAttributes.find(name);
 	if (attr == mAttributes.end())
 	{
-		GLint result = glGetAttribLocation(mProgramId, name.data());;
+		GLint result = glGetAttribLocation(mProgramId, name.data());
 		if (result == -1)
 		{
 			return false;
@@ -91,7 +91,7 @@ bool Shader::hasUniform(const std::string& name)
 	auto unif = mUniforms.find(name);
 	if (unif == mUniforms.end())
 	{
-		GLint result = glGetUniformLocation(mProgramId, name.data());;
+		GLint result = glGetUniformLocation(mProgramId, name.data());
 		if (result == -1)
 		{
 			return false;

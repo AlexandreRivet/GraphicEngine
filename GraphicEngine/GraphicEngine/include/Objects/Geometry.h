@@ -1,5 +1,5 @@
 #ifndef _GEOMETRY_H_
-#define _GEOMTERY_H_
+#define _GEOMETRY_H_
 
 #include "prerequisites.h"
 

@@ -7,7 +7,8 @@ Object3D::Object3D()
 	mScale(Vector3(1, 1, 1)),
 	mHasMesh(false),
 	mVisible(true),
-	mActive(true)
+	mActive(true),
+	mRenderMode(GL_TRIANGLES)
 {
 	updateMatrix();
 }
@@ -19,7 +20,8 @@ Object3D::Object3D(MeshSPtr m)
 	mScale(Vector3::UNIT_SCALE),
 	mHasMesh(true),
 	mVisible(true),
-	mActive(true)
+	mActive(true),
+	mRenderMode(GL_TRIANGLES)
 {
 	updateMatrix();
 }
@@ -169,9 +171,7 @@ Vector3 Object3D::getWorldPosition()
 {
 	updateWorldMatrix(true);
 
-	Vector3 pos;
-	mWorldMatrix.getTrans(pos);
-	return pos;
+	return Vector3(mWorldMatrix[0][3], mWorldMatrix[1][3], mWorldMatrix[2][3]);
 }
 
 Quaternion& Object3D::getRotation()
@@ -267,4 +267,14 @@ void Object3D::setActive(bool active)
 bool Object3D::isActive() const
 {
 	return mActive;
+}
+
+GLenum Object3D::getRenderMode()
+{
+	return mRenderMode;
+}
+
+void Object3D::setRenderMode(GLenum mode)
+{
+	mRenderMode = mode;
 }

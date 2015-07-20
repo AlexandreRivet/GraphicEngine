@@ -81,6 +81,12 @@ void Renderer::render(Scene& s, Camera& c)
 		Object3D* obj = objects[i];
 		obj->updateWorldMatrix();
 
+		if (obj->getRenderMode() == GL_POINTS)
+		{
+			glEnable(GL_POINT_SPRITE);
+			glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+		}
+			
 		MeshSPtr mesh = obj->getMesh();
 		Geometry& geo = mesh->getGeometry();
 		MaterialSPtr& mat = mesh->getMaterial();
@@ -107,7 +113,7 @@ void Renderer::render(Scene& s, Camera& c)
 
 		// On dessine
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mIndicesBuffer);
-		glDrawElements(GL_TRIANGLES, geo.getNbIndices(), GL_UNSIGNED_INT, 0);
+		glDrawElements(obj->getRenderMode(), geo.getNbIndices(), GL_UNSIGNED_INT, 0);
 
 		// On unbind le material
 		mat->unbind();
@@ -115,6 +121,8 @@ void Renderer::render(Scene& s, Camera& c)
 	}
 
 	glutSwapBuffers();
+
+	Sleep(1);
 }
 
 void Renderer::setAutoUpdate(bool update)
