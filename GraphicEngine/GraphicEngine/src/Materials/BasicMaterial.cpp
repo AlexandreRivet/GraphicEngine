@@ -1,10 +1,12 @@
 #include "Materials/BasicMaterial.h"
 
-BasicMaterial::BasicMaterial(const std::string& name, const Vector3& color)
+BasicMaterial::BasicMaterial(const std::string& name, const Vector3& color, const std::string& textureFilename)
 	: Material(name),
-	mColor(color)
+	mColor(color),
+	mHasTexture(false),
+	mTexture(textureFilename)
 {
-
+	mHasTexture = mTexture.hasImage();
 }
 
 void BasicMaterial::setColor(const Vector3& color)
@@ -25,11 +27,23 @@ void BasicMaterial::bind()
 
 	mShader->bind();
 
-	mShader->hasUniform("u_color");
 	mShader->setUniform("u_color", mColor);
+
+	if (mHasTexture)
+	{
+		mTexture.bind();
+		mShader->setUniform("u_sampler", mTexture);
+	}
+	
 }
 
 void BasicMaterial::unbind()
 {
 	mShader->unbind();
+}
+
+void BasicMaterial::setTexture(Texture t)
+{
+	mTexture = t;
+	mHasTexture = true;
 }

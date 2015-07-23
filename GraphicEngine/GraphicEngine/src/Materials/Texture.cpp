@@ -29,7 +29,7 @@ Texture::Texture(const std::string& filename, uint index)
 	mGLuid(0),
 	mGLunit(unitFromIndex(index)),
 	mIndex(index),
-	mMinFilter(GL_LINEAR),
+	mMinFilter(GL_NEAREST),
 	mMagFilter(GL_LINEAR)
 {
 	load(filename);
@@ -45,7 +45,15 @@ void Texture::load(const std::string& filename)
 	int n; // lol fallait un n
 	mData = stbi_load(filename.c_str(), &mWidth, &mHeight, &n, 4);
 	if (mWidth != 0 && mHeight != 0)
+	{
 		mHasImage = true;
+		init();
+	}
+}
+
+bool Texture::hasImage() const
+{
+	return mHasImage;
 }
 
 void Texture::init()
@@ -94,9 +102,6 @@ int Texture::getHeight() const
 {
 	return mHeight;
 }
-
-
-
 
 GLuint Texture::unitFromIndex(uint index)
 {

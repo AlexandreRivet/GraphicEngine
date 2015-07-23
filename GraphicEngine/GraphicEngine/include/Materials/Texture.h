@@ -16,6 +16,7 @@ public:
 	~Texture();
 
 	void load(const std::string& filename);
+	bool hasImage() const;
 
 	void init();
 	void bind();

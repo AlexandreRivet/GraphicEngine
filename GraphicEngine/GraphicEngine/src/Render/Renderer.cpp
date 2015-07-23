@@ -100,6 +100,15 @@ void Renderer::render(Scene& s, Camera& c)
 		glEnableVertexAttribArray(positionLocation);
 		glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(float)* 3, 0);
 
+		if (geo.hasUvs())
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->mUvsBuffer);
+			GLint uvLocation = mat->getShader()->attribute("a_texCoord");
+			glEnableVertexAttribArray(uvLocation);
+			glVertexAttribPointer(uvLocation, 2, GL_FLOAT, GL_FALSE, sizeof(float)* 2, 0);
+		}
+
+
 		// On envoie le reste des uniformes
 
 		// Proj matrix
