@@ -111,14 +111,17 @@ void Renderer::render(Scene& s, Camera& c)
 
 		// On envoie le reste des uniformes
 
+		// Viewport
+		mat->getShader()->setUniform("u_viewport", 800.0f, 600.0f);
+
 		// Proj matrix
 		mat->getShader()->setUniform("u_proj", c.getProjectionMatrix());
 
 		// View matriw
-		mat->getShader()->setUniform("u_view", c.getWorldMatrix().transpose());
+		mat->getShader()->setUniform("u_view", c.getWorldMatrix().inverse());
 
 		// World matrix
-		mat->getShader()->setUniform("u_world", obj->getWorldMatrix().transpose());
+		mat->getShader()->setUniform("u_world", obj->getWorldMatrix());
 
 		// On dessine
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mIndicesBuffer);
@@ -129,7 +132,7 @@ void Renderer::render(Scene& s, Camera& c)
 
 	}
 
-	glutSwapBuffers();
+	// glutSwapBuffers();
 
 	Sleep(1);
 }
@@ -142,4 +145,14 @@ void Renderer::setAutoUpdate(bool update)
 bool Renderer::autoUpdate() const
 {
 	return mAutoUpdate;
+}
+
+void Renderer::setAutoClear(bool clear)
+{
+	mAutoClear = clear;
+}
+
+bool Renderer::autoClear() const
+{
+	return mAutoClear;
 }

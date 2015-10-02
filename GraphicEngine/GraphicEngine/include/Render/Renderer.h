@@ -22,6 +22,9 @@ public:
 
 	void render(Scene& s, Camera& c);
 
+	void setAutoClear(bool clear);
+	bool autoClear() const;
+
 	void setAutoUpdate(bool update);
 	bool autoUpdate() const;
 
