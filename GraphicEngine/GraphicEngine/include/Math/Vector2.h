@@ -392,6 +392,27 @@ public:
         return acos(f);
     }
 
+	inline float angleOrientedBetween(const Vector2& other) const
+	{
+		float orientation = orientationTriangle(other);
+		if (orientation < 0)
+			return angleBetween(other);
+		else if (orientation > 0)
+			return 2.0f * M_PI - angleBetween(other);
+		else
+			return 0.0f;
+	}
+
+	inline float orientationTriangle(const Vector2& other) const
+	{
+		float cp = crossProduct(other);
+		if (cp > 0)
+			return 1.0f;
+		else if (cp < 0)
+			return -1.0f;
+		return 0.0f;
+	}
+
     inline float angleTo(const Vector2& other) const
     {
         float angle = angleBetween(other);
