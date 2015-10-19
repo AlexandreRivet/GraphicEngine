@@ -85,6 +85,7 @@ void Texture::bind()
 
 void Texture::resize(uint w, uint h)
 {
+    tools::unusedArg(w, h);
 }
 
 void Texture::setFilters(uint min, uint mag)

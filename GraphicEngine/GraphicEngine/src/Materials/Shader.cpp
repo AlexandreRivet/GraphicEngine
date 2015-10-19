@@ -161,6 +161,8 @@ void Shader::setUniform(const std::string& name, const Vector3& v)
 
 void Shader::setUniform(const std::string& name, const Matrix3 &m)
 {
+    tools::unusedArg(m);
+
 	GLint unif = uniform(name);
 
 	if (unif >= 0)
