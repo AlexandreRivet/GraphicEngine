@@ -28,7 +28,7 @@ namespace UI
         m_root.onMouseClick(button, state, x, y);
     }
 
-    void onMouseMove(int x, int y)
+    void UIManager::onMouseMove(int x, int y)
     {
     }
 }
