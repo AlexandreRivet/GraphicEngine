@@ -1,11 +1,11 @@
 #ifndef _PANEL_H_
 #define _PANEL_H_
 
-#include "Element.h"
+#include "Layout.h"
 
 namespace UI
 {
-	class Panel : public Element
+	class Panel : public Layout
 	{
 	public:
 
