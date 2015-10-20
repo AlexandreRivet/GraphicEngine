@@ -16,27 +16,29 @@ namespace UI
 
 	void Button::draw()
 	{
-		auto percent = 0.8f;
+		float percent = 0.8f;
+		float other_percent = 1.0f - percent;
+		Vector2 pos(x_final, y_final);
+
+		// Pour la gestion du bouton enfoncé
 		if (isPressed) {
-			drawSquare(Vector2(x_final, y_final + height_final * (1 - percent)), width_final, height_final * percent, bgColor, { 1.0, 0.0, 0.0, 0.0 });
-
-			if (isHightlighted)
-				drawStringCentered(label, Vector2(x_final + 1, y_final + height_final * (1 - percent) + 1), Vector2(width_final, height_final * percent), { 0.0, 0.0, 0.0, 0.0 }, true, true);
-
-			drawStringCentered(label, Vector2(x_final, y_final + height_final * (1 - percent)), Vector2(width_final, height_final * percent), lblColor, true, true);
-
+			other_percent /= 2.0f;
+			pos.y += height_final * (1 - percent - other_percent);
 		}
-		else {
-			Color secondSquare{ bgColor.r - 0.2f, bgColor.g - 0.2f, bgColor.b - 0.2f, bgColor.a };
 
-			drawSquare(Vector2(x_final, y_final), width_final, height_final * percent, bgColor, { 1.0, 0.0, 0.0, 0.0 });
-			drawSquare(Vector2(x_final, y_final + height_final * percent), width_final, height_final * (1.0f - percent), secondSquare, { 1.0, 0.0, 0.0, 0.0 });
+		// Rect principal bouton
+		drawSquare(pos, width_final, height_final * percent, bgColor, { 1.0, 0.0, 0.0, 0.0 });
+			
+		// Effet 3D
+		Color secondSquare{ bgColor.r - 0.2f, bgColor.g - 0.2f, bgColor.b - 0.2f, bgColor.a };
+		drawSquare(Vector2(pos.x, pos.y + height_final * percent), width_final, height_final * other_percent, secondSquare, { 1.0, 0.0, 0.0, 0.0 });
+		
+		// Survol => ombre
+		if (isHightlighted)
+			drawStringCentered(label, Vector2(pos.x + 1, pos.y + 1), Vector2(width_final, height_final * percent), { 0.0, 0.0, 0.0, 0.0 }, true, true);
 
-			if (isHightlighted)
-				drawStringCentered(label, Vector2(x_final + 1, y_final + 1), Vector2(width_final, height_final * percent), { 0.0, 0.0, 0.0, 0.0 }, true, true);
-
-			drawStringCentered(label, Vector2(x_final, y_final), Vector2(width_final, height_final * percent), lblColor, true, true);
-		}
+		// Label du texte
+		drawStringCentered(label, pos, Vector2(width_final, height_final * percent), lblColor, true, true);
 
 	}
 
@@ -52,6 +54,13 @@ namespace UI
 
     void Button::onMouseClick(int button, int state, int x, int y)
     {
+		isPressed = !isPressed;
+
         m_callBack(button, state, x, y);
     }
+
+	void Button::highlight()
+	{
+		isHightlighted = !isHightlighted;
+	}
 }

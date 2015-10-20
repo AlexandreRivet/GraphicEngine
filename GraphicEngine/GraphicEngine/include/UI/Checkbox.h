@@ -15,7 +15,7 @@ namespace UI
 
 		bool isChecked;
 
-        virtual void onMouseClick(int button, int state, int x, int y);
+        void onMouseClick(int button, int state, int x, int y);
 	private:
 		
 		bool isHightlighted;

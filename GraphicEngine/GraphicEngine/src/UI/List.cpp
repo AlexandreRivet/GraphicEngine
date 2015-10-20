@@ -6,22 +6,68 @@ namespace UI
 		: Element(_x, _y, _width, _height, _ref),
 		bgColor({ 1.0, 1.0, 1.0, 1.0 }),
 		lblColor({ 0.204, 0.596, 0.859, 1.0 }),
-		multiple(false),
-		currentPos(2),
-		numberItemsInList(6)
+		multiple(true),
+		currentPos(0),
+		numberItemsInList(5)
 	{
-		items.push_back("LOL_1");
-		items.push_back("LOL_2");
-		items.push_back("LOL_3");
-		items.push_back("LOL_4");
-		items.push_back("LOL_5");
-		items.push_back("LOL_6");
-		items.push_back("LOL_7");
-		items.push_back("LOL_8");
-		items.push_back("LOL_9");
-		selected.push_back(2);
-		selected.push_back(3);
-		selected.push_back(4);
+	}
+
+	void List::addItem(const std::string& item)
+	{
+		items.push_back(item);
+	}
+
+	void List::scrollDown()
+	{
+		currentPos++;
+		if (currentPos > items.size() - numberItemsInList)
+			currentPos = items.size() - numberItemsInList;
+	}
+
+	void List::scrollUp()
+	{
+		currentPos--;
+		if (currentPos < 0)
+			currentPos = 0;
+	}
+
+
+
+	void List::select(int index)
+	{
+		auto element = std::find(selected.begin(), selected.end(), index);
+		if (multiple)
+		{
+			if (element != selected.end())
+			{
+				selected.erase(element);
+			}
+			else
+			{
+				if (index < items.size())
+					selected.push_back(index);
+			}
+		}
+		else
+		{
+			if (element != selected.end())
+			{
+				if (selected.front() == index)
+					selected.clear();
+				else
+					selected.front() = index;				
+			}
+			else if (selected.size() == 0 && index < items.size())
+			{
+				selected.push_back(index);
+			}
+			else
+			{
+				selected.clear();
+			}
+		}
+
+		// Callback ??
 	}
 
 	void List::draw()
@@ -33,10 +79,10 @@ namespace UI
 		int size_scroll = 15;
 		int numberItems = items.size();
 		int step_item = height_final / numberItemsInList;
-		for (int i = 0; i < numberItemsInList; ++i)
+		for (int i = 0; i < ((numberItemsInList > numberItems) ? numberItems : numberItemsInList); ++i)
 		{
 			// Hightlight
-			if (std::find(selected.begin(), selected.end(), i) != selected.end())
+			if (std::find(selected.begin(), selected.end(), i + currentPos) != selected.end())
 			{
 				drawSquare(Vector2(x_final + 1, y_final + step_item * i), width_final - size_scroll - 3, step_item - 1, lblColor, { 0.0, 0.0, 0.0, 1.0 });
 				drawStringCentered(items[i + currentPos], Vector2(x_final + 5, y_final + step_item * i), Vector2(width_final, step_item), bgColor, false, true);
@@ -80,6 +126,41 @@ namespace UI
 
 		drawSquare(Vector2(x_scroll, y_final + height_final - size_scroll - 1), size_scroll, size_scroll, lblColor, { 0.0, 0.0, 0.0, 1.0 });
 		drawPolygon(tri_down, bgColor, { 0.0, 0.0, 0.0, 1.0 });
+	}
+
+	void List::onMouseClick(int button, int state, int x, int y)
+	{
+		int size_scroll = 15;
+		// Scroll up
+		if (x > x_final + width_final - size_scroll && y < y_final + size_scroll)
+		{
+			scrollUp();
+		}
+
+		// Scroll down
+		else if (x > x_final + width_final - size_scroll && y > y_final + height_final - size_scroll)
+		{
+			scrollDown();
+		}
+
+		// Sélection d'un item (ou déselection => appel le callback en question)
+		else if (x < x_final + width_final - size_scroll)
+		{
+			int step_item = height_final / numberItemsInList;
+			int x_relative = x - x_final;
+			int sel = x_relative / step_item;
+			select(sel);
+		}
+	}
+
+	void List::onMouseEnter(int x, int y)
+	{
+
+	}
+
+	void List::onMouseExit(int x, int y)
+	{
+
 	}
 
 }

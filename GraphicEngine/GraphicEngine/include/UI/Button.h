@@ -15,16 +15,17 @@ namespace UI
 
 		void draw();
 
-		bool isPressed;
-        
         const std::string& getLabel() const;
         void setCallBack(const std::function<void(char, char, int, int)>& c);
 
-        virtual void onMouseClick(int button, int state, int x, int y);
+		void highlight();
+
+		void onMouseClick(int button, int state, int x, int y);
+
 	private:
 		std::string label;
 		bool isHightlighted;
-		// bool isPressed;
+		bool isPressed;
         std::function<void(int, int, int, int)> m_callBack;
 
 		Color bgColor;
