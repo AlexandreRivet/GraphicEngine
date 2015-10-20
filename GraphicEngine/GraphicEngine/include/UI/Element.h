@@ -49,7 +49,7 @@ namespace UI
          */
         virtual void onMouseClick(int button, int state, int x, int y){};
         virtual void onMouseEnter(int x, int y){};
-        virtual void onMouseExite(int x, int y){};
+        virtual void onMouseExit(int x, int y){};
 
 	protected:
 

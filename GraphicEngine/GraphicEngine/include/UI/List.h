@@ -13,6 +13,16 @@ namespace UI
 
 		void draw();
 
+		void addItem(const std::string& item);
+
+		void select(int index);
+		void scrollDown();
+		void scrollUp();
+
+		void onMouseClick(int button, int state, int x, int y);
+		void onMouseEnter(int x, int y);
+		void onMouseExit(int x, int y);
+
 	private:
 		
 		std::vector<std::string> items;
