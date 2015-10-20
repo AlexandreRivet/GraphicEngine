@@ -138,6 +138,12 @@
     <ClInclude Include="include\UI\Checkbox.h">
       <Filter>Fichiers d%27en-tête\UI</Filter>
     </ClInclude>
+    <ClInclude Include="include\UI\InputText.h">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UI\List.h">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Math\Vector3.cpp">
@@ -210,6 +216,12 @@
       <Filter>Fichiers sources\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\Checkbox.cpp">
+      <Filter>Fichiers sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\InputText.cpp">
+      <Filter>Fichiers sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\List.cpp">
       <Filter>Fichiers sources\UI</Filter>
     </ClCompile>
   </ItemGroup>

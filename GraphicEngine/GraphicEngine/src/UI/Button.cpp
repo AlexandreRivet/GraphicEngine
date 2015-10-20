@@ -20,9 +20,9 @@ namespace UI
 			drawSquare(Vector2(x_final, y_final + height_final * (1 - percent)), width_final, height_final * percent, bgColor, { 1.0, 0.0, 0.0, 0.0 });
 
 			if (isHightlighted)
-				drawStringCentered(label, Vector2(x_final + 1, y_final + height_final * (1 - percent) + 1), Vector2(width_final, height_final * percent), { 0.0, 0.0, 0.0, 0.0 });
+				drawStringCentered(label, Vector2(x_final + 1, y_final + height_final * (1 - percent) + 1), Vector2(width_final, height_final * percent), { 0.0, 0.0, 0.0, 0.0 }, true, true);
 
-			drawStringCentered(label, Vector2(x_final, y_final + height_final * (1 - percent)), Vector2(width_final, height_final * percent), lblColor);
+			drawStringCentered(label, Vector2(x_final, y_final + height_final * (1 - percent)), Vector2(width_final, height_final * percent), lblColor, true, true);
 
 		}
 		else {
@@ -32,9 +32,9 @@ namespace UI
 			drawSquare(Vector2(x_final, y_final + height_final * percent), width_final, height_final * (1.0f - percent), secondSquare, { 1.0, 0.0, 0.0, 0.0 });
 
 			if (isHightlighted)
-				drawStringCentered(label, Vector2(x_final + 1, y_final + 1), Vector2(width_final, height_final * percent), { 0.0, 0.0, 0.0, 0.0 });
+				drawStringCentered(label, Vector2(x_final + 1, y_final + 1), Vector2(width_final, height_final * percent), { 0.0, 0.0, 0.0, 0.0 }, true, true);
 
-			drawStringCentered(label, Vector2(x_final, y_final), Vector2(width_final, height_final * percent), lblColor);
+			drawStringCentered(label, Vector2(x_final, y_final), Vector2(width_final, height_final * percent), lblColor, true, true);
 		}
 
 	}

@@ -92,11 +92,16 @@ void drawString(std::string label, Vector2 point, Color color)
 	glColor4f(oldColor[0], oldColor[1], oldColor[2], oldColor[3]);
 }
 
-void drawStringCentered(std::string label, Vector2 point, Vector2 rect, Color color)
+void drawStringCentered(std::string label, Vector2 point, Vector2 rect, Color color, bool centeredOnX, bool centeredOnY)
 {
 	const unsigned char* msg = (unsigned char*)label.c_str();
-	float fontx = point.x + (rect.x - glutBitmapLength(GLUT_BITMAP_HELVETICA_12, msg)) / 2.0f;
-	float fonty = point.y + (2.0f * rect.y - glutBitmapHeight(GLUT_BITMAP_HELVETICA_12)) / 2.0f;
+	float fontx = point.x;
+	float fonty = point.y;
+	
+	if (centeredOnX)
+		fontx += (rect.x - glutBitmapLength(GLUT_BITMAP_HELVETICA_12, msg)) / 2.0f;
+	if (centeredOnY)
+		fonty += rect.y / 2.0f + glutBitmapHeight(GLUT_BITMAP_HELVETICA_12) / 4.0f;
 
 	drawString(label, Vector2(fontx, fonty), color);
 }
@@ -104,4 +109,11 @@ void drawStringCentered(std::string label, Vector2 point, Vector2 rect, Color co
 void drawCircle(Vector2 center, int radius, Color color)
 {
 	
+}
+
+int getXCoordInString(std::string label, Vector2 origin, int posChar)
+{ 
+	std::string subLabel = label.substr(0, posChar);
+
+	return origin.x + glutBitmapLength(GLUT_BITMAP_HELVETICA_12, (unsigned char*)subLabel.c_str());
 }

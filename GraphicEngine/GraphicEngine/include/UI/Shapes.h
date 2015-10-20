@@ -9,7 +9,9 @@ void drawLine(Vector2 start, Vector2 end, Color color, int thickeness);
 void drawSquare(Vector2 point, int w, int h, Color fill, Color stroke);
 void drawPolygon(std::vector<Vector2> points, Color fill, Color stroke);		// Problem with concave
 void drawString(std::string label, Vector2 point, Color color);
-void drawStringCentered(std::string label, Vector2 point, Vector2 rect, Color color);
+void drawStringCentered(std::string label, Vector2 point, Vector2 rect, Color color, bool centeredOnX, bool centeredOnY);
 void drawCircle(Vector2 center, int radius, Color color);
+
+int getXCoordInString(std::string label, Vector2 origin, int posChar);
 
 #endif

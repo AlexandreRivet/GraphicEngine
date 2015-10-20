@@ -4,5 +4,7 @@
 #include "Panel.h"
 #include "Button.h"
 #include "Checkbox.h"
+#include "InputText.h"
+#include "List.h"
 
 #endif

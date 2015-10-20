@@ -33,6 +33,8 @@
     <ClInclude Include="include\UI\Button.h" />
     <ClInclude Include="include\UI\Checkbox.h" />
     <ClInclude Include="include\UI\Element.h" />
+    <ClInclude Include="include\UI\InputText.h" />
+    <ClInclude Include="include\UI\List.h" />
     <ClInclude Include="include\UI\Panel.h" />
     <ClInclude Include="include\UI\Structs.h" />
     <ClInclude Include="include\UI\Shapes.h" />
@@ -61,6 +63,8 @@
     <ClCompile Include="src\UI\Button.cpp" />
     <ClCompile Include="src\UI\Checkbox.cpp" />
     <ClCompile Include="src\UI\Element.cpp" />
+    <ClCompile Include="src\UI\InputText.cpp" />
+    <ClCompile Include="src\UI\List.cpp" />
     <ClCompile Include="src\UI\Panel.cpp" />
     <ClCompile Include="src\UI\Shapes.cpp" />
     <ClCompile Include="src\Utils\Utils.cpp" />
