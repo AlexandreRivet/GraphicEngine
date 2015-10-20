@@ -14,6 +14,8 @@ namespace UI
 		void draw();
 
 		void addItem(const std::string& item);
+		void setMultiple(bool _multiple);
+		bool getMultiple() const;
 
 		void select(int index);
 		void scrollDown();
