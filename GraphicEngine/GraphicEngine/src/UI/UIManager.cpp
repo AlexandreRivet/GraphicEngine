@@ -9,7 +9,8 @@ namespace UI
 {
     UIManager::UIManager()
         : m_root(0.0f, 0.0f, 100.0f, 100.0f, PERCENT)
-    {}
+    {
+    }
 
     Element* UIManager::getRoot()
     {
@@ -26,7 +27,7 @@ namespace UI
         m_root.computePosition(w, h);
     }
 
-    bool hasClicked(MouseButton button, MouseState state, const Vector2& mouse, Element* e)
+    bool UIManager::hasClicked(MouseButton button, MouseState state, const Vector2& mouse, Element* e)
     {
         auto bounding = e->getFinalBounds();
 
@@ -37,13 +38,15 @@ namespace UI
             if (children.size() == 0)
             {
                 e->onMouseClick(button, state, mouse.x, mouse.y);
+                m_lastOnClickElems[button] = e;
+
                 return true;
             }
             else
             {
                 int childHasClickedCount = 0;
 
-                std::for_each(children.begin(), children.end(), [&childHasClickedCount, button, state, &mouse](Element* child)
+                std::for_each(children.begin(), children.end(), [&childHasClickedCount, button, state, &mouse, this](Element* child)
                 {
                     if (hasClicked(button, state, mouse, child))
                         ++childHasClickedCount;
@@ -53,6 +56,8 @@ namespace UI
                 {
                     e->onMouseClick(button, state, mouse.x, mouse.y);
                     childHasClickedCount = 1;
+
+                    m_lastOnClickElems[button] = e;
                 }
 
                 return childHasClickedCount != 0;
@@ -72,10 +77,24 @@ namespace UI
 		MouseButton mouseButton = ((button == GLUT_LEFT_BUTTON) ? BUTTON_LEFT : ((button == GLUT_MIDDLE_BUTTON) ? BUTTON_MIDDLE : BUTTON_RIGHT ));
 		MouseState mouseState = ((state == GLUT_DOWN) ? MOUSE_DOWN : MOUSE_UP);
 
-		std::for_each(child.begin(), child.end(), [mouseButton, mouseState, mouse](Element* e)
+        if (mouseState == MOUSE_DOWN)
         {
-			hasClicked(mouseButton, mouseState, mouse, e);
-        });
+            std::for_each(child.begin(), child.end(), [mouseButton, mouseState, mouse, this](Element* e)
+            {
+                hasClicked(mouseButton, mouseState, mouse, e);
+            });
+        }
+        else
+        {
+            auto elemClicked = m_lastOnClickElems[mouseButton];
+
+            if (elemClicked != nullptr)
+            {
+                elemClicked->onMouseClick(mouseButton, mouseState, x, y);
+            }
+
+            m_lastOnClickElems[mouseButton] = nullptr;
+        }
     }
 
     void UIManager::onMouseMove(int x, int y)

@@ -4,12 +4,16 @@
 
 namespace UI
 {
-	Checkbox::Checkbox(float _x, float _y, float _width, float _height, Type _ref)
+	Checkbox::Checkbox(bool* toggleFlag, float _x, float _y, float _width, float _height, Type _ref)
 		: Element(_x, _y, _width, _height, _ref),
 		isChecked(false),
 		isHightlighted(false),
-		bgColor({ 1.0, 1.0, 1.0, 1.0 })
-	{}
+		bgColor({ 1.0, 1.0, 1.0, 1.0 }),
+        m_toggleflag(toggleFlag)
+	{
+        if (m_toggleflag != nullptr)
+            isChecked = *m_toggleflag;
+    }
 
 	void Checkbox::draw()
 	{
@@ -49,12 +53,27 @@ namespace UI
 		
 	}
 
+    void Checkbox::setToggleFlag(bool* tf)
+    {
+        m_toggleflag = tf;
+
+        if (m_toggleflag != nullptr)
+            isChecked = *m_toggleflag;
+    }
+
     void Checkbox::onMouseClick(MouseButton button, MouseState state, int x, int y)
     {
-		if (state == MOUSE_DOWN)
-			isChecked = !isChecked;
+        if (button == BUTTON_LEFT && state == MOUSE_DOWN)
+        {
+            isChecked = !isChecked;
 
-        tools::unusedArg(button, state, x, y);
+            if (m_toggleflag != nullptr)
+            {
+                *m_toggleflag = !(*m_toggleflag);
+            }
+        }
+
+        tools::unusedArg(x, y);
     }
 
 }

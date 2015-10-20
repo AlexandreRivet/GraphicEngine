@@ -54,9 +54,13 @@ namespace UI
 
     void Button::onMouseClick(MouseButton button, MouseState state, int x, int y)
     {
-		isPressed = !isPressed;
+        if (button == BUTTON_LEFT)
+        {
+            isPressed = !isPressed;
 
-        m_callBack(button, state, x, y);
+            if (state == MOUSE_DOWN)
+                m_callBack(button, state, x, y);
+        }
     }
 
 	void Button::highlight()

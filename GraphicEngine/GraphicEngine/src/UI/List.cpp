@@ -6,7 +6,7 @@ namespace UI
 		: Element(_x, _y, _width, _height, _ref),
 		bgColor({ 1.0, 1.0, 1.0, 1.0 }),
 		lblColor({ 0.204, 0.596, 0.859, 1.0 }),
-		multiple(false),
+		multiple(true),
 		currentPos(0),
 		numberItemsInList(5)
 	{
@@ -52,9 +52,10 @@ namespace UI
 		{
 			if (element != selected.end())
 			{
-				selected.clear();
-				if (selected.front() != index)
-					selected.push_back(index);
+				if (selected.front() == index)
+					selected.clear();
+				else
+					selected.front() = index;				
 			}
 			else if (selected.size() == 0 && index < items.size())
 			{
@@ -131,24 +132,25 @@ namespace UI
 	{
 		int size_scroll = 15;
 		// Scroll up
-		if (x > x_final + width_final - size_scroll && y < y_final + size_scroll && state == MOUSE_DOWN)
+		if (x > x_final + width_final - size_scroll && y < y_final + size_scroll)
 		{
 			scrollUp();
 		}
 
 		// Scroll down
-		else if (x > x_final + width_final - size_scroll && y > y_final + height_final - size_scroll && state == MOUSE_DOWN)
+		else if (x > x_final + width_final - size_scroll && y > y_final + height_final - size_scroll)
 		{
 			scrollDown();
 		}
 
 		// Sélection d'un item (ou déselection => appel le callback en question)
-		else if (x < x_final + width_final - size_scroll && state == MOUSE_DOWN)
+		else if (x < x_final + width_final - size_scroll)
 		{
 			int step_item = height_final / numberItemsInList;
-			int y_relative = y - y_final;
-			int sel = y_relative / step_item;
-			select(sel + currentPos);
+			int x_relative = x - x_final;
+			int sel = x_relative / step_item;
+			std::cout << sel << std::endl;
+			select(sel);
 		}
 	}
 

@@ -24,6 +24,10 @@ namespace UI
 
     private:
         Layout m_root;
+
+        std::map<MouseButton, Element*> m_lastOnClickElems;
+
+        bool hasClicked(MouseButton button, MouseState state, const Vector2& mouse, Element* e);
     };
 }
 #endif
