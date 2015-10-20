@@ -53,8 +53,6 @@ namespace UI
 			if (element != selected.end())
 			{
 				selected.clear();
-				if (selected.front() != index)
-					selected.push_back(index);
 			}
 			else if (selected.size() == 0 && index < items.size())
 			{
@@ -63,6 +61,7 @@ namespace UI
 			else
 			{
 				selected.clear();
+				selected.push_back(index);
 			}
 		}
 
