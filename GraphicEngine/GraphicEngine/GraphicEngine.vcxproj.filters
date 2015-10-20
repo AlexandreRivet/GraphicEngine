@@ -150,6 +150,9 @@
     <ClInclude Include="include\UI\List.h">
       <Filter>Fichiers d%27en-tête\UI</Filter>
     </ClInclude>
+    <ClInclude Include="include\Utils\Rect.h">
+      <Filter>Fichiers d%27en-tête\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Math\Vector3.cpp">
@@ -235,6 +238,9 @@
     </ClCompile>
     <ClCompile Include="src\UI\List.cpp">
       <Filter>Fichiers sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\Rect.cpp">
+      <Filter>Fichiers sources\Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,6 +1,8 @@
 #include "UI\UIManager.h"
 
 #include "Utils/utils.h"
+#include "Utils/Rect.h"
+
 namespace UI
 {
     UIManager::UIManager()
@@ -22,13 +24,60 @@ namespace UI
         m_root.computePosition(w, h);
     }
 
+    bool hasClicked(int button, int state, const Vector2& mouse, Element* e)
+    {
+        auto bounding = e->getFinalBounds();
+
+        if (isInside(bounding, mouse))
+        {
+            auto& children = e->getChildren();
+
+            if (children.size() == 0)
+            {
+                e->onMouseClick(button, state, mouse.x, mouse.y);
+                return true;
+            }
+            else
+            {
+                int childHasClickedCount = 0;
+
+                std::for_each(children.begin(), children.end(), [&childHasClickedCount, button, state, &mouse](Element* child)
+                {
+                    if (hasClicked(button, state, mouse, child))
+                        ++childHasClickedCount;
+                });
+
+                if (childHasClickedCount == 0)
+                {
+                    e->onMouseClick(button, state, mouse.x, mouse.y);
+                    childHasClickedCount = 1;
+                }
+
+                return childHasClickedCount != 0;
+            }
+        }
+
+        return false;
+    }
+
     void UIManager::onMouseClick(int button, int state, int x, int y)
     {
         //find the best Element to click button
         
+        auto& child = m_root.getChildren();
+        Vector2 mouse(x, y);
+
+        std::for_each(child.begin(), child.end(), [button, state, mouse](Element* e)
+        {
+            hasClicked(button, state, mouse, e);
+        });
     }
 
     void UIManager::onMouseMove(int x, int y)
+    {
+    }
+
+    void UIManager::onMouseDrag(int x, int y)
     {
     }
 }

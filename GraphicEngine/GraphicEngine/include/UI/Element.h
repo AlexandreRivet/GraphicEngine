@@ -6,6 +6,8 @@
 
 #include "Shapes.h"
 
+#include "Utils/Rect.h"
+
 namespace UI
 {
 	enum Type {PIXEL, PERCENT};
@@ -21,16 +23,7 @@ namespace UI
 		{}
 	};
 
-	template<typename T>
-	class Rect
-	{
-		T x;
-		T y;
-		T w;
-		T h;
-	};		
-
-    class Element
+	class Element
     {
     public:
         Element(float _x, float _y, float _width, float _height, Type _ref = PIXEL);
@@ -43,6 +36,13 @@ namespace UI
 
         void render();
         virtual void draw() = 0;
+
+        const Element* getParent() const;
+        Element* getParent();
+        const std::vector<Element*>& getChildren() const;
+        std::vector<Element*>& getChildren();
+
+        Rect<float> getFinalBounds() const;
 
         /**
          * Mouse Graphic event

@@ -146,4 +146,30 @@ namespace UI
 		}
 	}
 
+    const Element* Element::getParent() const
+    {
+        return parent;
+    }
+
+    Element* Element::getParent()
+    {
+        return parent;
+    }
+
+    const std::vector<Element*>& Element::getChildren() const
+    {
+        return children;
+    }
+
+    std::vector<Element*>& Element::getChildren()
+    {
+        return children;
+    }
+
+    Rect<float> Element::getFinalBounds() const
+    {
+        Rect<float> bounding = { x_final, y_final, width_final, height_final };
+
+        return bounding;
+    }
 }
