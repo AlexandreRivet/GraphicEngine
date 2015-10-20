@@ -25,7 +25,7 @@ namespace UI
     void UIManager::onMouseClick(int button, int state, int x, int y)
     {
         //find the best Element to click button
-        m_root.onMouseClick(button, state, x, y);
+        
     }
 
     void UIManager::onMouseMove(int x, int y)

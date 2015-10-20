@@ -12,12 +12,4 @@ namespace UI
     {
         //Do nothing because is just a layout
     }
-
-    void Layout::onMouseClick(int button, int state, int x, int y)
-    {
-        std::for_each(children.begin(), children.end(), [button, state, x, y](Element* e)
-        {
-            e->onMouseClick(button, state, x, y);
-        });
-    }
 }

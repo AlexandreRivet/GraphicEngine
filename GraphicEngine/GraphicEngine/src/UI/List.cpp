@@ -80,12 +80,6 @@ namespace UI
 
 		drawSquare(Vector2(x_scroll, y_final + height_final - size_scroll - 1), size_scroll, size_scroll, lblColor, { 0.0, 0.0, 0.0, 1.0 });
 		drawPolygon(tri_down, bgColor, { 0.0, 0.0, 0.0, 1.0 });
-
-
-		
-
-		
-
 	}
 
 }
