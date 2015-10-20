@@ -18,8 +18,7 @@ namespace UI
 		RefValue(float _value, Type _ref)
 			: value(_value),
 			ref(_ref)
-		{
-		}
+		{}
 	};
 
 	template<typename T>
@@ -31,19 +30,26 @@ namespace UI
 		T h;
 	};		
 
-	class Element
-	{
-	public:
-		Element(float _x, float _y, float _width, float _height, Type _ref = PIXEL);
+    class Element
+    {
+    public:
+        Element(float _x, float _y, float _width, float _height, Type _ref = PIXEL);
 
-		virtual bool Element::setStyle(std::string style);	// non const because of clean up the string
-		void computePosition(float w, float h);
+        virtual bool Element::setStyle(std::string style);	// non const because of clean up the string
+        void computePosition(float w, float h);
 
-		void setParent(Element* element);
-		void addElement(Element* element);
+        void setParent(Element* element);
+        void addElement(Element* element);
 
-		void render();
-		virtual void draw() = 0;
+        void render();
+        virtual void draw() = 0;
+
+        /**
+         * Mouse Graphic event
+         */
+        virtual void onMouseClick(int button, int state, int x, int y){};
+        virtual void onMouseEnter(int x, int y){};
+        virtual void onMouseExite(int x, int y){};
 
 	protected:
 

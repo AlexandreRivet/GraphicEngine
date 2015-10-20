@@ -7,4 +7,6 @@
 #include "InputText.h"
 #include "List.h"
 
+#include "UIManager.h"
+
 #endif

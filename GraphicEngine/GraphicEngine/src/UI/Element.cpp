@@ -12,10 +12,9 @@ namespace UI
 		x(_x, _ref),
 		y(_y, _ref),
 		width(_width, _ref),
-		height(_height, _ref)
-	{
-		
-	}
+		height(_height, _ref),
+        parent(nullptr)
+    {}
 
 	bool Element::setStyle(std::string style)
 	{
@@ -47,7 +46,7 @@ namespace UI
 
 			if (lastLetter.back() == '%')
 			{
-				floatValue = ::atof(value.substr(0, value.length() - 1).c_str());
+				floatValue = static_cast<float>(::atof(value.substr(0, value.length() - 1).c_str()));
 				type = PERCENT;
 			}
 			else if (lastLetter.front() == 'p' && lastLetter.back() == 'x')
@@ -55,7 +54,7 @@ namespace UI
 				if (value.size() < 3)
 					return false;
 
-				floatValue = ::atof(value.substr(0, value.length() - 2).c_str());
+				floatValue = static_cast<float>(::atof(value.substr(0, value.length() - 2).c_str()));
 				type = PIXEL;
 			}
 			else

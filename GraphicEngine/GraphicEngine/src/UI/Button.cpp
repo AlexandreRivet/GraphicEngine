@@ -2,11 +2,12 @@
 
 namespace UI
 {
-	Button::Button(const std::string& _label, float _x, float _y, float _width, float _height, Type _ref)
+    Button::Button(const std::string& _label, const std::function<void(char, char, int, int)>& f, float _x, float _y, float _width, float _height, Type _ref)
 		: Element(_x, _y, _width, _height, _ref),
 		label(_label),
 		isPressed(false),
 		isHightlighted(false),
+        m_callBack(f),
 		bgColor({0.204, 0.596, 0.859, 1.0}),
 		lblColor({1.0, 1.0, 1.0, 1.0})
 	{
@@ -39,4 +40,18 @@ namespace UI
 
 	}
 
+    const std::string& Button::getLabel() const
+    {
+        return label;
+    }
+
+    void Button::setCallBack(const std::function<void(char, char, int, int)>& c)
+    {
+        m_callBack = c;
+    }
+
+    void Button::onMouseClick(int button, int state, int x, int y)
+    {
+        m_callBack(button, state, x, y);
+    }
 }

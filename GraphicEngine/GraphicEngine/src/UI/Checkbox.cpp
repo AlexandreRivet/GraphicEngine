@@ -1,5 +1,7 @@
 #include "UI/Checkbox.h"
 
+#include "Utils/utils.h"
+
 namespace UI
 {
 	Checkbox::Checkbox(float _x, float _y, float _width, float _height, Type _ref)
@@ -7,9 +9,7 @@ namespace UI
 		isChecked(false),
 		isHightlighted(false),
 		bgColor({ 1.0, 1.0, 1.0, 1.0 })
-	{
-
-	}
+	{}
 
 	void Checkbox::draw()
 	{
@@ -17,15 +17,15 @@ namespace UI
 		// Contour
 		if (isHightlighted)
 		{
-			drawSquare(Vector2(x_final, y_final), width_final, height_final, { 0.0, 0.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0, 1.0 });
+            drawSquare(Vector2(x_final, y_final), static_cast<int>(width_final), static_cast<int>(height_final), { 0.0, 0.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0, 1.0 });
 		}
 		else
 		{
-			drawSquare(Vector2(x_final, y_final), width_final, height_final, { 0.3, 0.3, 0.3, 1.0 }, { 0.0, 0.0, 0.0, 1.0 });
+            drawSquare(Vector2(x_final, y_final), static_cast<int>(width_final), static_cast<int>(height_final), { 0.3, 0.3, 0.3, 1.0 }, { 0.0, 0.0, 0.0, 1.0 });
 		}
 
 		// Background
-		drawSquare(Vector2(x_final + 3, y_final + 3), width_final - 2 * thickeness, height_final - 2 * thickeness, bgColor, { 0.0, 0.0, 0.0, 1.0 });
+        drawSquare(Vector2(x_final + 3, y_final + 3), static_cast<int>(width_final - 2 * thickeness), static_cast<int>(height_final - 2 * thickeness), bgColor, { 0.0, 0.0, 0.0, 1.0 });
 
 		Color checked;
 		if (isChecked)
@@ -48,5 +48,10 @@ namespace UI
 		drawPolygon(secondPoly, checked, { 0.0, 0.0, 0.0, 1.0 });
 		
 	}
+
+    void Checkbox::onMouseClick(int button, int state, int x, int y)
+    {
+        tools::unusedArg(button, state, x, y);
+    }
 
 }

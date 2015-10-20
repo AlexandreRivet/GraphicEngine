@@ -142,6 +142,10 @@
       <Filter>Fichiers d%27en-tête\UI</Filter>
     </ClInclude>
     <ClInclude Include="include\UI\List.h">
+    <ClInclude Include="include\UI\Layout.h">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UI\UIManager.h">
       <Filter>Fichiers d%27en-tête\UI</Filter>
     </ClInclude>
   </ItemGroup>
@@ -222,6 +226,10 @@
       <Filter>Fichiers sources\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\List.cpp">
+    <ClCompile Include="src\UI\Layout.cpp">
+      <Filter>Fichiers sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\UIManager.cpp">
       <Filter>Fichiers sources\UI</Filter>
     </ClCompile>
   </ItemGroup>
