@@ -6,7 +6,7 @@ namespace UI
 		: Element(_x, _y, _width, _height, _ref),
 		bgColor({ 1.0, 1.0, 1.0, 1.0 }),
 		lblColor({ 0.204, 0.596, 0.859, 1.0 }),
-		multiple(true),
+		multiple(false),
 		currentPos(0),
 		numberItemsInList(5)
 	{
@@ -15,6 +15,16 @@ namespace UI
 	void List::addItem(const std::string& item)
 	{
 		items.push_back(item);
+	}
+
+	void List::setMultiple(bool _multiple)
+	{
+		multiple = _multiple;
+	}
+
+	bool List::getMultiple() const
+	{
+		return multiple;
 	}
 
 	void List::scrollDown()
@@ -30,8 +40,6 @@ namespace UI
 		if (currentPos < 0)
 			currentPos = 0;
 	}
-
-
 
 	void List::select(int index)
 	{
@@ -52,10 +60,7 @@ namespace UI
 		{
 			if (element != selected.end())
 			{
-				if (selected.front() == index)
-					selected.clear();
-				else
-					selected.front() = index;				
+				selected.clear();
 			}
 			else if (selected.size() == 0 && index < items.size())
 			{
@@ -64,6 +69,7 @@ namespace UI
 			else
 			{
 				selected.clear();
+				selected.push_back(index);
 			}
 		}
 
@@ -84,7 +90,7 @@ namespace UI
 			// Hightlight
 			if (std::find(selected.begin(), selected.end(), i + currentPos) != selected.end())
 			{
-				drawSquare(Vector2(x_final + 1, y_final + step_item * i), width_final - size_scroll - 3, step_item - 1, lblColor, { 0.0, 0.0, 0.0, 1.0 });
+				drawSquare(Vector2(x_final + 1, y_final + step_item * i + 1), width_final - size_scroll - 3, step_item - 2, lblColor, { 0.0, 0.0, 0.0, 1.0 });
 				drawStringCentered(items[i + currentPos], Vector2(x_final + 5, y_final + step_item * i), Vector2(width_final, step_item), bgColor, false, true);
 			}
 			else
