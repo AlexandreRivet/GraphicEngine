@@ -33,10 +33,12 @@
     <ClInclude Include="include\UI\Button.h" />
     <ClInclude Include="include\UI\Checkbox.h" />
     <ClInclude Include="include\UI\Element.h" />
+    <ClInclude Include="include\UI\Layout.h" />
     <ClInclude Include="include\UI\Panel.h" />
     <ClInclude Include="include\UI\Structs.h" />
     <ClInclude Include="include\UI\Shapes.h" />
     <ClInclude Include="include\UI\UI.h" />
+    <ClInclude Include="include\UI\UIManager.h" />
     <ClInclude Include="include\Utils\Utils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -61,8 +63,10 @@
     <ClCompile Include="src\UI\Button.cpp" />
     <ClCompile Include="src\UI\Checkbox.cpp" />
     <ClCompile Include="src\UI\Element.cpp" />
+    <ClCompile Include="src\UI\Layout.cpp" />
     <ClCompile Include="src\UI\Panel.cpp" />
     <ClCompile Include="src\UI\Shapes.cpp" />
+    <ClCompile Include="src\UI\UIManager.cpp" />
     <ClCompile Include="src\Utils\Utils.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

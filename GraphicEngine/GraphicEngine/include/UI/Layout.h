@@ -12,6 +12,8 @@ namespace UI
         Layout(float _x, float _y, float _width, float _height, Type _ref = PIXEL);
 
         void draw();
+
+        virtual void onMouseClick(int button, int state, int x, int y);
     };
 }
 

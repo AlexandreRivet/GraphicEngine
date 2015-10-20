@@ -4,5 +4,6 @@
 #include "Panel.h"
 #include "Button.h"
 #include "Checkbox.h"
+#include "UIManager.h"
 
 #endif

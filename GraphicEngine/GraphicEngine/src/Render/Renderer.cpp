@@ -47,7 +47,7 @@ uint Renderer::getHeight() const
 	return mViewportHeight;
 }
 
-void Renderer::render(Scene& s, Camera& c, UI::Element& root)
+void Renderer::render(Scene& s, Camera& c, UI::UIManager& uiManager)
 {
 	glDepthMask(GL_TRUE);
 	
@@ -64,7 +64,7 @@ void Renderer::render(Scene& s, Camera& c, UI::Element& root)
 	render(s, c);
 
 	// rend l'UI par dessus
-	render(root);
+	render(uiManager);
 
 	// Inversion des buffers
 	glutSwapBuffers();
@@ -73,12 +73,12 @@ void Renderer::render(Scene& s, Camera& c, UI::Element& root)
 	Sleep(1);
 }
 
-void Renderer::render(UI::Element& root)
+void Renderer::render(UI::UIManager& uiManager)
 {
 	glDepthMask(GL_FALSE);
 
 	// On calcule les positions finales
-	root.computePosition(mViewportWidth, mViewportHeight);
+	uiManager.computePosition(mViewportWidth, mViewportHeight);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -87,7 +87,7 @@ void Renderer::render(UI::Element& root)
 	glLoadIdentity();
 
 	// Dessin
-	root.render();
+    uiManager.render();
 }
 
 void Renderer::render(Scene& s, Camera& c)

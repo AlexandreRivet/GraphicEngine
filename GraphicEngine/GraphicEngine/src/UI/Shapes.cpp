@@ -13,6 +13,8 @@
 
 #include "GL/freeglut.h"
 
+#include "Utils/utils.h"
+
 void drawPoint(Vector2 point, Color color)
 {
 	static float oldColor[4] = { 0 };
@@ -31,7 +33,7 @@ void drawLine(Vector2 start, Vector2 end, Color color, int thickness)
 	static float oldColor[4] = { 0 };
 	glGetFloatv(GL_CURRENT_COLOR, oldColor);
 
-	glLineWidth(thickness);
+	glLineWidth(static_cast<GLfloat>(thickness));
 
 	glColor4f(color.r, color.g, color.b, color.a);
 	glBegin(GL_LINES);
@@ -58,12 +60,14 @@ void drawSquare(Vector2 point, int w, int h, Color fill, Color stroke)
 
 void drawPolygon(std::vector<Vector2> points, Color fill, Color stroke)
 {
+    tools::unusedArg(stroke);
+
 	static float oldColor[4] = { 0 };
 	glGetFloatv(GL_CURRENT_COLOR, oldColor);
 
 	glColor4f(fill.r, fill.g, fill.b, fill.a);
 	glBegin(GL_POLYGON);
-	for (int i = 0; i < points.size(); ++i)
+	for (unsigned int i = 0; i < points.size(); ++i)
 	{
 		glVertex2f(points[i].x, points[i].y);
 	}
@@ -75,13 +79,13 @@ void drawPolygon(std::vector<Vector2> points, Color fill, Color stroke)
 void drawString(std::string label, Vector2 point, Color color)
 {
 	const char* msg = label.c_str();
-	int len = (int)strlen(msg);
+	//int len = (int)strlen(msg);
 
 	static float oldColor[4] = { 0 };
 	glGetFloatv(GL_CURRENT_COLOR, oldColor);
 
 	glColor3f(color.r, color.g, color.b);
-	glRasterPos2i(point.x, point.y);
+    glRasterPos2i(static_cast<GLint>(point.x), static_cast<GLint>(point.y));
 
 	while (*msg != '\0')
 	{
@@ -103,5 +107,5 @@ void drawStringCentered(std::string label, Vector2 point, Vector2 rect, Color co
 
 void drawCircle(Vector2 center, int radius, Color color)
 {
-	
+    tools::unusedArg(center, radius, color);
 }
