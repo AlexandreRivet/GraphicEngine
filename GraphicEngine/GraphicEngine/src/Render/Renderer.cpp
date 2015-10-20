@@ -34,6 +34,7 @@ void Renderer::setViewport(uint w, uint h)
 {
 	mViewportWidth = w;
 	mViewportHeight = h;
+	glViewport(0, 0, mViewportWidth, mViewportHeight);
 }
 
 uint Renderer::getWidth() const
@@ -44,6 +45,49 @@ uint Renderer::getWidth() const
 uint Renderer::getHeight() const
 {
 	return mViewportHeight;
+}
+
+void Renderer::render(Scene& s, Camera& c, UI::Element& root)
+{
+	glDepthMask(GL_TRUE);
+	
+	// glViewport(0, 0, mViewportWidth, mViewportHeight);
+
+	if (mAutoClear)
+	{
+		glClearColor(mClearColor.x, mClearColor.y, mClearColor.z, 1.0f);
+		glClearDepth(1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
+	// rend la scène 3D
+	render(s, c);
+
+	// rend l'UI par dessus
+	render(root);
+
+	// Inversion des buffers
+	glutSwapBuffers();
+
+	// Trick chelou
+	Sleep(1);
+}
+
+void Renderer::render(UI::Element& root)
+{
+	glDepthMask(GL_FALSE);
+
+	// On calcule les positions finales
+	root.computePosition(mViewportWidth, mViewportHeight);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, mViewportWidth, mViewportHeight, 0, -1, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	// Dessin
+	root.render();
 }
 
 void Renderer::render(Scene& s, Camera& c)
@@ -64,16 +108,6 @@ void Renderer::render(Scene& s, Camera& c)
 
 		return distA < distB;
 	});
-
-	glViewport(0, 0, mViewportWidth, mViewportHeight);
-
-	if (mAutoClear)
-	{
-		glClearColor(mClearColor.x, mClearColor.y, mClearColor.z, 1.0f);
-		glClearDepth(1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	}
-
 	
 	// Parcourir les objets et faire les draw
 	for (uint i = 0; i < objects.size(); ++i)
@@ -131,10 +165,7 @@ void Renderer::render(Scene& s, Camera& c)
 		mat->unbind();
 
 	}
-
-	// glutSwapBuffers();
-
-	Sleep(1);
+	
 }
 
 void Renderer::setAutoUpdate(bool update)

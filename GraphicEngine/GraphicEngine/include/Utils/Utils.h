@@ -4,12 +4,14 @@
 #include <fstream>
 #include <streambuf>
 #include <cstdlib>
+#include <vector>
+#include <string>
 
 class Utils
 {
 public:
 	static bool fileToString(const std::string& fileName, std::string& content);
-
+	static std::vector<std::string> Utils::split(const std::string &s, char delim);
 };
 
 namespace tools

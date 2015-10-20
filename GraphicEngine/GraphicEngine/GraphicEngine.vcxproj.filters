@@ -49,6 +49,12 @@
     <Filter Include="Fichiers d%27en-tête\Objects">
       <UniqueIdentifier>{3ee4f217-0d78-4165-a316-5f8c177d4c20}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\UI">
+      <UniqueIdentifier>{b39705b7-e16a-48ca-90a1-1e8a2d6baa07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\UI">
+      <UniqueIdentifier>{744e54a8-1c57-4ba6-a448-b823dbd0cb12}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Math\Matrix3.h">
@@ -111,6 +117,27 @@
     <ClInclude Include="include\Objects\Scene.h">
       <Filter>Fichiers d%27en-tête\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="include\UI\Element.h">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UI\Button.h">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UI\Shapes.h">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UI\Structs.h">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UI\Panel.h">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UI\UI.h">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UI\Checkbox.h">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Math\Vector3.cpp">
@@ -169,6 +196,21 @@
     </ClCompile>
     <ClCompile Include="src\Render\Renderer.cpp">
       <Filter>Fichiers sources\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Element.cpp">
+      <Filter>Fichiers sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Shapes.cpp">
+      <Filter>Fichiers sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Button.cpp">
+      <Filter>Fichiers sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Panel.cpp">
+      <Filter>Fichiers sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Checkbox.cpp">
+      <Filter>Fichiers sources\UI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

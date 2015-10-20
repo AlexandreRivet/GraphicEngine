@@ -6,6 +6,7 @@
 
 #include "Objects/Scene.h"
 #include "Cameras/Camera.h"
+#include "UI/Element.h"
 
 class Renderer
 {
@@ -20,7 +21,9 @@ public:
 	uint getWidth() const;
 	uint getHeight() const;
 
+	void render(Scene& s, Camera& c, UI::Element& root);
 	void render(Scene& s, Camera& c);
+	void render(UI::Element& root);
 
 	void setAutoClear(bool clear);
 	bool autoClear() const;
