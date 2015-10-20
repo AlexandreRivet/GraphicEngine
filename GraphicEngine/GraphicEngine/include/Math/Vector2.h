@@ -398,7 +398,7 @@ public:
 		if (orientation < 0)
 			return angleBetween(other);
 		else if (orientation > 0)
-			return 2.0f * M_PI - angleBetween(other);
+			return 2.0f * static_cast<float>(M_PI) - angleBetween(other);
 		else
 			return 0.0f;
 	}
