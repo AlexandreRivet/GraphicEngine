@@ -12,6 +12,10 @@ namespace UI
 {
 	enum Type {PIXEL, PERCENT};
 
+	enum MouseState{MOUSE_UP, MOUSE_DOWN};
+
+	enum MouseButton{BUTTON_LEFT, BUTTON_MIDDLE, BUTTON_RIGHT};
+
 	struct RefValue
 	{
 		float value;
@@ -47,7 +51,7 @@ namespace UI
         /**
          * Mouse Graphic event
          */
-        virtual void onMouseClick(int button, int state, int x, int y){};
+        virtual void onMouseClick(MouseButton button, MouseState state, int x, int y){};
         virtual void onMouseEnter(int x, int y){};
         virtual void onMouseExit(int x, int y){};
 

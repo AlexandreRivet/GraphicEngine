@@ -15,7 +15,7 @@ namespace UI
 
 		bool isChecked;
 
-        void onMouseClick(int button, int state, int x, int y);
+        void onMouseClick(MouseButton button, MouseState state, int x, int y);
 	private:
 		
 		bool isHightlighted;

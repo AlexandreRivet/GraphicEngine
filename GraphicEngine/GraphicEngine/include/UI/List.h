@@ -19,7 +19,7 @@ namespace UI
 		void scrollDown();
 		void scrollUp();
 
-		void onMouseClick(int button, int state, int x, int y);
+		void onMouseClick(MouseButton button, MouseState state, int x, int y);
 		void onMouseEnter(int x, int y);
 		void onMouseExit(int x, int y);
 

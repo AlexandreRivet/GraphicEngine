@@ -3,6 +3,8 @@
 #include "Utils/utils.h"
 #include "Utils/Rect.h"
 
+#include "Utils/freeglut_include.h"
+
 namespace UI
 {
     UIManager::UIManager()
@@ -24,7 +26,7 @@ namespace UI
         m_root.computePosition(w, h);
     }
 
-    bool hasClicked(int button, int state, const Vector2& mouse, Element* e)
+    bool hasClicked(MouseButton button, MouseState state, const Vector2& mouse, Element* e)
     {
         auto bounding = e->getFinalBounds();
 
@@ -67,9 +69,12 @@ namespace UI
         auto& child = m_root.getChildren();
         Vector2 mouse(x, y);
 
-        std::for_each(child.begin(), child.end(), [button, state, mouse](Element* e)
+		MouseButton mouseButton = ((button == GLUT_LEFT_BUTTON) ? BUTTON_LEFT : ((button == GLUT_MIDDLE_BUTTON) ? BUTTON_MIDDLE : BUTTON_RIGHT ));
+		MouseState mouseState = ((state == GLUT_DOWN) ? MOUSE_DOWN : MOUSE_UP);
+
+		std::for_each(child.begin(), child.end(), [mouseButton, mouseState, mouse](Element* e)
         {
-            hasClicked(button, state, mouse, e);
+			hasClicked(mouseButton, mouseState, mouse, e);
         });
     }
 

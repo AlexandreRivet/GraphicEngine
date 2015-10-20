@@ -153,6 +153,9 @@
     <ClInclude Include="include\Utils\Rect.h">
       <Filter>Fichiers d%27en-tête\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="include\Utils\freeglut_include.h">
+      <Filter>Fichiers sources\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Math\Vector3.cpp">

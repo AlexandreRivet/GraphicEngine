@@ -49,9 +49,10 @@ namespace UI
 		
 	}
 
-    void Checkbox::onMouseClick(int button, int state, int x, int y)
+    void Checkbox::onMouseClick(MouseButton button, MouseState state, int x, int y)
     {
-		isChecked = !isChecked;
+		if (state == MOUSE_DOWN)
+			isChecked = !isChecked;
 
         tools::unusedArg(button, state, x, y);
     }

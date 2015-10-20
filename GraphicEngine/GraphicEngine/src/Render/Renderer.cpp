@@ -1,17 +1,6 @@
 #include "Render/Renderer.h"
 
-#define GLEW_STATIC 1
-#include "GL\glew.h"
-
-#ifdef _WIN32
-#	include <Windows.h>
-#	define FREEGLUT_LIB_PRAGMAS 0
-#	pragma comment(lib, "freeglut.lib")
-#	pragma comment(lib, "opengl32.lib")
-#	pragma comment(lib, "glew32s.lib")
-#endif
-
-#include "GL/freeglut.h"
+#include "Utils/freeglut_include.h"
 
 Renderer::Renderer()
 	: mClearColor(Vector3::ZERO),

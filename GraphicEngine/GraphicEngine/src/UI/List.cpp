@@ -128,7 +128,7 @@ namespace UI
 		drawPolygon(tri_down, bgColor, { 0.0, 0.0, 0.0, 1.0 });
 	}
 
-	void List::onMouseClick(int button, int state, int x, int y)
+	void List::onMouseClick(MouseButton button, MouseState state, int x, int y)
 	{
 		int size_scroll = 15;
 		// Scroll up
@@ -149,6 +149,7 @@ namespace UI
 			int step_item = height_final / numberItemsInList;
 			int x_relative = x - x_final;
 			int sel = x_relative / step_item;
+			std::cout << sel << std::endl;
 			select(sel);
 		}
 	}

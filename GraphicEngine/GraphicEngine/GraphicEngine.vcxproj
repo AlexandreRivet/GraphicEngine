@@ -41,6 +41,7 @@
     <ClInclude Include="include\UI\Shapes.h" />
     <ClInclude Include="include\UI\UI.h" />
     <ClInclude Include="include\UI\UIManager.h" />
+    <ClInclude Include="include\Utils\freeglut_include.h" />
     <ClInclude Include="include\Utils\Rect.h" />
     <ClInclude Include="include\Utils\Utils.h" />
   </ItemGroup>

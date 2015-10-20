@@ -47,12 +47,12 @@ namespace UI
         return label;
     }
 
-    void Button::setCallBack(const std::function<void(char, char, int, int)>& c)
+    void Button::setCallBack(const std::function<void(MouseButton, MouseState, int, int)>& c)
     {
         m_callBack = c;
     }
 
-    void Button::onMouseClick(int button, int state, int x, int y)
+    void Button::onMouseClick(MouseButton button, MouseState state, int x, int y)
     {
 		isPressed = !isPressed;
 
