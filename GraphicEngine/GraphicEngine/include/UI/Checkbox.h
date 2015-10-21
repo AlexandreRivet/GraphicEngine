@@ -9,10 +9,11 @@ namespace UI
 	{
 	public:
 
-		Checkbox(bool* toggleFlag, float _x, float _y, float _width = 30.0f, float _height = 30.0f, Type _ref = PIXEL);
+		Checkbox(bool* toggleFlag, float _x, float _y, float _width = 20.0f, float _height = 20.0f, Type _ref = PIXEL);
 
 		bool isChecked() const;
 
+		void computeState();
 		void draw();
 
         void setToggleFlag(bool*);
@@ -24,6 +25,11 @@ namespace UI
 		bool mIsChecked;
 
         bool* mToggleflag;
+
+		// Variable saved for calculations 
+		Rect<float> mFirstRect;
+		std::vector<std::vector<Vector2>> mTickPolys;
+
 	};
 
 }

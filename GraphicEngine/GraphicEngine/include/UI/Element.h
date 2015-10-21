@@ -38,6 +38,7 @@ namespace UI
         void computePosition(float w, float h);					// TODO: change when we will have context for OpenGL App
 		virtual void computeState();
 
+		void setNeedUpdate(bool update);
         void setParent(Element* element);
         void addElement(Element* element);
 		const Element* getParent() const;
