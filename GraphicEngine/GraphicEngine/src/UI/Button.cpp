@@ -2,69 +2,86 @@
 
 namespace UI
 {
-    Button::Button(const std::string& _label, const std::function<void(char, char, int, int)>& f, float _x, float _y, float _width, float _height, Type _ref)
-		: Element(_x, _y, _width, _height, _ref),
-		label(_label),
-		isPressed(false),
-		isHightlighted(false),
-        m_callBack(f),
-		bgColor({0.204, 0.596, 0.859, 1.0}),
-		lblColor({1.0, 1.0, 1.0, 1.0})
+	Button::Button(const std::string& label, const std::function<void(char, char, int, int)>& f, float x, float y, float width, float height, Type ref)
+		: Element(x, y, width, height, ref),
+		mLabel(label),
+		mCallBack(f),
+		mIsPressed(false),
+		mIsHightlighted(false),
+		mLabelColor(1.0, 1.0, 1.0, 1.0)
 	{
+		mBackgroundColor = Color(0.204f, 0.596f, 0.859f, 1.0f);
+	}
+
+	Button::Button(const std::string& label, const std::function<void(char, char, int, int)>& f, const Rect<RefValue>& localRect)
+		: Element(localRect),
+		mLabel(label),
+		mCallBack(f),
+		mIsPressed(false),
+		mIsHightlighted(false),
+		mLabelColor(1.0f, 1.0f, 1.0f, 1.0f)
+	{
+		mBackgroundColor = Color(0.204f, 0.596f, 0.859f, 1.0f);
+	}
+
+	void Button::computeState()
+	{
+		float percent = 0.8f;
+		float other_percent = 1.0f - percent;
+
+		mFirstRect = Rect<float>(mViewportRect.x, mViewportRect.y, mViewportRect.w, mViewportRect.h * percent);
+		mSecondRect = Rect<float>(mViewportRect.x, mViewportRect.y, mViewportRect.w, mViewportRect.h * other_percent);
+
+		if (mIsPressed) 
+		{
+			other_percent /= 0.2f;
+
+			mFirstRect.y += mViewportRect.h * (1.0f - percent - other_percent);
+
+			mSecondRect.y += mViewportRect.h * (1.0f - percent - other_percent) + mFirstRect.h;
+			mSecondRect.h = mViewportRect.h * other_percent;
+		}
 
 	}
 
 	void Button::draw()
 	{
-		float percent = 0.8f;
-		float other_percent = 1.0f - percent;
-		Vector2 pos(x_final, y_final);
-
-		// Pour la gestion du bouton enfoncé
-		if (isPressed) {
-			other_percent /= 2.0f;
-			pos.y += height_final * (1 - percent - other_percent);
-		}
-
 		// Rect principal bouton
-		drawSquare(pos, width_final, height_final * percent, bgColor, { 1.0, 0.0, 0.0, 0.0 });
-			
+		drawSquare(Vector2(mFirstRect.x, mFirstRect.y), static_cast<int>(mFirstRect.w), static_cast<int>(mFirstRect.h), mBackgroundColor, { 1.0f, 0.0f, 0.0f, 0.0f });
+
 		// Effet 3D
-		Color secondSquare{ bgColor.r - 0.2f, bgColor.g - 0.2f, bgColor.b - 0.2f, bgColor.a };
-		drawSquare(Vector2(pos.x, pos.y + height_final * percent), width_final, height_final * other_percent, secondSquare, { 1.0, 0.0, 0.0, 0.0 });
+		Color secondSquare(mBackgroundColor.r - 0.2f, mBackgroundColor.g - 0.2f, mBackgroundColor.b - 0.2f, mBackgroundColor.a);
+		drawSquare(Vector2(mSecondRect.x, mSecondRect.y), static_cast<int>(mSecondRect.w), static_cast<int>(mSecondRect.h), secondSquare, { 1.0f, 0.0f, 0.0f, 0.0f });
 		
 		// Survol => ombre
-		if (isHightlighted)
-			drawStringCentered(label, Vector2(pos.x + 1, pos.y + 1), Vector2(width_final, height_final * percent), { 0.0, 0.0, 0.0, 0.0 }, true, true);
+		if (mIsHightlighted)
+			drawStringCentered(mLabel, Vector2(mFirstRect.x + 1, mFirstRect.y + 1), Vector2(mFirstRect.w, mFirstRect.h), { 0.0f, 0.0f, 0.0f, 0.0f }, true, true);
 
 		// Label du texte
-		drawStringCentered(label, pos, Vector2(width_final, height_final * percent), lblColor, true, true);
+		drawStringCentered(mLabel, Vector2(mFirstRect.x, mFirstRect.y), Vector2(mFirstRect.w, mFirstRect.h), mLabelColor, true, true);
 
 	}
 
     const std::string& Button::getLabel() const
     {
-        return label;
+        return mLabel;
     }
 
     void Button::setCallBack(const std::function<void(MouseButton, MouseState, int, int)>& c)
     {
-        m_callBack = c;
+        mCallBack = c;
     }
 
     void Button::onMouseClick(MouseButton button, MouseState state, int x, int y)
     {
         if (button == BUTTON_LEFT)
         {
-            isPressed = !isPressed;
+            mIsPressed = !mIsPressed;
+
+			computeState();
 
             if (state == MOUSE_DOWN)
-                m_callBack(button, state, x, y);
+                mCallBack(button, state, x, y);
         }
     }
-
-	void Button::highlight()
-	{
-		isHightlighted = !isHightlighted;
-	}
 }

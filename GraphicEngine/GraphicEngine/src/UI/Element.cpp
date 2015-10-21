@@ -1,20 +1,26 @@
 #include "UI/Element.h"
 
-#include "Utils/Utils.h"
-
 #include <algorithm>
 
 namespace UI
 {
 
-	Element::Element(float _x, float _y, float _width, float _height, Type _ref)
-		: 
-		x(_x, _ref),
-		y(_y, _ref),
-		width(_width, _ref),
-		height(_height, _ref),
-        parent(nullptr)
+	Element::Element(float x, float y, float width, float height, Type _ref)
+		: mLocalRect(RefValue(x, _ref), RefValue(y, _ref), RefValue(width, _ref), RefValue(height, _ref)),
+		mViewportRect(0, 0, 0, 0),
+        mParent(nullptr),
+		mBackgroundColor(1.0, 1.0, 1.0, 1.0),
+		mNeedUpdate(true),
+		mVisible(true)
     {}
+
+	Element::Element(const Rect<RefValue>& localRect)
+		: mLocalRect(localRect),
+		mViewportRect(0, 0, 0, 0),
+		mParent(nullptr),
+		mBackgroundColor(1.0, 1.0, 1.0, 1.0),
+		mVisible(true)
+	{}
 
 	bool Element::setStyle(std::string style)
 	{
@@ -67,19 +73,19 @@ namespace UI
 
 			if (key == "x")
 			{
-				valueToFill = &x;
+				valueToFill = &mLocalRect.x;
 			}
 			else if (key == "y")
 			{
-				valueToFill = &y;
+				valueToFill = &mLocalRect.y;
 			}
 			else if (key == "width")
 			{
-				valueToFill = &width;
+				valueToFill = &mLocalRect.w;
 			}
 			else if (key == "height")
 			{
-				valueToFill = &height;
+				valueToFill = &mLocalRect.h;
 			}
 
 			if (valueToFill == nullptr)
@@ -96,80 +102,93 @@ namespace UI
 	void Element::computePosition(float w, float h)			// au cas où pour gérer
 	{
 		// Mise à jour de la position finale
-		if (parent == nullptr)
+		if (mNeedUpdate)
 		{
-			x_final = ((x.ref == PERCENT) ? w * x.value / 100.0f : x.value);
-			y_final = ((y.ref == PERCENT) ? h * y.value / 100.0f : y.value);
-			width_final = ((width.ref == PERCENT) ? w * width.value / 100.0f : width.value);
-			height_final = ((height.ref == PERCENT) ? h * height.value / 100.0f : height.value);
-		}
-		else
-		{
-			float x_p = parent->x_final;
-			float y_p = parent->y_final;
-			float w_p = parent->width_final;
-			float h_p = parent->height_final;
+			if (mParent == nullptr)
+			{
+				mViewportRect.x = ((mLocalRect.x.ref == PERCENT) ? w * mLocalRect.x.value / 100.0f : mLocalRect.x.value);
+				mViewportRect.y = ((mLocalRect.y.ref == PERCENT) ? w * mLocalRect.y.value / 100.0f : mLocalRect.y.value);
+				mViewportRect.w = ((mLocalRect.w.ref == PERCENT) ? w * mLocalRect.w.value / 100.0f : mLocalRect.w.value);
+				mViewportRect.h = ((mLocalRect.h.ref == PERCENT) ? w * mLocalRect.h.value / 100.0f : mLocalRect.h.value);
+			}
+			else
+			{
+				float x_p = mParent->mViewportRect.x;
+				float y_p = mParent->mViewportRect.y;
+				float w_p = mParent->mViewportRect.w;
+				float h_p = mParent->mViewportRect.h;
 
-			x_final = ((x.ref == PERCENT) ? w_p * x.value / 100.0f : x.value) + x_p;
-			y_final = ((y.ref == PERCENT) ? h_p * y.value / 100.0f : y.value) + y_p;
-			width_final = ((width.ref == PERCENT) ? w_p * width.value / 100.0f : width.value);
-			height_final = ((height.ref == PERCENT) ? h_p * height.value / 100.0f : height.value);
+				mViewportRect.x = ((mLocalRect.x.ref == PERCENT) ? w_p * mLocalRect.x.value / 100.0f : mLocalRect.x.value) + x_p;
+				mViewportRect.y = ((mLocalRect.y.ref == PERCENT) ? h_p * mLocalRect.y.value / 100.0f : mLocalRect.y.value) + y_p;
+				mViewportRect.w = ((mLocalRect.w.ref == PERCENT) ? w_p * mLocalRect.w.value / 100.0f : mLocalRect.w.value);
+				mViewportRect.h = ((mLocalRect.h.ref == PERCENT) ? h_p * mLocalRect.h.value / 100.0f : mLocalRect.h.value);
+			}
+
+			computeState();
+
 		}
+		
 
 		// Mise à jour de la position des fils
-		int numberChildren = children.size();
+		int numberChildren = mChildren.size();
 		for (int i = 0; i < numberChildren; ++i)
 		{
-			children[i]->computePosition(w, h);
+			mChildren[i]->computePosition(w, h);
 		}
+	}
+
+	void Element::computeState()
+	{
+
 	}
 
 	void Element::setParent(Element* element)
 	{
-		parent = element;
+		mParent = element;
 	}
 
 	void Element::addElement(Element* element)
 	{
 		element->setParent(this);
-		children.push_back(element);	
+		mChildren.push_back(element);	
 	}
 
 	void Element::render()
 	{
+		if (!mVisible)
+			return;
+
 		draw();
 
-		int numberChildren = children.size();
+		int numberChildren = mChildren.size();
 		for (int i = 0; i < numberChildren; ++i)
 		{
-			children[i]->render();
+			mChildren[i]->render();
 		}
 	}
 
     const Element* Element::getParent() const
     {
-        return parent;
+        return mParent;
     }
 
     Element* Element::getParent()
     {
-        return parent;
+        return mParent;
     }
 
     const std::vector<Element*>& Element::getChildren() const
     {
-        return children;
+        return mChildren;
     }
 
     std::vector<Element*>& Element::getChildren()
     {
-        return children;
+        return mChildren;
     }
 
-    Rect<float> Element::getFinalBounds() const
+    const Rect<float>& Element::getViewportBounds() const
     {
-        Rect<float> bounding = { x_final, y_final, width_final, height_final };
-
-        return bounding;
+        return mViewportRect;
     }
 }

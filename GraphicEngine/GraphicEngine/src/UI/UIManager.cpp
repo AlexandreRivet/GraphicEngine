@@ -29,7 +29,9 @@ namespace UI
 
     bool UIManager::hasClicked(MouseButton button, MouseState state, const Vector2& mouse, Element* e)
     {
-        auto bounding = e->getFinalBounds();
+		// TODO: prendre en compte le visible
+		
+        auto bounding = e->getViewportBounds();
 
         if (isInside(bounding, mouse))
         {

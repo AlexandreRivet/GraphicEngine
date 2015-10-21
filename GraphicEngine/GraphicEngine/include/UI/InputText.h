@@ -16,13 +16,12 @@ namespace UI
 		bool isPressed;
 
 	private:
-		std::string text;
-		int posCursor;
+		std::string mText;
+		int mPosCursor;
 		
-		Vector2 selection;
-		bool selected;
+		Vector2 mSelection;			// start and end selection
+		bool mSelected;
 
-		Color bgColor;
 		Color lblColor;
 	};
 

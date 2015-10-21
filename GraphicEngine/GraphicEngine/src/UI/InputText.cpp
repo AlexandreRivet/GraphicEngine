@@ -4,11 +4,10 @@ namespace UI
 {
 	InputText::InputText(float _x, float _y, float _width, float _height, Type _ref)
 		: Element(_x, _y, _width, _height, _ref),
-		bgColor({ 1.0, 1.0, 1.0, 1.0 }),
-		lblColor({ 0.204, 0.596, 0.859, 1.0 }),
-		posCursor(0),
-		selected(false),
-		selection(0, 0)
+		lblColor({ 0.204f, 0.596f, 0.859f, 1.0f }),
+		mPosCursor(0),
+		mSelection(0, 0),
+		mSelected(false)
 	{
 
 	}
@@ -16,40 +15,40 @@ namespace UI
 	void InputText::draw()
 	{
 		// auto thickeness = 2.0f;
-		drawSquare(Vector2(x_final, y_final), width_final, height_final, bgColor, { 0.0, 0.0, 0.0, 1.0 });
+		drawSquare(Vector2(mViewportRect.x, mViewportRect.y), static_cast<int>(mViewportRect.w), static_cast<int>(mViewportRect.h), mBackgroundColor, { 0.0f, 0.0f, 0.0f, 1.0f });
 
-		if (selected) 
+		if (mSelected) 
 		{
-			int start = selection.x;
-			int end = selection.y;
+			int start = static_cast<int>(mSelection.x);
+			int end = static_cast<int>(mSelection.y);
 
 			// First part
-			drawStringCentered(text.substr(0, start), Vector2(x_final + 2, y_final), Vector2(width_final, height_final), lblColor, false, true);
+			drawStringCentered(mText.substr(0, start), Vector2(mViewportRect.x + 2, mViewportRect.y), Vector2(mViewportRect.w, mViewportRect.h), lblColor, false, true);
 
 			// Selected
-			int start_selected = getXCoordInString(text, Vector2(x_final + 2, y_final), start);
-			int end_selected = getXCoordInString(text, Vector2(x_final + 2, y_final), end);
+			int start_selected = getXCoordInString(mText, Vector2(mViewportRect.x + 2, mViewportRect.y), start);
+			int end_selected = getXCoordInString(mText, Vector2(mViewportRect.x + 2, mViewportRect.y), end);
 
-			drawSquare(Vector2(start_selected, y_final + 2), end_selected - start_selected, height_final - 4, { 1.0 - bgColor.r, 1.0 - bgColor.g, 1.0 - bgColor.b, bgColor.a }, { 0.0, 0.0, 0.0, 1.0 });
-			drawStringCentered(text.substr(start, end - start), Vector2(start_selected, y_final), Vector2(width_final, height_final), { 1.0 - lblColor.r, 1.0 - lblColor.g, 1.0 - lblColor.b, lblColor.a }, false, true);
+			drawSquare(Vector2(static_cast<float>(start_selected), mViewportRect.y + 2.0f), end_selected - start_selected, static_cast<int>(mViewportRect.h) - 4, { 1.0f - mBackgroundColor.r, 1.0f - mBackgroundColor.g, 1.0f - mBackgroundColor.b, mBackgroundColor.a }, { 0.0f, 0.0f, 0.0f, 1.0f });
+			drawStringCentered(mText.substr(start, end - start), Vector2(static_cast<float>(start_selected), mViewportRect.y), Vector2(mViewportRect.w, mViewportRect.h), { 1.0f - lblColor.r, 1.0f - lblColor.g, 1.0f - lblColor.b, lblColor.a }, false, true);
 
 			// Last part
-			drawStringCentered(text.substr(end), Vector2(end_selected, y_final), Vector2(width_final, height_final), lblColor, false, true);
+			drawStringCentered(mText.substr(end), Vector2(static_cast<float>(end_selected), mViewportRect.y), Vector2(mViewportRect.w, mViewportRect.h), lblColor, false, true);
 
 		}
 		else
 		{
-			if (text.size() == 0) 
+			if (mText.size() == 0) 
 			{
-				drawStringCentered("Text here...", Vector2(x_final + 2, y_final), Vector2(width_final, height_final), { 0.7, 0.7, 0.7, 1.0 }, false, true);
+				drawStringCentered("Text here...", Vector2(mViewportRect.x + 2, mViewportRect.y), Vector2(mViewportRect.w, mViewportRect.h), { 0.7f, 0.7f, 0.7f, 1.0f }, false, true);
 			}
 			else 
 			{
-				drawStringCentered(text, Vector2(x_final + 2, y_final), Vector2(width_final, height_final), lblColor, false, true);
+				drawStringCentered(mText, Vector2(mViewportRect.x + 2, mViewportRect.y), Vector2(mViewportRect.w, mViewportRect.h), lblColor, false, true);
 
-				int cursorX = getXCoordInString(text, Vector2(x_final + 2, y_final), posCursor);
+				int cursorX = getXCoordInString(mText, Vector2(mViewportRect.x + 2, mViewportRect.y), mPosCursor);
 
-				drawLine(Vector2(cursorX, y_final + 2), Vector2(cursorX, y_final + height_final - 4), lblColor, 1.0);
+				drawLine(Vector2(static_cast<float>(cursorX), mViewportRect.y + 2), Vector2(cursorX, mViewportRect.y + mViewportRect.h - 4), lblColor, 1.0);
 			}
 			
 		}

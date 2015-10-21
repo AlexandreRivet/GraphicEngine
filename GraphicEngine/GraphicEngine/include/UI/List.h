@@ -33,8 +33,8 @@ namespace UI
 		std::vector<int> selected;
 		bool multiple;
 
-		int currentPos;
-		int numberItemsInList;
+		uint currentPos;
+		uint numberItemsInList;
 
 		float pos_y = -1;
 		float delta_sum = 0;

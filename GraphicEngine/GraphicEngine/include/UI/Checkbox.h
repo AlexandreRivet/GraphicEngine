@@ -11,19 +11,19 @@ namespace UI
 
 		Checkbox(bool* toggleFlag, float _x, float _y, float _width = 30.0f, float _height = 30.0f, Type _ref = PIXEL);
 
-		void draw();
+		bool isChecked() const;
 
-		bool isChecked;
+		void draw();
 
         void setToggleFlag(bool*);
 
         void onMouseClick(MouseButton button, MouseState state, int x, int y);
+
 	private:
 		
-		bool isHightlighted;
-		Color bgColor;
+		bool mIsChecked;
 
-        bool* m_toggleflag;
+        bool* mToggleflag;
 	};
 
 }

@@ -8,8 +8,8 @@ namespace UI
 		minValue(_minValue),
 		maxValue(_maxValue),
 		currentValue(_maxValue),
-		bgColor({ 0.204, 0.596, 0.859, 1.0 }),
-		handlerColor({ 1.0, 1.0, 1.0, 1.0 })
+		bgColor({ 0.204f, 0.596f, 0.859f, 1.0f }),
+		handlerColor({ 1.0f, 1.0f, 1.0f, 1.0f })
 	{
 
 	}
@@ -55,18 +55,18 @@ namespace UI
 	void Slider::draw()
 	{
 		float percent = 0.6f;
-		float current_height = percent * height_final;
-		float offset = ((1.0f - percent) * height_final) / 2.0f;
+		float current_height = percent * mViewportRect.h;
+		float offset = ((1.0f - percent) * mViewportRect.h) / 2.0f;
 
 		// Slider bar
-		drawSquare(Vector2(x_final, y_final + offset), width_final, current_height, bgColor, { 0.0, 0.0, 0.0, 1.0 });
+		drawSquare(Vector2(mViewportRect.x, mViewportRect.y + offset), mViewportRect.w, current_height, bgColor, { 0.0, 0.0, 0.0, 1.0 });
 
 		// Slider handler
 		float distanceMax = maxValue - minValue;
 		float distanceCurr = currentValue - minValue;
-		float posInSlider = (distanceCurr / distanceMax) * width_final - height_final / 2.0f;
+		float posInSlider = (distanceCurr / distanceMax) * mViewportRect.w - mViewportRect.h / 2.0f;
 
-		drawSquare(Vector2(x_final + posInSlider, y_final), height_final, height_final, handlerColor, { 0.0, 0.0, 0.0, 1.0 });
+		drawSquare(Vector2(mViewportRect.x + posInSlider, mViewportRect.y), mViewportRect.h, mViewportRect.h, handlerColor, { 0.0, 0.0, 0.0, 1.0 });
 
 	}
 
@@ -74,16 +74,16 @@ namespace UI
 	{
 		if (button == BUTTON_LEFT && state == MOUSE_DOWN)
 		{
-			float distance = (float) x - x_final;
-			float value = distance * (maxValue - minValue) / width_final + minValue;
+			float distance = (float) x - mViewportRect.x;
+			float value = distance * (maxValue - minValue) / mViewportRect.w + minValue;
 			setValue(value);
 		}
 	}
 
 	void Slider::onMouseDrag(int x, int y)
 	{
-		float distance = (float)x - x_final;
-		float value = distance * (maxValue - minValue) / width_final + minValue;
+		float distance = (float)x - mViewportRect.x;
+		float value = distance * (maxValue - minValue) / mViewportRect.w + minValue;
 		setValue(value);
 	}
 

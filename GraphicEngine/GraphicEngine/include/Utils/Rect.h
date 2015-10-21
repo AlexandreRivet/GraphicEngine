@@ -10,6 +10,16 @@ struct Rect
     T y;
     T w;
     T h;
+
+	Rect() {}
+
+	Rect(T _x, T _y, T _w, T _h)
+		: x(_x),
+		y(_y),
+		w(_w),
+		h(_h)
+	{}
+
 };
 
 bool isInside(const Rect<float>& bounding, const Vector2& point);

@@ -5,15 +5,15 @@ namespace UI
 	Text::Text(const std::string& _label, float _x, float _y, float _width, float _height, Type _ref)
 		: Element(_x, _y, _width, _height, _ref),
 		content(_label),
-		bgColor({ 0.204, 0.596, 0.859, 1.0 }),
-		lblColor({ 1.0, 1.0, 1.0, 1.0 })
+		bgColor({ 0.204f, 0.596f, 0.859f, 1.0f }),
+		lblColor({ 1.0f, 1.0f, 1.0f, 1.0f })
 	{
 
 	}
 
 	void Text::draw()
 	{
-		drawStringCentered(content, Vector2(x_final, y_final), Vector2(width_final, height_final), lblColor, false, true);
+		drawStringCentered(content, Vector2(mViewportRect.x, mViewportRect.y), Vector2(mViewportRect.w, mViewportRect.h), lblColor, false, true);
 	}
 
 	const std::string& Text::getText() const

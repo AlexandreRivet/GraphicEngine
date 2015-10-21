@@ -6,6 +6,7 @@
 
 #include "Shapes.h"
 
+#include "Utils/Utils.h"
 #include "Utils/Rect.h"
 
 namespace UI
@@ -30,47 +31,47 @@ namespace UI
     class Element
     {
     public:
-        Element(float _x, float _y, float _width, float _height, Type _ref = PIXEL);
+        Element(float x, float y, float width, float height, Type _ref = PIXEL);
+		Element(const Rect<RefValue>& localRect);		
 
-        virtual bool Element::setStyle(std::string style);	// non const because of clean up the string
-        void computePosition(float w, float h);
+        virtual bool Element::setStyle(std::string style);		// non const because of clean up the string
+        void computePosition(float w, float h);					// TODO: change when we will have context for OpenGL App
+		virtual void computeState();
 
         void setParent(Element* element);
         void addElement(Element* element);
+		const Element* getParent() const;
+		Element* getParent();
+		const std::vector<Element*>& getChildren() const;
+		std::vector<Element*>& getChildren();
 
         void render();
         virtual void draw() = 0;
 
-        const Element* getParent() const;
-        Element* getParent();
-        const std::vector<Element*>& getChildren() const;
-        std::vector<Element*>& getChildren();
-
-        Rect<float> getFinalBounds() const;
+        const Rect<float>& getViewportBounds() const;
 
         /**
          * Mouse Graphic event
          */
-        virtual void onMouseClick(MouseButton button, MouseState state, int x, int y){};
-        virtual void onMouseEnter(int x, int y){};
-        virtual void onMouseExit(int x, int y){};
-        virtual void onMouseDrag(int x, int y){};
+		virtual void onMouseClick(MouseButton button, MouseState state, int x, int y){ tools::unusedArg(button, state, x, y); };
+		virtual void onMouseEnter(int x, int y){ tools::unusedArg(x, y); };
+		virtual void onMouseExit(int x, int y){ tools::unusedArg(x, y); };
+		virtual void onMouseDrag(int x, int y){ tools::unusedArg(x, y); };
 
 	protected:
 
-		RefValue x;								// Coordinate x (local)
-		RefValue y;								// Coordinate y (local)
-		RefValue width;							// Width (local)
-		RefValue height;						// Height (local)
+		Rect<RefValue> mLocalRect;					// Rect local
 
-		float x_final;							// Coordinate x (viewport)
-		float y_final;							// Coordinate y (viewport)
-		float width_final;						// Width (viewport)
-		float height_final;						// Height (viewport)
+		Rect<float> mViewportRect;					// Rect in the viewport
 
-		Element* parent;						// Parent of the element
-		std::vector<Element*> children;			// List of element children of this
+		Element* mParent;							// Parent of the element
+		std::vector<Element*> mChildren;			// List of element children of this
 
+		bool mNeedUpdate;							// Have to recompute viewport rect
+		bool mVisible;								// Draw or not this element and children 
+
+		// List of style
+		Color mBackgroundColor;
 	};
 
 }

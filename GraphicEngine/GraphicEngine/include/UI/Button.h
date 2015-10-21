@@ -11,27 +11,32 @@ namespace UI
 	{
 	public:
 
-		Button(const std::string& _label, const std::function<void(char, char, int, int)>& f, float _x, float _y, float _width, float _height, Type _ref = PIXEL);
+		Button(const std::string& label, const std::function<void(char, char, int, int)>& f, float x, float y, float width, float height, Type ref = PIXEL);
+		Button(const std::string& label, const std::function<void(char, char, int, int)>& f, const Rect<RefValue>& localRect);
 
+		void computeState();
 		void draw();
 
         const std::string& getLabel() const;
-        void setCallBack(const std::function<void(MouseButton, MouseState, int, int)>& c);
+		void setLabel(const std::string& label);
 
-		void highlight();
+        void setCallBack(const std::function<void(MouseButton, MouseState, int, int)>& c);
 
 		void onMouseClick(MouseButton button, MouseState state, int x, int y);
 
 	private:
-		std::string label;
-		bool isHightlighted;
-		bool isPressed;
-        std::function<void(MouseButton, MouseState, int, int)> m_callBack;
+		std::string mLabel;
 
-		Color bgColor;
-		Color lblColor;
+		bool mIsHightlighted;
+		bool mIsPressed;
+        std::function<void(MouseButton, MouseState, int, int)> mCallBack;
+
+		Color mLabelColor;
+
+		// Rect 
+		Rect<float> mFirstRect;
+		Rect<float> mSecondRect;
 	};
-
 
 }
 
