@@ -1,6 +1,8 @@
 #ifndef _UI_UIMANAGER_H_
 #define _UI_UIMANAGER_H_
 
+#include <stack>
+
 #include "Layout.h"
 
 namespace UI
@@ -25,7 +27,8 @@ namespace UI
     private:
         Layout m_root;
 
-        std::map<MouseButton, Element*> m_lastOnClickElems;
+        std::map<MouseButton, std::vector<Element*>> m_lastOnClickElems;
+        std::stack<Element*> m_mouseOverList;
 
         bool hasClicked(MouseButton button, MouseState state, const Vector2& mouse, Element* e);
     };

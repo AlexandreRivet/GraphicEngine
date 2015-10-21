@@ -38,7 +38,7 @@ namespace UI
             if (children.size() == 0)
             {
                 e->onMouseClick(button, state, mouse.x, mouse.y);
-                m_lastOnClickElems[button] = e;
+                m_lastOnClickElems[button].push_back(e);
 
                 return true;
             }
@@ -57,7 +57,7 @@ namespace UI
                     e->onMouseClick(button, state, mouse.x, mouse.y);
                     childHasClickedCount = 1;
 
-                    m_lastOnClickElems[button] = e;
+                    m_lastOnClickElems[button].push_back(e);
                 }
 
                 return childHasClickedCount != 0;
@@ -79,6 +79,8 @@ namespace UI
 
         if (mouseState == MOUSE_DOWN)
         {
+            m_lastOnClickElems[mouseButton].clear();
+
             std::for_each(child.begin(), child.end(), [mouseButton, mouseState, mouse, this](Element* e)
             {
                 hasClicked(mouseButton, mouseState, mouse, e);
@@ -86,14 +88,17 @@ namespace UI
         }
         else
         {
-            auto elemClicked = m_lastOnClickElems[mouseButton];
+            auto& elemClicked = m_lastOnClickElems[mouseButton];
 
-            if (elemClicked != nullptr)
+            if (elemClicked.size() > 0)
             {
-                elemClicked->onMouseClick(mouseButton, mouseState, x, y);
+                std::for_each(elemClicked.begin(), elemClicked.end(), [mouseButton, mouseState, x, y](Element* e)
+                {
+                    e->onMouseClick(mouseButton, mouseState, x, y);
+                });
             }
 
-            m_lastOnClickElems[mouseButton] = nullptr;
+            m_lastOnClickElems[mouseButton].clear();
         }
     }
 
@@ -103,5 +108,12 @@ namespace UI
 
     void UIManager::onMouseDrag(int x, int y)
     {
+        std::for_each(m_lastOnClickElems.begin(), m_lastOnClickElems.end(), [x, y](std::pair<const MouseButton, std::vector<Element*>>& elementOnClick)
+        {
+            std::for_each(elementOnClick.second.begin(), elementOnClick.second.end(), [x, y](Element* e)
+            {
+                e->onMouseDrag(x, y);
+            });
+        });
     }
 }
