@@ -72,12 +72,19 @@ namespace UI
 
 	void Slider::onMouseClick(MouseButton button, MouseState state, int x, int y)
 	{
-		if (button == BUTTON_LEFT)
+		if (button == BUTTON_LEFT && state == MOUSE_DOWN)
 		{
 			float distance = (float) x - x_final;
 			float value = distance * (maxValue - minValue) / width_final + minValue;
 			setValue(value);
 		}
+	}
+
+	void Slider::onMouseDrag(int x, int y)
+	{
+		float distance = (float)x - x_final;
+		float value = distance * (maxValue - minValue) / width_final + minValue;
+		setValue(value);
 	}
 
 }

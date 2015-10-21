@@ -24,6 +24,7 @@ namespace UI
 		void draw();
 
 		void onMouseClick(MouseButton button, MouseState state, int x, int y);
+		void onMouseDrag(int x, int y);
 
 	private:
 		

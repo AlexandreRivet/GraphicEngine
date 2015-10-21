@@ -24,6 +24,8 @@ namespace UI
 		void onMouseClick(MouseButton button, MouseState state, int x, int y);
 		void onMouseEnter(int x, int y);
 		void onMouseExit(int x, int y);
+		void onMouseDrag(int x, int y);
+
 
 	private:
 		
@@ -33,6 +35,9 @@ namespace UI
 
 		int currentPos;
 		int numberItemsInList;
+
+		float pos_y = -1;
+		float delta_sum = 0;
 
 		Color bgColor;
 		Color lblColor;

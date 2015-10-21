@@ -159,6 +159,10 @@ namespace UI
 			int sel = y_relative / step_item;
 			select(sel + currentPos);
 		}
+		else
+		{
+			pos_y = y;
+		}
 	}
 
 	void List::onMouseEnter(int x, int y)
@@ -169,6 +173,29 @@ namespace UI
 	void List::onMouseExit(int x, int y)
 	{
 
+	}
+
+	void List::onMouseDrag(int x, int y)
+	{
+		int size_scroll = 15;
+		if (x > x_final + width_final - size_scroll && y > y_final + size_scroll && y < y_final + height_final - size_scroll)
+		{
+			float delta_y = y - pos_y;
+			delta_sum += delta_y;
+			float delta_sum_abs = abs(delta_sum);
+			float scrollbar_bg_size = height_final - 2 * (size_scroll + 1);
+			float step = (items.size() != 0) ? scrollbar_bg_size / (float)items.size() : 0;
+			float size_step_scroll = scrollbar_bg_size / step;
+			if (delta_sum_abs > size_step_scroll)
+			{
+				if (delta_sum < 0)
+					scrollUp();
+				else
+					scrollDown();
+				delta_sum = 0;
+			}
+			pos_y = y;
+		}
 	}
 
 }
