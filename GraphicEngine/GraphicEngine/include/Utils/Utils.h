@@ -36,7 +36,7 @@ namespace tools
         unusedArg(args...);
     }
 
-	const std::string& to_string_presision(float f, int precision);
+	std::string to_string_presision(float f, int precision);
 }
 
 #endif
