@@ -37,3 +37,11 @@ std::vector<std::string> Utils::split(const std::string &s, char delim)
 	}
 	return elems;
 }
+
+const std::string& tools::to_string_presision(float f, int precision)
+{
+	std::stringstream ss;
+	ss << std::setprecision(precision) << f;
+	return ss.str();
+}
+

@@ -156,6 +156,12 @@
     <ClInclude Include="include\Utils\freeglut_include.h">
       <Filter>Fichiers sources\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="include\UI\Slider.h">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UI\Text.h">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Math\Vector3.cpp">
@@ -244,6 +250,12 @@
     </ClCompile>
     <ClCompile Include="src\Utils\Rect.cpp">
       <Filter>Fichiers sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Slider.cpp">
+      <Filter>Fichiers sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Text.cpp">
+      <Filter>Fichiers sources\UI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

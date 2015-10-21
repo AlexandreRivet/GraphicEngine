@@ -8,7 +8,7 @@ namespace UI
 		lblColor({ 0.204, 0.596, 0.859, 1.0 }),
 		multiple(false),
 		currentPos(0),
-		numberItemsInList(5)
+		numberItemsInList(4)
 	{
 	}
 
@@ -103,9 +103,9 @@ namespace UI
 		
 		int offset_tri = 3;
 		int x_scroll = x_final + width_final - size_scroll - 1;
-		int scrollbar_bg_size = (y_final + height_final - size_scroll - 1) - (y_final + 1 + size_scroll);
+		int scrollbar_bg_size = height_final - 2 * (size_scroll + 1);
 
-		// UP
+		// U1
 		std::vector<Vector2> tri_up;
 		tri_up.push_back(Vector2(x_scroll + offset_tri, y_final + size_scroll + 1 - offset_tri));
 		tri_up.push_back(Vector2(x_scroll + size_scroll - offset_tri, y_final + size_scroll + 1 - offset_tri));
@@ -119,9 +119,11 @@ namespace UI
 		drawSquare(Vector2(x_scroll, y_final + 1 + size_scroll), size_scroll, scrollbar_bg_size, { 0.8, 0.8, 0.8, 1.0 }, { 0.0, 0.0, 0.0, 1.0 });
 		
 		// Current
+		float step = (numberItems != 0) ? scrollbar_bg_size / (float)numberItems : 0;
+		float modulo_step = (numberItems != 0) ? scrollbar_bg_size % numberItems : 0;
 		int y_current = y_final + 2 + size_scroll;
-		y_current += (numberItems != 0) ? scrollbar_bg_size / numberItems * currentPos : 0;
-		int height_current = (numberItems != 0) ? scrollbar_bg_size / numberItems * numberItemsInList : 0;
+		y_current += step * currentPos;
+		int height_current = numberItemsInList * step - 2;
 		drawSquare(Vector2(x_scroll, y_current), size_scroll, height_current, lblColor, { 0.0, 0.0, 0.0, 1.0 });
 
 		// DOWN

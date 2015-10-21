@@ -37,8 +37,10 @@
     <ClInclude Include="include\UI\List.h" />
     <ClInclude Include="include\UI\Layout.h" />
     <ClInclude Include="include\UI\Panel.h" />
+    <ClInclude Include="include\UI\Slider.h" />
     <ClInclude Include="include\UI\Structs.h" />
     <ClInclude Include="include\UI\Shapes.h" />
+    <ClInclude Include="include\UI\Text.h" />
     <ClInclude Include="include\UI\UI.h" />
     <ClInclude Include="include\UI\UIManager.h" />
     <ClInclude Include="include\Utils\freeglut_include.h" />
@@ -72,6 +74,8 @@
     <ClCompile Include="src\UI\Layout.cpp" />
     <ClCompile Include="src\UI\Panel.cpp" />
     <ClCompile Include="src\UI\Shapes.cpp" />
+    <ClCompile Include="src\UI\Slider.cpp" />
+    <ClCompile Include="src\UI\Text.cpp" />
     <ClCompile Include="src\UI\UIManager.cpp" />
     <ClCompile Include="src\Utils\Rect.cpp" />
     <ClCompile Include="src\Utils\Utils.cpp" />

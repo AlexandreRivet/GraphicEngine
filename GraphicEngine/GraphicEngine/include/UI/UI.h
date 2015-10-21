@@ -6,6 +6,8 @@
 #include "Checkbox.h"
 #include "InputText.h"
 #include "List.h"
+#include "Slider.h"
+#include "Text.h"
 
 #include "UIManager.h"
 

@@ -44,6 +44,14 @@ namespace Math
         return r * 180.0f / static_cast<float>(M_PI);
     }
 
+	inline float truncate(float r, int precision)
+	{
+		int value_10 = pow(10, precision);
+		int y = value_10 * r;
+		float result = (float)y / value_10;
+		return result;
+	}
+
     float UnitRandom();
 }
 

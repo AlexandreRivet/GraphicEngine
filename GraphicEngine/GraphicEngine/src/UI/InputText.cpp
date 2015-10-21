@@ -6,10 +6,9 @@ namespace UI
 		: Element(_x, _y, _width, _height, _ref),
 		bgColor({ 1.0, 1.0, 1.0, 1.0 }),
 		lblColor({ 0.204, 0.596, 0.859, 1.0 }),
-		posCursor(8),
-		selected(true),
-		selection(0, 9),
-		text("Mon premier texte")
+		posCursor(0),
+		selected(false),
+		selection(0, 0)
 	{
 
 	}
@@ -40,11 +39,19 @@ namespace UI
 		}
 		else
 		{
-			drawStringCentered(text, Vector2(x_final + 2, y_final), Vector2(width_final, height_final), lblColor, false, true);
+			if (text.size() == 0) 
+			{
+				drawStringCentered("Text here...", Vector2(x_final + 2, y_final), Vector2(width_final, height_final), { 0.7, 0.7, 0.7, 1.0 }, false, true);
+			}
+			else 
+			{
+				drawStringCentered(text, Vector2(x_final + 2, y_final), Vector2(width_final, height_final), lblColor, false, true);
 
-			int cursorX = getXCoordInString(text, Vector2(x_final + 2, y_final), posCursor);
+				int cursorX = getXCoordInString(text, Vector2(x_final + 2, y_final), posCursor);
 
-			drawLine(Vector2(cursorX, y_final + 2), Vector2(cursorX, y_final + height_final - 4), lblColor, 1.0);
+				drawLine(Vector2(cursorX, y_final + 2), Vector2(cursorX, y_final + height_final - 4), lblColor, 1.0);
+			}
+			
 		}
 	}
 

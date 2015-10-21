@@ -6,6 +6,9 @@
 #include <cstdlib>
 #include <vector>
 #include <string>
+#include <iomanip>
+#include <iostream>
+#include <sstream>
 
 class Utils
 {
@@ -32,6 +35,8 @@ namespace tools
 
         unusedArg(args...);
     }
+
+	const std::string& to_string_presision(float f, int precision);
 }
 
 #endif
