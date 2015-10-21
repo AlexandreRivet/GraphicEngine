@@ -27,7 +27,7 @@ namespace UI
 		{}
 	};
 
-	class Element
+    class Element
     {
     public:
         Element(float _x, float _y, float _width, float _height, Type _ref = PIXEL);
@@ -54,6 +54,7 @@ namespace UI
         virtual void onMouseClick(MouseButton button, MouseState state, int x, int y){};
         virtual void onMouseEnter(int x, int y){};
         virtual void onMouseExit(int x, int y){};
+        virtual void onMouseDrag(int x, int y){};
 
 	protected:
 
