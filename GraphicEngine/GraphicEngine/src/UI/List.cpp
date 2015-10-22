@@ -8,7 +8,7 @@ namespace UI
 		lblColor( 0.204f, 0.596f, 0.859f, 1.0f),
 		multiple(false),
 		currentPos(0),
-		numberItemsInList(4)
+		numberItemsInList(8)
 	{
 	}
 
@@ -118,12 +118,15 @@ namespace UI
 		drawSquare(Vector2(static_cast<int>(x_scroll), mViewportRect.y + 1.0f + static_cast<float>(size_scroll)), size_scroll, scrollbar_bg_size, { 0.8f, 0.8f, 0.8f, 1.0f }, { 0.0f, 0.0f, 0.0f, 1.0f });
 		
 		// Current
-		float step = (numberItems != 0) ? scrollbar_bg_size / (float)numberItems : 0;
-		float modulo_step = (numberItems != 0) ? scrollbar_bg_size % numberItems : 0;
-		int y_current = mViewportRect.y + 2 + size_scroll;
-		y_current += step * currentPos;
-		int height_current = numberItemsInList * step - 2;
-		drawSquare(Vector2(x_scroll, y_current), size_scroll, height_current, lblColor, { 0.0, 0.0, 0.0, 1.0 });
+		if (numberItems > numberItemsInList)
+		{
+			float step = (numberItems != 0) ? scrollbar_bg_size / (float)numberItems : 0;
+			int y_current = mViewportRect.y + 2 + size_scroll;
+			y_current += step * currentPos;
+			int height_current = numberItemsInList * step - 2;
+			drawSquare(Vector2(x_scroll, y_current), size_scroll, height_current, lblColor, { 0.0, 0.0, 0.0, 1.0 });
+		}
+		
 
 		// DOWN
 		std::vector<Vector2> tri_down;
@@ -139,19 +142,19 @@ namespace UI
 	{
 		int size_scroll = 15;
 		// Scroll up
-		if (x > mViewportRect.x + mViewportRect.w - size_scroll && y < mViewportRect.y + size_scroll && state == MOUSE_DOWN)
+		if (x > mViewportRect.x + mViewportRect.w - size_scroll && y < mViewportRect.y + size_scroll && state == MOUSE_DOWN && button == BUTTON_LEFT)
 		{
 			scrollUp();
 		}
 
 		// Scroll down
-		else if (x > mViewportRect.x + mViewportRect.w - size_scroll && y > mViewportRect.y + mViewportRect.h - size_scroll && state == MOUSE_DOWN)
+		else if (x > mViewportRect.x + mViewportRect.w - size_scroll && y > mViewportRect.y + mViewportRect.h - size_scroll && state == MOUSE_DOWN && button == BUTTON_LEFT)
 		{
 			scrollDown();
 		}
 
 		// Sélection d'un item (ou déselection => appel le callback en question)
-		else if (x < mViewportRect.x + mViewportRect.w - size_scroll && state == MOUSE_DOWN)
+		else if (x < mViewportRect.x + mViewportRect.w - size_scroll && state == MOUSE_DOWN && button == BUTTON_LEFT)
 		{
 			int step_item = mViewportRect.h / numberItemsInList;
 			int y_relative = y - mViewportRect.y;

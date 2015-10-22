@@ -13,33 +13,39 @@ namespace UI
 			mIsChecked = *mToggleflag;
     }
 
+	void Checkbox::computeState()
+	{
+		// Background
+		mFirstRect = Rect<float>(mViewportRect.x, mViewportRect.y, mViewportRect.w, mViewportRect.h);
+
+		// Tick
+		mTickPolys.clear();
+
+		mTickPolys.push_back(std::vector<Vector2>());
+		mTickPolys.back().push_back(Vector2(mViewportRect.x + 1.0f, mViewportRect.y + 2.0f * mViewportRect.h / 3.0f));
+		mTickPolys.back().push_back(Vector2(mViewportRect.x + 1.0f * mViewportRect.w / 3.0f, mViewportRect.y + mViewportRect.h - 1.0f));
+		mTickPolys.back().push_back(Vector2(mViewportRect.x + 1.0f * mViewportRect.w / 3.0f + 3.0f, mViewportRect.y + mViewportRect.h - 4.0f));
+		mTickPolys.back().push_back(Vector2(mViewportRect.x + 4.0f, mViewportRect.y + 2.0f * mViewportRect.h / 3.0f - 3.0f));
+
+		mTickPolys.push_back(std::vector<Vector2>());
+		mTickPolys.back().push_back(Vector2(mViewportRect.x + 1.0f * mViewportRect.w / 3.0f, mViewportRect.y + mViewportRect.h - 1.0f));
+		mTickPolys.back().push_back(Vector2(mViewportRect.x + mViewportRect.w - 1.0f, mViewportRect.y + 1.0f * mViewportRect.w / 3.0f));
+		mTickPolys.back().push_back(Vector2(mViewportRect.x + mViewportRect.w - 4.0f, mViewportRect.y + 1.0f * mViewportRect.w / 3.0f - 3.0f));
+		mTickPolys.back().push_back(Vector2(mViewportRect.x + 1.0f * mViewportRect.w / 3.0f - 3.0f, mViewportRect.y + mViewportRect.h - 4.0f));
+	}
+
 	void Checkbox::draw()
 	{
-		auto thickeness = 3;
-		// Contour
-        drawSquare(Vector2(mViewportRect.x, mViewportRect.y), static_cast<int>(mViewportRect.w), static_cast<int>(mViewportRect.h), { 0.3f, 0.3f, 0.3f, 1.0f }, { 0.0f, 0.0f, 0.0f, 1.0f });
-
 		// Background
-		drawSquare(Vector2(mViewportRect.x + 3.0f, mViewportRect.y + 3.0f), static_cast<int>(mViewportRect.w - 2.0f * thickeness), static_cast<int>(mViewportRect.h - 2.0f * thickeness), mBackgroundColor, { 0.0, 0.0, 0.0, 1.0 });
+		drawSquare(Vector2(mFirstRect.x, mFirstRect.y), static_cast<int>(mFirstRect.w), static_cast<int>(mFirstRect.h), mBackgroundColor, { 0.0f, 0.0f, 0.0f, 1.0f });
 
+		// Tick
 		Color checked(0.8f, 0.8f, 0.8f, 1.0f);
 		if (mIsChecked)
 			checked = { 0.0f, 0.0f, 0.0f, 1.0f };
-
-		// Tick
-		std::vector<Vector2> firstpoly;
-		firstpoly.push_back(Vector2(mViewportRect.x + thickeness + 1.0f, mViewportRect.y + 2.0f * mViewportRect.h / 3.0f));
-		firstpoly.push_back(Vector2(mViewportRect.x + 1.0f * mViewportRect.w / 3.0f, mViewportRect.y + mViewportRect.h - thickeness - 1.0f));
-		firstpoly.push_back(Vector2(mViewportRect.x + 1.0f * mViewportRect.w / 3.0f + 3.0f, mViewportRect.y + mViewportRect.h - thickeness - 4.0f));
-		firstpoly.push_back(Vector2(mViewportRect.x + thickeness + 4.0f, mViewportRect.y + 2.0f * mViewportRect.h / 3.0f - 3.0f));
-		drawPolygon(firstpoly, checked, { 0.0, 0.0, 0.0, 1.0 });
-
-		std::vector<Vector2> secondPoly;
-		secondPoly.push_back(Vector2(mViewportRect.x + 1.0f * mViewportRect.w / 3.0f, mViewportRect.y + mViewportRect.h - thickeness - 1.0f));
-		secondPoly.push_back(Vector2(mViewportRect.x + mViewportRect.w - thickeness - 1.0f, mViewportRect.y + 1.0f * mViewportRect.w / 3.0f));
-		secondPoly.push_back(Vector2(mViewportRect.x + mViewportRect.w - thickeness - 4.0f, mViewportRect.y + 1.0f * mViewportRect.w / 3.0f - 3.0f));
-		secondPoly.push_back(Vector2(mViewportRect.x + 1.0f * mViewportRect.w / 3.0f - 3.0f, mViewportRect.y + mViewportRect.h - thickeness - 4.0f));
-		drawPolygon(secondPoly, checked, { 0.0, 0.0, 0.0, 1.0 });
+		
+		drawPolygon(mTickPolys[0], checked, { 0.0f, 0.0f, 0.0f, 1.0f });
+		drawPolygon(mTickPolys[1], checked, { 0.0f, 0.0f, 0.0f, 1.0f });
 		
 	}
 
@@ -56,6 +62,8 @@ namespace UI
         if (button == BUTTON_LEFT && state == MOUSE_DOWN)
         {
             mIsChecked = !mIsChecked;
+
+			computeState();
 
             if (mToggleflag != nullptr)
             {

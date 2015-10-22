@@ -33,7 +33,7 @@ namespace UI
 
 		Color mLabelColor;
 
-		// Rect 
+		// Variable saved for calculations 
 		Rect<float> mFirstRect;
 		Rect<float> mSecondRect;
 	};

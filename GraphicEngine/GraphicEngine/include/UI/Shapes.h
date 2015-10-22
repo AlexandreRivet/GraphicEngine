@@ -13,5 +13,7 @@ void drawStringCentered(std::string label, Vector2 point, Vector2 rect, Color co
 void drawCircle(Vector2 center, int radius, Color color);
 
 int getXCoordInString(std::string label, Vector2 origin, int posChar);
+int getSizeBetweenTwoPosInString(std::string label, int start = 0, int end = -1);
+int getPosInString(std::string label, int x_start, int x_current);
 
 #endif

@@ -11,9 +11,13 @@ namespace UI
 
 		InputText(float _x, float _y, float _width, float _height, Type _ref = PIXEL);
 
+		void computeState();
 		void draw();
 
 		bool isPressed;
+
+		void onMouseClick(MouseButton button, MouseState state, int x, int y);
+		void onMouseDrag(int x, int y);
 
 	private:
 		std::string mText;

@@ -99,6 +99,12 @@ namespace UI
 
 	}
 
+	void Element::setNeedUpdate(bool update)
+	{
+		mNeedUpdate = update;
+	}
+
+
 	void Element::computePosition(float w, float h)			// au cas où pour gérer
 	{
 		// Mise à jour de la position finale
@@ -107,9 +113,9 @@ namespace UI
 			if (mParent == nullptr)
 			{
 				mViewportRect.x = ((mLocalRect.x.ref == PERCENT) ? w * mLocalRect.x.value / 100.0f : mLocalRect.x.value);
-				mViewportRect.y = ((mLocalRect.y.ref == PERCENT) ? w * mLocalRect.y.value / 100.0f : mLocalRect.y.value);
+				mViewportRect.y = ((mLocalRect.y.ref == PERCENT) ? h * mLocalRect.y.value / 100.0f : mLocalRect.y.value);
 				mViewportRect.w = ((mLocalRect.w.ref == PERCENT) ? w * mLocalRect.w.value / 100.0f : mLocalRect.w.value);
-				mViewportRect.h = ((mLocalRect.h.ref == PERCENT) ? w * mLocalRect.h.value / 100.0f : mLocalRect.h.value);
+				mViewportRect.h = ((mLocalRect.h.ref == PERCENT) ? h * mLocalRect.h.value / 100.0f : mLocalRect.h.value);
 			}
 			else
 			{
@@ -126,15 +132,23 @@ namespace UI
 
 			computeState();
 
+			int numberChildren = mChildren.size();
+			for (int i = 0; i < numberChildren; ++i)
+			{
+				mChildren[i]->setNeedUpdate(true);
+			}
+
+			mNeedUpdate = false;
+
 		}
 		
-
 		// Mise à jour de la position des fils
 		int numberChildren = mChildren.size();
 		for (int i = 0; i < numberChildren; ++i)
 		{
 			mChildren[i]->computePosition(w, h);
 		}
+
 	}
 
 	void Element::computeState()

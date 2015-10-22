@@ -4,10 +4,16 @@ namespace UI
 {
 	InputText::InputText(float _x, float _y, float _width, float _height, Type _ref)
 		: Element(_x, _y, _width, _height, _ref),
-		lblColor({ 0.204f, 0.596f, 0.859f, 1.0f }),
+		lblColor({ 1.0f, 0.0f, 0.0f, 1.0f }),
 		mPosCursor(0),
 		mSelection(0, 0),
-		mSelected(false)
+		mSelected(false),
+		mText("Test pour le cursor")
+	{
+
+	}
+
+	void InputText::computeState()
 	{
 
 	}
@@ -51,6 +57,37 @@ namespace UI
 				drawLine(Vector2(static_cast<float>(cursorX), mViewportRect.y + 2), Vector2(cursorX, mViewportRect.y + mViewportRect.h - 4), lblColor, 1.0);
 			}
 			
+		}
+	}
+
+	void InputText::onMouseClick(MouseButton button, MouseState state, int x, int y)
+	{
+		if (button == BUTTON_LEFT && state == MOUSE_DOWN)
+		{
+			// Calcul du curseur
+			mPosCursor = getPosInString(mText, mViewportRect.x, x);
+
+			if (mSelected)
+				mSelected = false;
+		}
+	}
+
+	void InputText::onMouseDrag(int x, int y)
+	{
+		int otherPos = getPosInString(mText, mViewportRect.x, x);
+
+		if (otherPos < 0)
+			otherPos = 0;
+		if (mPosCursor < 0)
+			mPosCursor = 0;
+
+		if (otherPos != mPosCursor)
+		{
+			mSelected = true;
+			if (otherPos < mPosCursor)
+				mSelection = Vector2(otherPos, mPosCursor);
+			else
+				mSelection = Vector2(mPosCursor, otherPos);
 		}
 	}
 

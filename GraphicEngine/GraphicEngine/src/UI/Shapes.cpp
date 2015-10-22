@@ -110,3 +110,33 @@ int getXCoordInString(std::string label, Vector2 origin, int posChar)
 
 	return origin.x + glutBitmapLength(GLUT_BITMAP_HELVETICA_12, (unsigned char*)subLabel.c_str());
 }
+
+int getSizeBetweenTwoPosInString(std::string label, int start, int end)
+{
+	if (end == -1)
+		end = label.size() - 1;
+
+	std::string subLabel = label.substr(start, (end - start));
+
+	return glutBitmapLength(GLUT_BITMAP_HELVETICA_12, (unsigned char*)subLabel.c_str());
+}
+
+int getPosInString(std::string label, int x_start, int x_current)
+{
+	int cursor = -1;
+
+	do
+	{
+		
+		int size = getSizeBetweenTwoPosInString(label, 0, cursor + 1);
+		int final_x = x_start + size;
+
+		if (final_x > x_current)
+			break;
+
+		cursor++;
+
+	} while (cursor != label.size());
+
+	return cursor;
+}

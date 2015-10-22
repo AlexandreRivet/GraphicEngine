@@ -30,15 +30,15 @@ namespace UI
 		float other_percent = 1.0f - percent;
 
 		mFirstRect = Rect<float>(mViewportRect.x, mViewportRect.y, mViewportRect.w, mViewportRect.h * percent);
-		mSecondRect = Rect<float>(mViewportRect.x, mViewportRect.y, mViewportRect.w, mViewportRect.h * other_percent);
+		mSecondRect = Rect<float>(mViewportRect.x, mViewportRect.y + mFirstRect.h, mViewportRect.w, mViewportRect.h * other_percent);
 
 		if (mIsPressed) 
 		{
-			other_percent /= 0.2f;
+			other_percent /= 2.0f;
 
 			mFirstRect.y += mViewportRect.h * (1.0f - percent - other_percent);
 
-			mSecondRect.y += mViewportRect.h * (1.0f - percent - other_percent) + mFirstRect.h;
+			mSecondRect.y += mViewportRect.h * (1.0f - percent - other_percent);
 			mSecondRect.h = mViewportRect.h * other_percent;
 		}
 
@@ -59,7 +59,6 @@ namespace UI
 
 		// Label du texte
 		drawStringCentered(mLabel, Vector2(mFirstRect.x, mFirstRect.y), Vector2(mFirstRect.w, mFirstRect.h), mLabelColor, true, true);
-
 	}
 
     const std::string& Button::getLabel() const
