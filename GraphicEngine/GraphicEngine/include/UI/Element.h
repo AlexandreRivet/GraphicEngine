@@ -45,6 +45,8 @@ namespace UI
 		const std::vector<Element*>& getChildren() const;
 		std::vector<Element*>& getChildren();
 
+        bool isVisible() const;
+
         void render();
         virtual void draw() = 0;
 
