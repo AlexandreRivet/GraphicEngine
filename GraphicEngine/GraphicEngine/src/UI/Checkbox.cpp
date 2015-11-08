@@ -57,7 +57,7 @@ namespace UI
             mIsChecked = *mToggleflag;
     }
 
-    void Checkbox::onMouseClick(MouseButton button, MouseState state, int x, int y)
+    void Checkbox::onMouseClick(MouseButton button, MouseState state, const Vector2& mousePosition)
     {
         if (button == BUTTON_LEFT && state == MOUSE_DOWN)
         {
@@ -71,7 +71,7 @@ namespace UI
             }
         }
 
-        tools::unusedArg(x, y);
+        tools::unusedArg(mousePosition);
     }
 
 }

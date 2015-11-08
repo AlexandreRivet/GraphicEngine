@@ -56,10 +56,10 @@ namespace UI
         /**
          * Mouse Graphic event
          */
-		virtual void onMouseClick(MouseButton button, MouseState state, int x, int y){ tools::unusedArg(button, state, x, y); };
-		virtual void onMouseEnter(int x, int y){ tools::unusedArg(x, y); };
-		virtual void onMouseExit(int x, int y){ tools::unusedArg(x, y); };
-		virtual void onMouseDrag(int x, int y){ tools::unusedArg(x, y); };
+        virtual void onMouseClick(MouseButton button, MouseState state, const Vector2& mousePosition){ tools::unusedArg(button, state, mousePosition); };
+        virtual void onMouseEnter(const Vector2& mousePosition){ tools::unusedArg(mousePosition); };
+        virtual void onMouseExit(const Vector2& mousePosition){ tools::unusedArg(mousePosition); };
+		virtual void onMouseDrag(const Vector2& mousePosition){ tools::unusedArg(mousePosition); };
 
 	protected:
 

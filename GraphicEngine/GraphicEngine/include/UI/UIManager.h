@@ -30,8 +30,8 @@ namespace UI
         std::map<MouseButton, std::vector<Element*>> m_lastOnClickElems;
         Element* m_lastMouseOverElement;
 
-        bool hasClicked(MouseButton button, MouseState state, const Vector2& mouse, Element* e);
-        Element* findPreciseUIElement(int x, int y);
+        Element* findPreciseUIElementInChild(Element* current, const Vector2& mousePosition, bool onEnter = true);
+        Element* findPreciseUIElementInParent(Element* current, const Vector2& mousePosition, bool onExit = true);
     };
 }
 #endif

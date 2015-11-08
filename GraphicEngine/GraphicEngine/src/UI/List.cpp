@@ -138,51 +138,49 @@ namespace UI
 		drawPolygon(tri_down, bgColor, { 0.0, 0.0, 0.0, 1.0 });
 	}
 
-	void List::onMouseClick(MouseButton button, MouseState state, int x, int y)
+    void List::onMouseClick(MouseButton button, MouseState state, const Vector2& mousePosition)
 	{
 		int size_scroll = 15;
 		// Scroll up
-		if (x > mViewportRect.x + mViewportRect.w - size_scroll && y < mViewportRect.y + size_scroll && state == MOUSE_DOWN && button == BUTTON_LEFT)
+        if (mousePosition.x > mViewportRect.x + mViewportRect.w - size_scroll && mousePosition.y < mViewportRect.y + size_scroll && state == MOUSE_DOWN && button == BUTTON_LEFT)
 		{
 			scrollUp();
 		}
 
 		// Scroll down
-		else if (x > mViewportRect.x + mViewportRect.w - size_scroll && y > mViewportRect.y + mViewportRect.h - size_scroll && state == MOUSE_DOWN && button == BUTTON_LEFT)
+		else if (mousePosition.x > mViewportRect.x + mViewportRect.w - size_scroll && mousePosition.y > mViewportRect.y + mViewportRect.h - size_scroll && state == MOUSE_DOWN && button == BUTTON_LEFT)
 		{
 			scrollDown();
 		}
 
 		// Sélection d'un item (ou déselection => appel le callback en question)
-		else if (x < mViewportRect.x + mViewportRect.w - size_scroll && state == MOUSE_DOWN && button == BUTTON_LEFT)
+		else if (mousePosition.x < mViewportRect.x + mViewportRect.w - size_scroll && state == MOUSE_DOWN && button == BUTTON_LEFT)
 		{
 			int step_item = mViewportRect.h / numberItemsInList;
-			int y_relative = y - mViewportRect.y;
+			int y_relative = mousePosition.y - mViewportRect.y;
 			int sel = y_relative / step_item;
 			select(sel + currentPos);
 		}
 		else
 		{
-			pos_y = y;
+			pos_y = mousePosition.y;
 		}
 	}
 
-	void List::onMouseEnter(int x, int y)
+    void List::onMouseEnter(const Vector2& mousePosition)
 	{
-
 	}
 
-	void List::onMouseExit(int x, int y)
+    void List::onMouseExit(const Vector2& mousePosition)
 	{
-
 	}
 
-	void List::onMouseDrag(int x, int y)
+    void List::onMouseDrag(const Vector2& mousePosition)
 	{
 		int size_scroll = 15;
-		if (x > mViewportRect.x + mViewportRect.w - size_scroll && y > mViewportRect.y + size_scroll && y < mViewportRect.y + mViewportRect.h - size_scroll)
+        if (mousePosition.x > mViewportRect.x + mViewportRect.w - size_scroll && mousePosition.y > mViewportRect.y + size_scroll && mousePosition.y < mViewportRect.y + mViewportRect.h - size_scroll)
 		{
-			float delta_y = y - pos_y;
+			float delta_y = mousePosition.y - pos_y;
 			delta_sum += delta_y;
 			float delta_sum_abs = abs(delta_sum);
 			float scrollbar_bg_size = mViewportRect.h - 2 * (size_scroll + 1);
@@ -196,7 +194,7 @@ namespace UI
 					scrollDown();
 				delta_sum = 0;
 			}
-			pos_y = y;
+            pos_y = mousePosition.y;
 		}
 	}
 
