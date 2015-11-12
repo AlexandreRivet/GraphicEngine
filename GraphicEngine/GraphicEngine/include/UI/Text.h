@@ -18,6 +18,9 @@ namespace UI
 
 		void draw();
 
+        virtual void onMouseEnter(const Vector2& mousePosition){ tools::unusedArg(mousePosition); };
+        virtual void onMouseExit(const Vector2& mousePosition){ tools::unusedArg(mousePosition); };
+
 	private:
 		std::string content;
 

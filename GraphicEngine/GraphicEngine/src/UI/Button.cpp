@@ -2,7 +2,7 @@
 
 namespace UI
 {
-	Button::Button(const std::string& label, const std::function<void(char, char, int, int)>& f, float x, float y, float width, float height, Type ref)
+    Button::Button(const std::string& label, const std::function<void(char, char, const Vector2& mousePosition)>& f, float x, float y, float width, float height, Type ref)
 		: Element(x, y, width, height, ref),
 		mLabel(label),
 		mCallBack(f),
@@ -13,7 +13,7 @@ namespace UI
 		mBackgroundColor = Color(0.204f, 0.596f, 0.859f, 1.0f);
 	}
 
-	Button::Button(const std::string& label, const std::function<void(char, char, int, int)>& f, const Rect<RefValue>& localRect)
+    Button::Button(const std::string& label, const std::function<void(char, char, const Vector2& mousePosition)>& f, const Rect<RefValue>& localRect)
 		: Element(localRect),
 		mLabel(label),
 		mCallBack(f),
@@ -66,12 +66,12 @@ namespace UI
         return mLabel;
     }
 
-    void Button::setCallBack(const std::function<void(MouseButton, MouseState, int, int)>& c)
+    void Button::setCallBack(const std::function<void(MouseButton, MouseState, const Vector2& mousePosition)>& c)
     {
         mCallBack = c;
     }
 
-    void Button::onMouseClick(MouseButton button, MouseState state, int x, int y)
+    void Button::onMouseClick(MouseButton button, MouseState state, const Vector2& mousePosition)
     {
         if (button == BUTTON_LEFT)
         {
@@ -80,7 +80,7 @@ namespace UI
 			computeState();
 
             if (state == MOUSE_DOWN)
-                mCallBack(button, state, x, y);
+                mCallBack(button, state, mousePosition);
         }
     }
 }

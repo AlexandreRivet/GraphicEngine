@@ -201,6 +201,11 @@ namespace UI
         return mChildren;
     }
 
+    bool Element::isVisible() const
+    {
+        return mVisible;
+    }
+
     const Rect<float>& Element::getViewportBounds() const
     {
         return mViewportRect;

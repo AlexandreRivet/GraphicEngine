@@ -21,10 +21,10 @@ namespace UI
 		void scrollDown();
 		void scrollUp();
 
-		void onMouseClick(MouseButton button, MouseState state, int x, int y);
-		void onMouseEnter(int x, int y);
-		void onMouseExit(int x, int y);
-		void onMouseDrag(int x, int y);
+        void onMouseClick(MouseButton button, MouseState state, const Vector2& mousePosition);
+        void onMouseEnter(const Vector2& mousePosition);
+		void onMouseExit(const Vector2& mousePosition);
+		void onMouseDrag(const Vector2& mousePosition);
 
 
 	private:

@@ -12,6 +12,9 @@ namespace UI
 		Panel(float _x, float _y, float _width, float _height, Type _ref = PIXEL);
 
 		void draw();
+
+        virtual void onMouseEnter(const Vector2& mousePosition){ tools::unusedArg(mousePosition); };
+        virtual void onMouseExit(const Vector2& mousePosition){ tools::unusedArg(mousePosition); };
 	};
 }
 

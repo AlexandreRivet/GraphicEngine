@@ -59,21 +59,21 @@ namespace UI
 		}
 	}
 
-	void InputText::onMouseClick(MouseButton button, MouseState state, int x, int y)
+    void InputText::onMouseClick(MouseButton button, MouseState state, const Vector2& mousePosition)
 	{
 		if (button == BUTTON_LEFT && state == MOUSE_DOWN)
 		{
 			// Calcul du curseur
-			mPosCursor = getPosInString(mText, mViewportRect.x, x);
+            mPosCursor = getPosInString(mText, mViewportRect.x, mousePosition.x);
 
 			if (mSelected)
 				mSelected = false;
 		}
 	}
 
-	void InputText::onMouseDrag(int x, int y)
+    void InputText::onMouseDrag(const Vector2& mousePosition)
 	{
-		int otherPos = getPosInString(mText, mViewportRect.x, x);
+		int otherPos = getPosInString(mText, mViewportRect.x, mousePosition.x);
 
 		if (otherPos < 0)
 			otherPos = 0;

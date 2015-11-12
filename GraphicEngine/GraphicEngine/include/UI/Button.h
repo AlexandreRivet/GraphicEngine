@@ -11,8 +11,8 @@ namespace UI
 	{
 	public:
 
-		Button(const std::string& label, const std::function<void(char, char, int, int)>& f, float x, float y, float width, float height, Type ref = PIXEL);
-		Button(const std::string& label, const std::function<void(char, char, int, int)>& f, const Rect<RefValue>& localRect);
+		Button(const std::string& label, const std::function<void(char, char, const Vector2& mousePosition)>& f, float x, float y, float width, float height, Type ref = PIXEL);
+		Button(const std::string& label, const std::function<void(char, char, const Vector2& mousePosition)>& f, const Rect<RefValue>& localRect);
 
 		void computeState();
 		void draw();
@@ -20,16 +20,16 @@ namespace UI
         const std::string& getLabel() const;
 		void setLabel(const std::string& label);
 
-        void setCallBack(const std::function<void(MouseButton, MouseState, int, int)>& c);
+        void setCallBack(const std::function<void(MouseButton, MouseState, const Vector2& mousePosition)>& c);
 
-		void onMouseClick(MouseButton button, MouseState state, int x, int y);
+		void onMouseClick(MouseButton button, MouseState state, const Vector2& mousePosition);
 
 	private:
 		std::string mLabel;
 
 		bool mIsHightlighted;
 		bool mIsPressed;
-        std::function<void(MouseButton, MouseState, int, int)> mCallBack;
+        std::function<void(MouseButton, MouseState, const Vector2& mousePosition)> mCallBack;
 
 		Color mLabelColor;
 

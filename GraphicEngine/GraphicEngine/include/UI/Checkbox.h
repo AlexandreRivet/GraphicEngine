@@ -18,7 +18,7 @@ namespace UI
 
         void setToggleFlag(bool*);
 
-        void onMouseClick(MouseButton button, MouseState state, int x, int y);
+        void onMouseClick(MouseButton button, MouseState state, const Vector2& mousePosition);
 
 	private:
 		

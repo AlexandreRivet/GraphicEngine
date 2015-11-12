@@ -6,7 +6,6 @@ Renderer::Renderer()
 	: mClearColor(Vector3::ZERO),
 	mAutoClear(true)
 {
-
 }
 
 void Renderer::setClearColor(const Vector3& color)

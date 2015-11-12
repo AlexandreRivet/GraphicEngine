@@ -16,8 +16,11 @@ namespace UI
 
 		bool isPressed;
 
-		void onMouseClick(MouseButton button, MouseState state, int x, int y);
-		void onMouseDrag(int x, int y);
+		void onMouseClick(MouseButton button, MouseState state, const Vector2& mousePosition);
+        void onMouseDrag(const Vector2& mousePosition);
+
+        virtual void onMouseEnter(const Vector2& mousePosition){ tools::unusedArg(mousePosition); };
+        virtual void onMouseExit(const Vector2& mousePosition){ tools::unusedArg(mousePosition); };
 
 	private:
 		std::string mText;

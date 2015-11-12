@@ -70,19 +70,19 @@ namespace UI
 
 	}
 
-	void Slider::onMouseClick(MouseButton button, MouseState state, int x, int y)
+    void Slider::onMouseClick(MouseButton button, MouseState state, const Vector2& mousePosition)
 	{
 		if (button == BUTTON_LEFT && state == MOUSE_DOWN)
 		{
-			float distance = (float) x - mViewportRect.x;
+			float distance = (float) mousePosition.x - mViewportRect.x;
 			float value = distance * (maxValue - minValue) / mViewportRect.w + minValue;
 			setValue(value);
 		}
 	}
 
-	void Slider::onMouseDrag(int x, int y)
+    void Slider::onMouseDrag(const Vector2& mousePosition)
 	{
-		float distance = (float)x - mViewportRect.x;
+		float distance = (float)mousePosition.x - mViewportRect.x;
 		float value = distance * (maxValue - minValue) / mViewportRect.w + minValue;
 		setValue(value);
 	}

@@ -28,9 +28,10 @@ namespace UI
         Layout m_root;
 
         std::map<MouseButton, std::vector<Element*>> m_lastOnClickElems;
-        std::stack<Element*> m_mouseOverList;
+        Element* m_lastMouseOverElement;
 
-        bool hasClicked(MouseButton button, MouseState state, const Vector2& mouse, Element* e);
+        Element* findPreciseUIElementInChild(Element* current, const Vector2& mousePosition, bool onEnter = true);
+        Element* findPreciseUIElementInParent(Element* current, const Vector2& mousePosition, bool onExit = true);
     };
 }
 #endif
