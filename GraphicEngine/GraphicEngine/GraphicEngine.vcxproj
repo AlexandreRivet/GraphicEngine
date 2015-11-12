@@ -13,7 +13,6 @@
   <ItemGroup>
     <ClInclude Include="include\Cameras\Camera.h" />
     <ClInclude Include="include\Cameras\PerspectiveCamera.h" />
-    <ClInclude Include="include\Engine\Engine.h" />
     <ClInclude Include="include\Materials\BasicMaterial.h" />
     <ClInclude Include="include\Materials\Material.h" />
     <ClInclude Include="include\Materials\Shader.h" />
@@ -25,7 +24,6 @@
     <ClInclude Include="include\Math\Quaternion.h" />
     <ClInclude Include="include\Math\Vector2.h" />
     <ClInclude Include="include\Math\Vector3.h" />
-    <ClInclude Include="include\Objects\CubeGeometry.h" />
     <ClInclude Include="include\Objects\Geometry.h" />
     <ClInclude Include="include\Objects\Mesh.h" />
     <ClInclude Include="include\Objects\Object3D.h" />

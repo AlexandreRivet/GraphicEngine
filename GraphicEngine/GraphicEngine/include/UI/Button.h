@@ -23,6 +23,8 @@ namespace UI
         void setCallBack(const std::function<void(MouseButton, MouseState, const Vector2& mousePosition)>& c);
 
 		void onMouseClick(MouseButton button, MouseState state, const Vector2& mousePosition);
+		void onMouseEnter(const Vector2& mousePosition);
+		void onMouseExit(const Vector2& mousePosition);
 
 	private:
 		std::string mLabel;

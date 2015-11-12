@@ -55,9 +55,6 @@
     <Filter Include="Fichiers sources\UI">
       <UniqueIdentifier>{744e54a8-1c57-4ba6-a448-b823dbd0cb12}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers sources\Engine">
-      <UniqueIdentifier>{bb7b54ba-30a3-4017-b409-62ffdaa1d15e}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Math\Matrix3.h">
@@ -167,12 +164,6 @@
     </ClInclude>
     <ClInclude Include="include\UI\Histogram.h">
       <Filter>Fichiers d%27en-tête\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\Engine.h">
-      <Filter>Fichiers sources\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Objects\CubeGeometry.h">
-      <Filter>Fichiers d%27en-tête\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

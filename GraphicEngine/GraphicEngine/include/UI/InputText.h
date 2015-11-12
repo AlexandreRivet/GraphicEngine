@@ -21,6 +21,10 @@ namespace UI
 
         virtual void onMouseEnter(const Vector2& mousePosition){ tools::unusedArg(mousePosition); };
         virtual void onMouseExit(const Vector2& mousePosition){ tools::unusedArg(mousePosition); };
+		void keyPressed(const char c);
+		void keyReleased(const char c);
+		void specialPressed(const char c);
+		void specialReleased(const char c);
 
 	private:
 		std::string mText;

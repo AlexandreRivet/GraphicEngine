@@ -7,8 +7,7 @@ namespace UI
 		lblColor({ 1.0f, 0.0f, 0.0f, 1.0f }),
 		mPosCursor(0),
 		mSelection(0, 0),
-		mSelected(false),
-		mText("Test pour le cursor")
+		mSelected(false)
 	{
 
 	}
@@ -88,6 +87,65 @@ namespace UI
 			else
 				mSelection = Vector2(mPosCursor, otherPos);
 		}
+	}
+
+	void InputText::keyPressed(const char c)
+	{
+		switch (c)
+		{
+		case 8:
+			mPosCursor--;
+			if (mPosCursor < 0)
+				mPosCursor = 0;
+			else
+				mText.erase(mPosCursor, 1);
+			break;
+		default:
+			if (mSelected)
+			{
+				mText.erase(mText.begin() + mSelection.x, mText.begin() + mSelection.y);
+				mPosCursor = mSelection.x;
+				mSelected = false;
+			}
+
+			mText.insert(mPosCursor, 1, c);
+			mPosCursor++;
+			break;
+		}		
+	}
+
+	void InputText::keyReleased(const char c)
+	{
+
+	}
+
+	void InputText::specialPressed(const char c)
+	{
+		switch (c)
+		{
+		case 100:
+			mPosCursor--;
+			break;
+		case 102:
+			mPosCursor++;
+			break;
+		case 106:
+			mPosCursor = 0;
+			break;
+		case 107:
+			mPosCursor = mText.size();
+		}
+		
+
+		if (mPosCursor < 0)
+			mPosCursor = 0;
+		else if (mPosCursor > mText.size())
+			mPosCursor = mText.size();
+	}
+
+	void InputText::specialReleased(const char c)
+	{
+
 	}
 
 }

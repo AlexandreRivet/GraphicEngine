@@ -83,4 +83,15 @@ namespace UI
                 mCallBack(button, state, mousePosition);
         }
     }
+
+	void Button::onMouseEnter(const Vector2& mousePosition)
+	{
+		mIsHightlighted = true;
+	}
+
+	void Button::onMouseExit(const Vector2& mousePosition)
+	{
+		mIsHightlighted = false;
+	}
+
 }

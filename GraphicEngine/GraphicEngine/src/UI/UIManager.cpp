@@ -40,9 +40,13 @@ namespace UI
         {
             m_lastOnClickElems[mouseButton].clear();
 
-            m_lastMouseOverElement->onMouseClick(mouseButton, mouseState, mouse);
+			if (m_lastMouseOverElement != nullptr)
+			{
+				m_lastMouseOverElement->onMouseClick(mouseButton, mouseState, mouse);
+				m_onFocusElement = m_lastMouseOverElement;
 
-            m_lastOnClickElems[mouseButton].push_back(m_lastMouseOverElement);
+				m_lastOnClickElems[mouseButton].push_back(m_lastMouseOverElement);
+			}
         }
         else
         {
@@ -155,6 +159,28 @@ namespace UI
             });
         });
     }
+
+	void UIManager::keyPressed(char c, bool special)
+	{
+		if (m_onFocusElement == nullptr)
+			return;
+
+		if (special)
+			m_onFocusElement->specialPressed(c);
+		else
+			m_onFocusElement->keyPressed(c);
+	}
+
+	void UIManager::keyReleased(char c, bool special)
+	{
+		if (m_onFocusElement == nullptr)
+			return;
+
+		if (special)
+			m_onFocusElement->specialReleased(c);
+		else
+			m_onFocusElement->keyReleased(c);
+	}
 
     Element* UIManager::findPreciseUIElementInChild(Element* current, const Vector2& mousePosition, bool onEnter)
     {

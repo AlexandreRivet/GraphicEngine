@@ -60,6 +60,10 @@ namespace UI
         virtual void onMouseEnter(const Vector2& mousePosition){ tools::unusedArg(mousePosition); };
         virtual void onMouseExit(const Vector2& mousePosition){ tools::unusedArg(mousePosition); };
 		virtual void onMouseDrag(const Vector2& mousePosition){ tools::unusedArg(mousePosition); };
+		virtual void keyPressed(const char c) { tools::unusedArg(c); };
+		virtual void keyReleased(const char c) { tools::unusedArg(c); };
+		virtual void specialPressed(const char c) { tools::unusedArg(c); };
+		virtual void specialReleased(const char c) { tools::unusedArg(c); };
 
 	protected:
 
