@@ -20,7 +20,6 @@ namespace UI
 
 	void InputText::draw()
 	{
-		// auto thickeness = 2.0f;
 		drawSquare(Vector2(mViewportRect.x, mViewportRect.y), static_cast<int>(mViewportRect.w), static_cast<int>(mViewportRect.h), mBackgroundColor, { 0.0f, 0.0f, 0.0f, 1.0f });
 
 		if (mSelected) 

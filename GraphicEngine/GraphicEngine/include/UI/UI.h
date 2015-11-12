@@ -8,6 +8,7 @@
 #include "List.h"
 #include "Slider.h"
 #include "Text.h"
+#include "Histogram.h"
 
 #include "UIManager.h"
 

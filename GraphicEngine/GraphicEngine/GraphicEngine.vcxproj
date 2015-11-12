@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="include\Cameras\Camera.h" />
     <ClInclude Include="include\Cameras\PerspectiveCamera.h" />
+    <ClInclude Include="include\Engine\Engine.h" />
     <ClInclude Include="include\Materials\BasicMaterial.h" />
     <ClInclude Include="include\Materials\Material.h" />
     <ClInclude Include="include\Materials\Shader.h" />
@@ -24,6 +25,7 @@
     <ClInclude Include="include\Math\Quaternion.h" />
     <ClInclude Include="include\Math\Vector2.h" />
     <ClInclude Include="include\Math\Vector3.h" />
+    <ClInclude Include="include\Objects\CubeGeometry.h" />
     <ClInclude Include="include\Objects\Geometry.h" />
     <ClInclude Include="include\Objects\Mesh.h" />
     <ClInclude Include="include\Objects\Object3D.h" />
@@ -33,6 +35,7 @@
     <ClInclude Include="include\UI\Button.h" />
     <ClInclude Include="include\UI\Checkbox.h" />
     <ClInclude Include="include\UI\Element.h" />
+    <ClInclude Include="include\UI\Histogram.h" />
     <ClInclude Include="include\UI\InputText.h" />
     <ClInclude Include="include\UI\List.h" />
     <ClInclude Include="include\UI\Layout.h" />
@@ -69,6 +72,7 @@
     <ClCompile Include="src\UI\Button.cpp" />
     <ClCompile Include="src\UI\Checkbox.cpp" />
     <ClCompile Include="src\UI\Element.cpp" />
+    <ClCompile Include="src\UI\Histogram.cpp" />
     <ClCompile Include="src\UI\InputText.cpp" />
     <ClCompile Include="src\UI\List.cpp" />
     <ClCompile Include="src\UI\Layout.cpp" />

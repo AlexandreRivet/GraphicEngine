@@ -29,7 +29,6 @@ public:
 	bool hasAttribute(const std::string& name);
 	bool hasUniform(const std::string& name);
 
-	/* TODO: Faire les textures */
 	void setUniform(const std::string& name, Texture& tex);
 	void setUniform(const std::string& name, int val);
 	void setUniform(const std::string& name, float f);
@@ -47,6 +46,9 @@ private:
 	GLuint mVertexShaderId;
 	GLuint mFragmentShaderId;
 	GLuint mGeometryShaderId;
+	/*Not implemented yet*/
+	GLuint mComputeShaderId;
+	GLuint mTesselationShaderId;
 
 	std::map<std::string, GLint> mUniforms;
 	std::map<std::string, GLint> mAttributes;

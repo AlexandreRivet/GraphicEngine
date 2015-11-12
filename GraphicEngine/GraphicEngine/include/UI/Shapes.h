@@ -5,7 +5,7 @@
 #include "Structs.h"
 
 void drawPoint(Vector2 point, Color color);
-void drawLine(Vector2 start, Vector2 end, Color color, int thickeness);
+void drawLine(Vector2 start, Vector2 end, Color color, int thickness, int dashed = -1);
 void drawSquare(Vector2 point, int w, int h, Color fill, Color stroke);
 void drawPolygon(std::vector<Vector2> points, Color fill, Color stroke);		// Problem with concave
 void drawString(std::string label, Vector2 point, Color color);

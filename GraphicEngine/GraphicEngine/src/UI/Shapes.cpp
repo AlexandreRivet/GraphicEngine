@@ -17,7 +17,7 @@ void drawPoint(Vector2 point, Color color)
 	glColor4f(oldColor[0], oldColor[1], oldColor[2], oldColor[3]);
 }
 
-void drawLine(Vector2 start, Vector2 end, Color color, int thickness)
+void drawLine(Vector2 start, Vector2 end, Color color, int thickness, int dashed)
 {
 	static float oldColor[4] = { 0 };
 	glGetFloatv(GL_CURRENT_COLOR, oldColor);
@@ -25,9 +25,29 @@ void drawLine(Vector2 start, Vector2 end, Color color, int thickness)
 	glLineWidth(static_cast<GLfloat>(thickness));
 
 	glColor4f(color.r, color.g, color.b, color.a);
+
 	glBegin(GL_LINES);
-	glVertex2f(start.x, start.y);
-	glVertex2f(end.x, end.y);
+	if (dashed > 0)
+	{
+		float distance = start.distance(end);
+		int numberDash = distance / (dashed * 2.0f);	// nombre de paires dash + dash vide
+		Vector2 start_end = (end - start);
+		Vector2 step;
+		for (int i = 0; i < numberDash; ++i)
+		{
+			step = ((static_cast<float>(i) / static_cast<float>(numberDash)) * start_end);
+			Vector2 new_start = step + start;
+			step = (((static_cast<float>(i)* 2.0f + 1.0f) / (static_cast<float>(numberDash) * 2.0f)) * start_end);
+			Vector2 new_end = step + start;
+			glVertex2f(new_start.x, new_start.y);
+			glVertex2f(new_end.x, new_end.y);
+		}
+	}
+	else
+	{
+		glVertex2f(start.x, start.y);
+		glVertex2f(end.x, end.y);	
+	}
 	glEnd();
 
 	glLineWidth(1);

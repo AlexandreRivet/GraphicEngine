@@ -132,10 +132,12 @@ void Renderer::render(Scene& s, Camera& c)
 		}
 
 
+
+
 		// On envoie le reste des uniformes
 
 		// Viewport
-		mat->getShader()->setUniform("u_viewport", 800.0f, 600.0f);
+		mat->getShader()->setUniform("u_viewport", mViewportWidth, mViewportHeight);
 
 		// Proj matrix
 		mat->getShader()->setUniform("u_proj", c.getProjectionMatrix());
