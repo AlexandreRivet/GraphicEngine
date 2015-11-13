@@ -198,4 +198,22 @@ namespace UI
 		}
 	}
 
+	void List::keyPressed(const char c)
+	{
+		switch (c)
+		{
+		case 101:
+			scrollUp();
+			break;
+		case 103:
+			scrollDown();
+			break;
+		}
+	}
+
+	void List::keyReleased(const char c)
+	{
+
+	}
+
 }

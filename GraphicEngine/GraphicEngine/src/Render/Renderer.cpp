@@ -70,7 +70,7 @@ void Renderer::render(UI::UIManager& uiManager)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0, mViewportWidth, mViewportHeight, 0, -1, 1);
+	glOrtho(0, mViewportWidth, mViewportHeight, 0, 0, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
@@ -113,25 +113,11 @@ void Renderer::render(Scene& s, Camera& c)
 		Geometry& geo = mesh->getGeometry();
 		MaterialSPtr& mat = mesh->getMaterial();
 
+		// On bind le VAO
+		glBindVertexArray(mesh->mVAO);
+
 		// On bind le material
 		mat->bind();
-
-		// On configure le reste des attributes
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->mVerticesBuffer);
-		GLint positionLocation = mat->getShader()->attribute("a_position");
-		glEnableVertexAttribArray(positionLocation);
-		glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(float)* 3, 0);
-
-		if (geo.hasUvs())
-		{
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->mUvsBuffer);
-			GLint uvLocation = mat->getShader()->attribute("a_texCoord");
-			glEnableVertexAttribArray(uvLocation);
-			glVertexAttribPointer(uvLocation, 2, GL_FLOAT, GL_FALSE, sizeof(float)* 2, 0);
-		}
-
-
-
 
 		// On envoie le reste des uniformes
 
@@ -148,12 +134,11 @@ void Renderer::render(Scene& s, Camera& c)
 		mat->getShader()->setUniform("u_world", obj->getWorldMatrix());
 
 		// On dessine
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mIndicesBuffer);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mIBO);
 		glDrawElements(obj->getRenderMode(), geo.getNbIndices(), GL_UNSIGNED_INT, 0);
 
 		// On unbind le material
 		mat->unbind();
-
 	}
 	
 }

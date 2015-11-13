@@ -16,10 +16,9 @@ public:
 	Geometry& getGeometry();
 	MaterialSPtr& getMaterial();
 
-	GLuint mVerticesBuffer;
-	GLuint mIndicesBuffer;
-	GLuint mUvsBuffer;
-	GLuint mNormalsBuffer;
+	GLuint mVBO;
+	GLuint mVAO;
+	GLuint mIBO;
 
 protected:
 
@@ -30,7 +29,6 @@ protected:
 
 	bool mHasNormals;
 	bool mHasUvs;
-
 };
 
 typedef std::shared_ptr<Mesh> MeshSPtr;

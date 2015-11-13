@@ -165,6 +165,9 @@
     <ClInclude Include="include\UI\Histogram.h">
       <Filter>Fichiers d%27en-tête\UI</Filter>
     </ClInclude>
+    <ClInclude Include="include\Cameras\OrthographicCamera.h">
+      <Filter>Fichiers d%27en-tête\Cameras</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Math\Vector3.cpp">
@@ -262,6 +265,9 @@
     </ClCompile>
     <ClCompile Include="src\UI\Histogram.cpp">
       <Filter>Fichiers sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cameras\OrthographicCamera.cpp">
+      <Filter>Fichiers sources\Cameras</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

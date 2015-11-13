@@ -1,6 +1,6 @@
 #include "Objects/Geometry.h"
 
-Geometry::Geometry(const std::vector<float>& vertices, const std::vector<int>& indices, const std::vector<float>& uvs, const std::vector<float>& normals)
+Geometry::Geometry(const std::vector<float>& vertices, const std::vector<unsigned int>& indices, const std::vector<float>& uvs, const std::vector<float>& normals)
 	: mVertices(vertices),
 	mIndices(indices),
 	mUvs(uvs),
@@ -17,7 +17,7 @@ void Geometry::setVertices(const std::vector<float>& vertices)
 	mNeedsUpdate = true;
 }
 
-void Geometry::setIndices(const std::vector<int>& indices)
+void Geometry::setIndices(const std::vector<uint>& indices)
 {
 	mIndices = indices;
 	mNeedsUpdate = true;
@@ -42,7 +42,7 @@ const std::vector<float>& Geometry::getVertices() const
 	return mVertices;
 }
 
-const std::vector<int>& Geometry::getIndices() const
+const std::vector<uint>& Geometry::getIndices() const
 {
 	return mIndices;
 }

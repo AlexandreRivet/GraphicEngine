@@ -201,6 +201,11 @@ namespace UI
         return mChildren;
     }
 
+	void Element::setVisible(bool visible)
+	{
+		mVisible = visible;
+	}
+
     bool Element::isVisible() const
     {
         return mVisible;

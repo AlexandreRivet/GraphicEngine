@@ -25,6 +25,8 @@ namespace UI
         void onMouseEnter(const Vector2& mousePosition);
 		void onMouseExit(const Vector2& mousePosition);
 		void onMouseDrag(const Vector2& mousePosition);
+		virtual void keyPressed(const char c);
+		virtual void keyReleased(const char c);
 
 
 	private:
