@@ -40,7 +40,7 @@ namespace UI
 			currentPos--;
 	}
 
-	void List::select(int index)
+	void List::select(uint index)
 	{
 		auto element = std::find(selected.begin(), selected.end(), index);
 		if (multiple)
@@ -57,33 +57,28 @@ namespace UI
 		}
 		else
 		{
-			if (element != selected.end())
-			{
-				selected.clear();
-			}
-			else if (selected.size() == 0 && index < items.size())
-			{
+			selected.clear();
+			if (index < items.size())	
 				selected.push_back(index);
-			}
-			else
-			{
-				selected.clear();
-				selected.push_back(index);
-			}
 		}
 
 		// Callback ??
 	}
 
+	std::vector<int> List::getSelected() const
+	{
+		return selected;
+	}
+
 	void List::draw()
 	{
 		// Draw background
-		drawSquare(Vector2(mViewportRect.x, mViewportRect.y), mViewportRect.w, mViewportRect.h, bgColor, { 0.0, 0.0, 0.0, 1.0 });
+		drawSquare(Vector2(mViewportRect.x, mViewportRect.y), (int)mViewportRect.w, (int)mViewportRect.h, bgColor, { 0.0, 0.0, 0.0, 1.0 });
 
 		// Draw items
-		int size_scroll = 15;
-		int numberItems = items.size();
-		int step_item = mViewportRect.h / numberItemsInList;
+		uint size_scroll = 15;
+		uint numberItems = items.size();
+		int step_item = (int)mViewportRect.h / numberItemsInList;
 		for (int i = 0; i < ((numberItemsInList > numberItems) ? numberItems : numberItemsInList); ++i)
 		{
 			// Hightlight

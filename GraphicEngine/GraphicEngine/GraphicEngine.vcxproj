@@ -28,6 +28,7 @@
     <ClInclude Include="include\Objects\Geometry.h" />
     <ClInclude Include="include\Objects\Mesh.h" />
     <ClInclude Include="include\Objects\Object3D.h" />
+    <ClInclude Include="include\Objects\OpenGLBuffer.h" />
     <ClInclude Include="include\Objects\Scene.h" />
     <ClInclude Include="include\prerequisites.h" />
     <ClInclude Include="include\Render\Renderer.h" />
@@ -67,6 +68,7 @@
     <ClCompile Include="src\Objects\Geometry.cpp" />
     <ClCompile Include="src\Objects\Mesh.cpp" />
     <ClCompile Include="src\Objects\Object3D.cpp" />
+    <ClCompile Include="src\Objects\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Objects\Scene.cpp" />
     <ClCompile Include="src\Render\Renderer.cpp" />
     <ClCompile Include="src\UI\Button.cpp" />

@@ -30,7 +30,7 @@ void drawLine(Vector2 start, Vector2 end, Color color, int thickness, int dashed
 	if (dashed > 0)
 	{
 		float distance = start.distance(end);
-		int numberDash = distance / (dashed * 2.0f);	// nombre de paires dash + dash vide
+		int numberDash = distance / ((float)dashed * 2.0f);	// nombre de paires dash + dash vide
 		Vector2 start_end = (end - start);
 		Vector2 step;
 		for (int i = 0; i < numberDash; ++i)
@@ -143,7 +143,7 @@ int getSizeBetweenTwoPosInString(std::string label, int start, int end)
 
 int getPosInString(std::string label, int x_start, int x_current)
 {
-	int cursor = -1;
+	uint cursor = -1;
 
 	do
 	{

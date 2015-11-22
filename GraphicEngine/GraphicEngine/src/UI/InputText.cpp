@@ -4,7 +4,7 @@ namespace UI
 {
 	InputText::InputText(float _x, float _y, float _width, float _height, Type _ref)
 		: Element(_x, _y, _width, _height, _ref),
-		lblColor({ 1.0f, 0.0f, 0.0f, 1.0f }),
+		lblColor({ 0.0f, 0.0f, 0.0f, 1.0f }),
 		mPosCursor(0),
 		mSelection(0, 0),
 		mSelected(false)
@@ -94,11 +94,20 @@ namespace UI
 		switch (c)
 		{
 		case 8:
-			mPosCursor--;
-			if (mPosCursor < 0)
-				mPosCursor = 0;
+			if (mSelected)
+			{
+				mText.erase(mText.begin() + mSelection.x, mText.begin() + mSelection.y);
+				mPosCursor = mSelection.x;
+				mSelected = false;
+			}
 			else
-				mText.erase(mPosCursor, 1);
+			{
+				mPosCursor--;
+				if (mPosCursor < 0)
+					mPosCursor = 0;
+				else
+					mText.erase(mPosCursor, 1);
+			}
 			break;
 		default:
 			if (mSelected)

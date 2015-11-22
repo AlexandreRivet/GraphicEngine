@@ -13,6 +13,7 @@ namespace UI
         UIManager();
 
         Element* getRoot();
+		Element* getLastMouseOverElement();
 
         void render();
         void computePosition(float w, float h);

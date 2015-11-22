@@ -20,6 +20,8 @@ namespace UI
         const std::string& getLabel() const;
 		void setLabel(const std::string& label);
 
+		void set3D(bool is3D);
+
         void setCallBack(const std::function<void(MouseButton, MouseState, const Vector2& mousePosition)>& c);
 
 		void onMouseClick(MouseButton button, MouseState state, const Vector2& mousePosition);
@@ -31,6 +33,7 @@ namespace UI
 
 		bool mIsHightlighted;
 		bool mIsPressed;
+		bool mIs3D;
         std::function<void(MouseButton, MouseState, const Vector2& mousePosition)> mCallBack;
 
 		Color mLabelColor;

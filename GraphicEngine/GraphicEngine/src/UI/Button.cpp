@@ -8,7 +8,8 @@ namespace UI
 		mCallBack(f),
 		mIsPressed(false),
 		mIsHightlighted(false),
-		mLabelColor(1.0, 1.0, 1.0, 1.0)
+		mLabelColor(1.0, 1.0, 1.0, 1.0),
+		mIs3D(true)
 	{
 		mBackgroundColor = Color(0.204f, 0.596f, 0.859f, 1.0f);
 	}
@@ -19,20 +20,23 @@ namespace UI
 		mCallBack(f),
 		mIsPressed(false),
 		mIsHightlighted(false),
-		mLabelColor(1.0f, 1.0f, 1.0f, 1.0f)
+		mLabelColor(1.0f, 1.0f, 1.0f, 1.0f),
+		mIs3D(true)
 	{
 		mBackgroundColor = Color(0.204f, 0.596f, 0.859f, 1.0f);
 	}
 
 	void Button::computeState()
 	{
-		float percent = 0.8f;
+		float percent = 1.0f;
+		if (mIs3D)
+			percent = 0.8f;
 		float other_percent = 1.0f - percent;
 
 		mFirstRect = Rect<float>(mViewportRect.x, mViewportRect.y, mViewportRect.w, mViewportRect.h * percent);
 		mSecondRect = Rect<float>(mViewportRect.x, mViewportRect.y + mFirstRect.h, mViewportRect.w, mViewportRect.h * other_percent);
 
-		if (mIsPressed) 
+		if (mIsPressed && mIs3D) 
 		{
 			other_percent /= 2.0f;
 
@@ -65,6 +69,16 @@ namespace UI
     {
         return mLabel;
     }
+
+	void Button::setLabel(const std::string& label)
+	{
+		mLabel = label;
+	}
+
+	void Button::set3D(bool is3D)
+	{
+		mIs3D = is3D;
+	}
 
     void Button::setCallBack(const std::function<void(MouseButton, MouseState, const Vector2& mousePosition)>& c)
     {

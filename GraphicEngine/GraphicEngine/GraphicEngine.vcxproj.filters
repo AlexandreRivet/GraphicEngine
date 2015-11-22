@@ -168,6 +168,9 @@
     <ClInclude Include="include\Cameras\OrthographicCamera.h">
       <Filter>Fichiers d%27en-tête\Cameras</Filter>
     </ClInclude>
+    <ClInclude Include="include\Objects\OpenGLBuffer.h">
+      <Filter>Fichiers d%27en-tête\Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Math\Vector3.cpp">
@@ -268,6 +271,9 @@
     </ClCompile>
     <ClCompile Include="src\Cameras\OrthographicCamera.cpp">
       <Filter>Fichiers sources\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Objects\OpenGLBuffer.cpp">
+      <Filter>Fichiers sources\Objects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

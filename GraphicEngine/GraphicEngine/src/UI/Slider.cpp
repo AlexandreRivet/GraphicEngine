@@ -59,14 +59,14 @@ namespace UI
 		float offset = ((1.0f - percent) * mViewportRect.h) / 2.0f;
 
 		// Slider bar
-		drawSquare(Vector2(mViewportRect.x, mViewportRect.y + offset), mViewportRect.w, current_height, bgColor, { 0.0, 0.0, 0.0, 1.0 });
+		drawSquare(Vector2(mViewportRect.x, mViewportRect.y + offset), mViewportRect.w, current_height, bgColor, { 0.0f, 0.0f, 0.0f, 1.0f });
 
 		// Slider handler
 		float distanceMax = maxValue - minValue;
 		float distanceCurr = currentValue - minValue;
 		float posInSlider = (distanceCurr / distanceMax) * mViewportRect.w - mViewportRect.h / 2.0f;
 
-		drawSquare(Vector2(mViewportRect.x + posInSlider, mViewportRect.y), mViewportRect.h, mViewportRect.h, handlerColor, { 0.0, 0.0, 0.0, 1.0 });
+		drawSquare(Vector2(mViewportRect.x + posInSlider, mViewportRect.y), mViewportRect.h, mViewportRect.h, handlerColor, { 0.0f, 0.0f, 0.0f, 1.0f });
 
 	}
 

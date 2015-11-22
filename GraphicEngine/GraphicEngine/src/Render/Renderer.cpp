@@ -39,8 +39,6 @@ void Renderer::render(Scene& s, Camera& c, UI::UIManager& uiManager)
 {
 	glDepthMask(GL_TRUE);
 	
-	// glViewport(0, 0, mViewportWidth, mViewportHeight);
-
 	if (mAutoClear)
 	{
 		glClearColor(mClearColor.x, mClearColor.y, mClearColor.z, 1.0f);

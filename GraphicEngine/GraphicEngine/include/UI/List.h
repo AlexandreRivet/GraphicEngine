@@ -17,7 +17,8 @@ namespace UI
 		void setMultiple(bool _multiple);
 		bool getMultiple() const;
 
-		void select(int index);
+		void select(uint index);
+		std::vector<int> getSelected() const;
 		void scrollDown();
 		void scrollUp();
 

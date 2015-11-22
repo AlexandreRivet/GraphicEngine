@@ -19,6 +19,11 @@ namespace UI
         return &m_root;
     }
 
+	Element* UIManager::getLastMouseOverElement()
+	{
+		return m_lastMouseOverElement;
+	}
+
     void UIManager::render()
     {
         m_root.render();
@@ -31,7 +36,7 @@ namespace UI
 
     void UIManager::onMouseClick(int button, int state, int x, int y)
     {
-        Vector2 mouse(x, y);
+        Vector2 mouse((float)x, (float)y);
 
         MouseButton mouseButton = ((button == GLUT_LEFT_BUTTON) ? BUTTON_LEFT : ((button == GLUT_MIDDLE_BUTTON) ? BUTTON_MIDDLE : BUTTON_RIGHT));
         MouseState mouseState = ((state == GLUT_DOWN) ? MOUSE_DOWN : MOUSE_UP);
@@ -66,7 +71,7 @@ namespace UI
 
     void UIManager::onMouseMove(int x, int y)
     {
-        Vector2 mousePosition(x, y);
+        Vector2 mousePosition((float)x, (float)y);
 
         if (m_lastMouseOverElement == nullptr)
         {
@@ -149,7 +154,7 @@ namespace UI
 
     void UIManager::onMouseDrag(int x, int y)
     {
-        Vector2 mousePosition(x, y);
+        Vector2 mousePosition((float)x, (float)y);
 
         std::for_each(m_lastOnClickElems.begin(), m_lastOnClickElems.end(), [&mousePosition](std::pair<const MouseButton, std::vector<Element*>>& elementOnClick)
         {

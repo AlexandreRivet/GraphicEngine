@@ -11,6 +11,6 @@ namespace UI
 
 	void Panel::draw()
 	{
-		drawSquare(Vector2(mViewportRect.x, mViewportRect.y), mViewportRect.w, mViewportRect.h, { 0.2f, 0.25f, 0.3f, 0.0f }, { 1.0f, 0.0f, 0.0f, 0.0f });
+		drawSquare(Vector2(mViewportRect.x, mViewportRect.y), (int)mViewportRect.w, (int)mViewportRect.h, { 0.2f, 0.25f, 0.3f, 1.0f }, { 1.0f, 0.0f, 0.0f, 0.0f });
 	}
 }

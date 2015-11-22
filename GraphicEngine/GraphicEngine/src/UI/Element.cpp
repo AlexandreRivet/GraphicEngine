@@ -95,6 +95,7 @@ namespace UI
 			valueToFill->ref = type;			
 		}
 
+		mNeedUpdate = true;
 		return true;
 
 	}
