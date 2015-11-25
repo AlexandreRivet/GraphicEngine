@@ -14,10 +14,13 @@ namespace UI
 		void draw();
 
 		void addItem(const std::string& item);
+		void editItem(uint index, const std::string& item);
+		void removeItem(uint index);
 		void setMultiple(bool _multiple);
 		bool getMultiple() const;
 
 		void select(uint index);
+		void deselectAll();
 		std::vector<int> getSelected() const;
 		void scrollDown();
 		void scrollUp();

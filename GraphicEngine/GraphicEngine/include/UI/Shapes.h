@@ -6,8 +6,10 @@
 
 void drawPoint(Vector2 point, Color color);
 void drawLine(Vector2 start, Vector2 end, Color color, int thickness, int dashed = -1);
+void drawLines(std::vector<Vector2*> points, Color color, int thickness, bool close = true);
+void drawSquareCentered(Vector2 point, int w, int h, Color fill, Color stroke);
 void drawSquare(Vector2 point, int w, int h, Color fill, Color stroke);
-void drawPolygon(std::vector<Vector2> points, Color fill, Color stroke);		// Problem with concave
+void drawPolygon(std::vector<Vector2> points, Color fill, Color stroke);
 void drawString(std::string label, Vector2 point, Color color);
 void drawStringCentered(std::string label, Vector2 point, Vector2 rect, Color color, bool centeredOnX, bool centeredOnY);
 void drawCircle(Vector2 center, int radius, Color color);

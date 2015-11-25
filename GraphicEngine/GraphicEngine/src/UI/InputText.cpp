@@ -12,6 +12,16 @@ namespace UI
 
 	}
 
+	void InputText::setText(const std::string& text)
+	{
+		mText = text;
+	}
+
+	const std::string& InputText::getText() const
+	{
+		return mText;
+	}
+
 	void InputText::computeState()
 	{
 

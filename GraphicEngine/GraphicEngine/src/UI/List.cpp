@@ -17,6 +17,16 @@ namespace UI
 		items.push_back(item);
 	}
 
+	void List::editItem(uint index, const std::string& item)
+	{
+		items[index] = item;
+	}
+
+	void List::removeItem(uint index)
+	{
+		items.erase(items.begin() + index);
+	}
+
 	void List::setMultiple(bool _multiple)
 	{
 		multiple = _multiple;
@@ -57,12 +67,17 @@ namespace UI
 		}
 		else
 		{
-			selected.clear();
+			deselectAll();
 			if (index < items.size())	
 				selected.push_back(index);
 		}
 
 		// Callback ??
+	}
+
+	void List::deselectAll()
+	{
+		selected.clear();
 	}
 
 	std::vector<int> List::getSelected() const

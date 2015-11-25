@@ -21,6 +21,7 @@ public:
 	uint getWidth() const;
 	uint getHeight() const;
 
+	void render(const std::function<void()>& renderFunction, UI::UIManager& uiManager);
 	void render(Scene& s, Camera& c, UI::UIManager& uiManager);
 	void render(Scene& s, Camera& c);
 	void render(UI::UIManager& uiManager);

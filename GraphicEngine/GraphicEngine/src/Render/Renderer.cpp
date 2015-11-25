@@ -35,6 +35,30 @@ uint Renderer::getHeight() const
 	return mViewportHeight;
 }
 
+void Renderer::render(const std::function<void()>& renderFunction, UI::UIManager& uiManager)
+{
+	glDepthMask(GL_TRUE);
+
+	if (mAutoClear)
+	{
+		glClearColor(mClearColor.x, mClearColor.y, mClearColor.z, 1.0f);
+		glClearDepth(1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
+	// rend la scène 3D
+	renderFunction();
+
+	// rend l'UI par dessus
+	render(uiManager);
+
+	// Inversion des buffers
+	glutSwapBuffers();
+
+	// Trick chelou
+	Sleep(1);
+}
+
 void Renderer::render(Scene& s, Camera& c, UI::UIManager& uiManager)
 {
 	glDepthMask(GL_TRUE);

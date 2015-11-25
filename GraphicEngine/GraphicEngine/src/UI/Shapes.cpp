@@ -17,6 +17,36 @@ void drawPoint(Vector2 point, Color color)
 	glColor4f(oldColor[0], oldColor[1], oldColor[2], oldColor[3]);
 }
 
+void drawLines(std::vector<Vector2*> points, Color color, int thickness, bool close)
+{
+	uint nbPoints = points.size();
+	if (nbPoints < 2)
+		return;
+
+	static float oldColor[4] = { 0 };
+	glGetFloatv(GL_CURRENT_COLOR, oldColor);
+
+	glLineWidth(static_cast<GLfloat>(thickness));
+
+	glColor4f(color.r, color.g, color.b, color.a);
+
+	glBegin(GL_LINES);
+	for (uint i = 0; i < nbPoints - 1; ++i)
+	{
+		glVertex2f(points[i]->x, points[i]->y);
+		glVertex2f(points[i + 1]->x, points[i + 1]->y);
+	}
+	if (close)
+	{
+		glVertex2f(points[nbPoints - 1]->x, points[nbPoints - 1]->y);
+		glVertex2f(points[0]->x, points[0]->y);
+	}
+	glEnd();
+
+	glLineWidth(1);
+	glColor4f(oldColor[0], oldColor[1], oldColor[2], oldColor[3]);
+}
+
 void drawLine(Vector2 start, Vector2 end, Color color, int thickness, int dashed)
 {
 	static float oldColor[4] = { 0 };
@@ -53,6 +83,19 @@ void drawLine(Vector2 start, Vector2 end, Color color, int thickness, int dashed
 	glLineWidth(1);
 	glColor4f(oldColor[0], oldColor[1], oldColor[2], oldColor[3]); 
 
+}
+
+void drawSquareCentered(Vector2 point, int w, int h, Color fill, Color stroke)
+{
+	std::vector<Vector2> points;
+	int half_w = w / 2;
+	int half_h = h / 2;
+	points.push_back(Vector2(point.x - half_w, point.y - half_h));
+	points.push_back(Vector2(point.x + half_w, point.y - half_h));
+	points.push_back(Vector2(point.x + half_w, point.y + half_h));
+	points.push_back(Vector2(point.x - half_w, point.y + half_h));
+
+	drawPolygon(points, fill, stroke);
 }
 
 // Réfléchir comment utiliser le stroke et le fill proprement
