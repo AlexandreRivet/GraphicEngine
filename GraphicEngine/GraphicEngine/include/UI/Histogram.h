@@ -26,6 +26,7 @@ namespace UI
 		Histogram(const std::string& title, const Rect<RefValue>& localRect);
 
 		void addValue(const std::string& key, float value, Color c = Color(0.3f, 0.7f, 0.8f, 1.0f));
+		void clear();
 
 		void computeState();
 		void draw();
@@ -59,6 +60,8 @@ namespace UI
 		std::map<std::string, std::vector<Vector2>> mSeparationDashes;
 		std::map<std::string, Rect<float>> mPanelsValue;
 		std::map<std::string, std::vector<Vector2>> mTriangles;
+		std::map<std::string, Rect<float>> mTexts;
+
 	};
 
 }

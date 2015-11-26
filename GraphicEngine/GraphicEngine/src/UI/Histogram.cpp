@@ -8,7 +8,7 @@ namespace UI
 		mXAxisTitle("X Axis"),
 		mYAxisTitle("Y Axis"),
 		mYAxisMin(0),
-		mYAxisMax(200),
+		mYAxisMax(50),
 		mLabelColor(0.6f, 0.6f, 0.6f, 1.0f),
 		mBarColor(0.133f, 0.192f, 0.247f, 1.0f)
 	{
@@ -28,7 +28,16 @@ namespace UI
 
 	void Histogram::addValue(const std::string& key, float value, Color c)
 	{
+		if (value > mYAxisMax)
+			mYAxisMax = value;
 		mValues[key] = HistoBar(value, c);
+		computeState();
+	}
+
+	void Histogram::clear()
+	{
+		mValues.clear();
+		computeState();
 	}
 
 	void Histogram::computeState()
@@ -63,7 +72,7 @@ namespace UI
 				float size = (current_distance * height / max_distance);
 				float current_y = mViewportRect.y + offset_border + (height - size);
 				
-				Rect<float> r = Rect<float>(mViewportRect.x + offset_border + i * bar_bg_width + remainder_width, current_y, bar_width, size);
+				Rect<float> r(mViewportRect.x + offset_border + i * bar_bg_width + remainder_width, current_y, bar_width, size);
 
 				// Bars
 				mBars[(*it).first] = r;
@@ -87,6 +96,11 @@ namespace UI
 				tri.push_back(Vector2(middle, r.y));
 				mTriangles[(*it).first] = tri;
 
+				// Text
+				std::string text = (*it).first;
+				int sizeText = getSizeBetweenTwoPosInString(text);
+				Rect<float> textRect(mViewportRect.x + i * bar_bg_width + offset_border + (bar_bg_width - sizeText) / 2.0f, mViewportRect.y + offset_border + height, sizeText, offset_border);
+				mTexts[(*it).first] = textRect;
 
 				i++;
 			}
@@ -111,6 +125,7 @@ namespace UI
 		{
 			Rect<float> r = (*it).second;
 			Rect<float> panel = mPanelsValue[(*it).first];
+			Rect<float> text = mTexts[(*it).first];
 			std::vector<Vector2> tri = mTriangles[(*it).first];
 			std::vector<Vector2> dash = mSeparationDashes[(*it).first];
 			Color c = mValues[(*it).first].color;
@@ -125,7 +140,10 @@ namespace UI
 			drawSquare(Vector2(panel.x, panel.y), panel.w, panel.h, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f, 0.0f });
 			drawPolygon(tri, { 1.0f, 1.0f, 1.0f, 1.0f, }, { 0.0f, 0.0f, 0.0f, 1.0f });
 
-			// Text
+			// Key
+			drawStringCentered((*it).first, Vector2(text.x, text.y), Vector2(text.w, text.h), mLabelColor, true, true);
+
+			// Value
 			drawStringCentered(tools::to_string_presision(mValues[(*it).first].value, 3), Vector2(panel.x, panel.y), Vector2(panel.w, panel.h), mLabelColor, true, true);
 		}
 
