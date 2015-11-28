@@ -25,6 +25,7 @@ namespace UI
 
         void onMouseClick(MouseButton button, MouseState state, const Vector2& mousePosition);
         void onMouseDrag(const Vector2& mousePosition);
+		void onChangeValue(std::function<void()> onChange);
 
         virtual void onMouseEnter(const Vector2& mousePosition){ tools::unusedArg(mousePosition); };
         virtual void onMouseExit(const Vector2& mousePosition){ tools::unusedArg(mousePosition); };
@@ -36,6 +37,7 @@ namespace UI
 		float maxValue;
 
 		float* float_flag;
+		std::function<void()> mOnChange;
 
 		Color bgColor;
 		Color handlerColor;

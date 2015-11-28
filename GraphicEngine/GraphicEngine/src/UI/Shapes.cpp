@@ -47,6 +47,36 @@ void drawLines(std::vector<Vector2*> points, Color color, int thickness, bool cl
 	glColor4f(oldColor[0], oldColor[1], oldColor[2], oldColor[3]);
 }
 
+void drawLines(std::vector<Vector2> points, Color color, int thickness, bool close)
+{
+	uint nbPoints = points.size();
+	if (nbPoints < 2)
+		return;
+
+	static float oldColor[4] = { 0 };
+	glGetFloatv(GL_CURRENT_COLOR, oldColor);
+
+	glLineWidth(static_cast<GLfloat>(thickness));
+
+	glColor4f(color.r, color.g, color.b, color.a);
+
+	glBegin(GL_LINES);
+	for (uint i = 0; i < nbPoints - 1; ++i)
+	{
+		glVertex2f(points[i].x, points[i].y);
+		glVertex2f(points[i + 1].x, points[i + 1].y);
+	}
+	if (close)
+	{
+		glVertex2f(points[nbPoints - 1].x, points[nbPoints - 1].y);
+		glVertex2f(points[0].x, points[0].y);
+	}
+	glEnd();
+
+	glLineWidth(1);
+	glColor4f(oldColor[0], oldColor[1], oldColor[2], oldColor[3]);
+}
+
 void drawLine(Vector2 start, Vector2 end, Color color, int thickness, int dashed)
 {
 	static float oldColor[4] = { 0 };

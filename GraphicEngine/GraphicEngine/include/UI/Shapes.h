@@ -7,6 +7,7 @@
 void drawPoint(Vector2 point, Color color);
 void drawLine(Vector2 start, Vector2 end, Color color, int thickness, int dashed = -1);
 void drawLines(std::vector<Vector2*> points, Color color, int thickness, bool close = true);
+void drawLines(std::vector<Vector2> points, Color color, int thickness, bool close = true);
 void drawSquareCentered(Vector2 point, int w, int h, Color fill, Color stroke);
 void drawSquare(Vector2 point, int w, int h, Color fill, Color stroke);
 void drawPolygon(std::vector<Vector2> points, Color fill, Color stroke);
