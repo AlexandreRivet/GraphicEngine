@@ -8,8 +8,8 @@ namespace UI
 		mXAxisTitle("X Axis"),
 		mYAxisTitle("Y Axis"),
 		mYAxisMin(0),
-		mYAxisMax(50),
-		mLabelColor(0.6f, 0.6f, 0.6f, 1.0f),
+		mYAxisMax(0),
+		mLabelColor(0.2f, 0.2f, 0.2f, 1.0f),
 		mBarColor(0.133f, 0.192f, 0.247f, 1.0f)
 	{
 		mBackgroundColor = Color(0.992f, 0.890f, 0.655f, 1.0f);
@@ -32,6 +32,12 @@ namespace UI
 			mYAxisMax = value;
 		mValues[key] = HistoBar(value, c);
 		computeState();
+	}
+
+	void Histogram::setAxis(const std::string& x, const std::string &y)
+	{
+		mXAxisTitle = x;
+		mYAxisTitle = y;
 	}
 
 	void Histogram::clear()
@@ -84,7 +90,7 @@ namespace UI
 				mSeparationDashes[(*it).first] = dash;
 
 				// Panel (rect)
-				float width_panel = getSizeBetweenTwoPosInString(tools::to_string_presision(current_distance, 3)) + 12.0f;
+				float width_panel = getSizeBetweenTwoPosInString(tools::to_string_presision(current_distance, 0)) + 12.0f;
 
 				mPanelsValue[(*it).first] = Rect<float>(r.x - ((width_panel - r.w) / 2.0f), r.y - 24, width_panel, 20);
 
@@ -115,6 +121,7 @@ namespace UI
 
 		// YAxis
 		drawLine(mYAxis[0], mYAxis[1], mLabelColor, 1);
+		drawString(mYAxisTitle, Vector2(mViewportRect.x + 5.0f, mYAxis[0].y - 5.0f), mLabelColor);
 
 		// XAxis
 		drawLine(mXAxis[0], mXAxis[1], mLabelColor, 1);
@@ -144,7 +151,7 @@ namespace UI
 			drawStringCentered((*it).first, Vector2(text.x, text.y), Vector2(text.w, text.h), mLabelColor, true, true);
 
 			// Value
-			drawStringCentered(tools::to_string_presision(mValues[(*it).first].value, 3), Vector2(panel.x, panel.y), Vector2(panel.w, panel.h), mLabelColor, true, true);
+			drawStringCentered(tools::to_string_presision(mValues[(*it).first].value, 0), Vector2(panel.x, panel.y), Vector2(panel.w, panel.h), mLabelColor, true, true);
 		}
 
 		// draw Title

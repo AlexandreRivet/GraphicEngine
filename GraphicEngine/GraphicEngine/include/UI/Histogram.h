@@ -26,6 +26,7 @@ namespace UI
 		Histogram(const std::string& title, const Rect<RefValue>& localRect);
 
 		void addValue(const std::string& key, float value, Color c = Color(0.3f, 0.7f, 0.8f, 1.0f));
+		void setAxis(const std::string& x, const std::string &y);
 		void clear();
 
 		void computeState();

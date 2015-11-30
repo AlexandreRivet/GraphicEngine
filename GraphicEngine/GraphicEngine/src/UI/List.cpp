@@ -75,6 +75,11 @@ namespace UI
 		// Callback ??
 	}
 
+	void List::selectLast()
+	{
+		select(items.size() - 1);
+	}
+
 	void List::deselectAll()
 	{
 		selected.clear();

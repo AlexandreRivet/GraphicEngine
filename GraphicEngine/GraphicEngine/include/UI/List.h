@@ -20,6 +20,7 @@ namespace UI
 		bool getMultiple() const;
 
 		void select(uint index);
+		void selectLast();
 		void deselectAll();
 		std::vector<int> getSelected() const;
 		void scrollDown();
