@@ -8,7 +8,7 @@ namespace UI
 		mXAxisTitle("X Axis"),
 		mYAxisTitle("Y Axis"),
 		mYAxisMin(0),
-		mYAxisMax(0),
+		mYAxisMax(1),
 		mLabelColor(0.2f, 0.2f, 0.2f, 1.0f),
 		mBarColor(0.133f, 0.192f, 0.247f, 1.0f)
 	{
