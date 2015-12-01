@@ -13,7 +13,7 @@ void drawSquare(Vector2 point, int w, int h, Color fill, Color stroke);
 void drawPolygon(std::vector<Vector2> points, Color fill, Color stroke);
 void drawString(std::string label, Vector2 point, Color color);
 void drawStringCentered(std::string label, Vector2 point, Vector2 rect, Color color, bool centeredOnX, bool centeredOnY);
-void drawCircle(Vector2 center, int radius, Color color);
+void drawCircle(Vector2 center, float radius, Color color, float step = 1.0f);
 
 int getXCoordInString(std::string label, Vector2 origin, int posChar);
 int getSizeBetweenTwoPosInString(std::string label, int start = 0, int end = -1);

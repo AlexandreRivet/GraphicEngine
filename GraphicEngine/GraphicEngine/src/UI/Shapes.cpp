@@ -192,9 +192,18 @@ void drawStringCentered(std::string label, Vector2 point, Vector2 rect, Color co
 	drawString(label, Vector2(fontx, fonty), color);
 }
 
-void drawCircle(Vector2 center, int radius, Color color)
+void drawCircle(Vector2 center, float radius, Color color, float step)
 {
-    tools::unusedArg(center, radius, color);
+	std::vector<Vector2>points;
+
+	for (float i = 0; i < 360; i += step)		// 360 degrés
+	{
+		float x = radius * cos(i / 180.0f * M_PI);
+		float y = radius * sin(i / 180.0f * M_PI);
+		points.push_back(Vector2(x, y) + center);
+	}
+
+	drawLines(points, color, 1, true);
 }
 
 int getXCoordInString(std::string label, Vector2 origin, int posChar)
@@ -220,7 +229,6 @@ int getPosInString(std::string label, int x_start, int x_current)
 
 	do
 	{
-		
 		int size = getSizeBetweenTwoPosInString(label, 0, cursor + 1);
 		int final_x = x_start + size;
 
