@@ -11,6 +11,17 @@ PerspectiveCamera::PerspectiveCamera(float fov, float w, float h, float near, fl
     updateProjectionMatrix();
 }
 
+void PerspectiveCamera::set(float fov, float w, float h, float near, float far)
+{
+	mFov = fov;
+	mWidth = w;
+	mHeight = h;
+	mNear = near;
+	mFar = far;
+
+	updateProjectionMatrix();
+}
+
 void PerspectiveCamera::setFov(float fov)
 {
     mFov = fov;

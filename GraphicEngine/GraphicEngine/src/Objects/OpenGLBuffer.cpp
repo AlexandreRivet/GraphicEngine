@@ -16,7 +16,7 @@ void OpenGLBuffer::unbind() const
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void OpenGLBuffer::pushVertices(const std::vector<VertexData>& newVertices, const std::vector<VertexData>& allVertices)
+void OpenGLBuffer::pushVertices(const std::vector<ShaderData>& newVertices, const std::vector<ShaderData>& allVertices)
 {
 	// Ajout des vertices
 }

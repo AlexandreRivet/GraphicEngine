@@ -10,11 +10,6 @@
 
 #include "Objects/Mesh.h"
 
-class Object3D;
-
-typedef std::shared_ptr<Object3D> Object3DSPtr;
-typedef std::unique_ptr<Object3D> Object3DUPtr;
-
 class Object3D
 {
 public:
@@ -96,5 +91,8 @@ protected:
 	GLenum mRenderMode;
 
 };
+
+typedef std::shared_ptr<Object3D> Object3DSPtr;
+typedef std::unique_ptr<Object3D> Object3DUPtr;
 
 #endif

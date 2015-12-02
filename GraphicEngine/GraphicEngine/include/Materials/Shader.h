@@ -11,7 +11,28 @@
 #include "Math/Matrix3.h"
 #include "Math/Matrix4.h"
 
+struct ShaderData
+{
+	uint nData;
+	uint sizeOfBuffer;
+	void* buffer;
 
+	virtual ~ShaderData()
+	{}
+};
+
+template<typename T>
+struct GenericShaderData : public ShaderData
+{
+	std::vector<T> data;
+
+	void updateShaderData()
+	{
+		nData = data.size();
+		sizeOfBuffer = nData * sizeof(T);
+		buffer = data.data();
+	}
+};
 
 class Shader
 {
