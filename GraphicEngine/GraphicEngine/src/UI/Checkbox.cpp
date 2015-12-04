@@ -68,10 +68,18 @@ namespace UI
             if (mToggleflag != nullptr)
             {
                 *mToggleflag = !(*mToggleflag);
+                
+                if (mOnChange)
+                    mOnChange();
             }
         }
 
         tools::unusedArg(mousePosition);
+    }
+
+    void Checkbox::onChangeValue(std::function<void()> onChange)
+    {
+        mOnChange = onChange;
     }
 
 }

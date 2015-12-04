@@ -39,6 +39,9 @@ namespace UI
 
 	void List::scrollDown()
 	{
+        if (numberItemsInList > items.size())
+            return;
+
 		currentPos++;
 		if (currentPos > items.size() - numberItemsInList)
 			currentPos = items.size() - numberItemsInList;
@@ -46,6 +49,9 @@ namespace UI
 
 	void List::scrollUp()
 	{
+        if (numberItemsInList > items.size())
+            return;
+
 		if (currentPos > 0)
 			currentPos--;
 	}

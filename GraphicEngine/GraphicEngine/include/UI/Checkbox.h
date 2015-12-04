@@ -19,6 +19,7 @@ namespace UI
         void setToggleFlag(bool*);
 
         void onMouseClick(MouseButton button, MouseState state, const Vector2& mousePosition);
+        void onChangeValue(std::function<void()> onChange);
 
 	private:
 		
@@ -29,6 +30,7 @@ namespace UI
 		// Variable saved for calculations 
 		Rect<float> mFirstRect;
 		std::vector<std::vector<Vector2>> mTickPolys;
+        std::function<void()> mOnChange;
 
 	};
 
