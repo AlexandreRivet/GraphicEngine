@@ -15,7 +15,9 @@ class Object3D
 public:
 	
 	Object3D();
-	Object3D(MeshSPtr m);
+	Object3D(const std::string& name, MeshSPtr m);
+
+	const std::string& Object3D::getName() const;
 
 	void setPosition(const Vector3& v);
 	void setRotation(const Quaternion& q);
@@ -70,6 +72,8 @@ public:
 	void setRenderMode(GLenum mode);
 
 protected:
+
+	std::string mName;				// Histoire qu'on sache quand même un peu ce que c'est
 
 	MeshSPtr mMesh;
 

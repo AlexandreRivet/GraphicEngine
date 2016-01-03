@@ -26,8 +26,3 @@ void OrthographicCamera::updateProjectionMatrix()
 	);
 	mProjectionMatrix = mProjectionMatrix.transpose();
 }
-
-void OrthographicCamera::lookAt(const Vector3& target)
-{
-
-}

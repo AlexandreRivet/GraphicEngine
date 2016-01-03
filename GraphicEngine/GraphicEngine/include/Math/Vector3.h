@@ -508,6 +508,13 @@ public:
 		if (cmp.y > y) y = cmp.y;
 		if (cmp.z > z) z = cmp.z;
 	}
+	/*
+	
+	*/
+	inline Vector3 lerp(const Vector3& v2, float amount)
+	{
+		return *this + (v2 - *this) * amount;
+	}
 
 	/** Generates a vector perpendicular to this vector (eg an 'up' vector).
 	@remarks
@@ -516,7 +523,7 @@ public:
 	method will guarantee to generate one of them. If you need more
 	control you should use the Quaternion class.
 	*/
-	inline Vector3 perpendicular(void) const
+	inline Vector3 perpendicular(bool normalized = true) const
 	{
 		static const float fSquareZero = (float)(1e-06 * 1e-06);
 
@@ -530,7 +537,9 @@ public:
 			*/
 			perp = this->crossProduct(Vector3::UNIT_Y);
 		}
-		perp.normalise();
+
+		if (normalized)
+			perp.normalise();
 
 		return perp;
 	}

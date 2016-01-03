@@ -10,7 +10,6 @@ public:
 	OrthographicCamera(float left, float right, float bottom, float top, float near = 0.1f, float far = 30000.0f);
 
 	void updateProjectionMatrix();
-	void lookAt(const Vector3& target);
 
 private:
 

@@ -228,6 +228,20 @@ public:
             m[0][3], m[1][3], m[2][3], m[3][3]);
     }
 
+	inline Matrix4 lookAt(const Vector3& eye, const Vector3& target, const Vector3& upVector)
+	{
+		Vector3 forward = (eye - target).normalisedCopy();
+		Vector3 left = upVector.crossProduct(forward).normalisedCopy();
+		Vector3 up = forward.crossProduct(left).normalisedCopy();
+
+		return Matrix4(
+			left.x,		left.y,		left.z,		m[0][3],
+			up.x,		up.y,		up.z,		m[1][3],
+			forward.x,	forward.y,	forward.z,	m[2][3],
+			m[3][0],	m[3][1],	m[3][2],	m[3][3]
+		);
+	}
+
     inline void setTrans(const Vector3& v)
     {
         m[0][3] = v.x;

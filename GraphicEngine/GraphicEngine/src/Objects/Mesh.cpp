@@ -32,7 +32,7 @@ void Mesh::initBuffers()
 	uint nbNormals = mGeometry.getNbNormals();
 	uint nbUVs = mGeometry.getNbUvs();
 
-	uint sizeVertices = nbVertices* sizeof(GLfloat);
+	uint sizeVertices = nbVertices * sizeof(GLfloat);
 	uint sizeIndices = nbIndices * sizeof(uint);
 	uint sizeNormals = nbNormals * sizeof(GLfloat);
 	uint sizeUVs = nbUVs * sizeof(GLfloat);

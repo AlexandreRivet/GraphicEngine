@@ -25,7 +25,6 @@ public:
 	float getFar() const;
 
 	void updateProjectionMatrix();
-	void lookAt(const Vector3& target);
 
 private:
 

@@ -9,11 +9,14 @@ public:
 	
 	Scene();
 
+	void loadFromFile(const std::string& filename);
+	void _parseOBJ();
 	void add(Object3D* obj, Object3D* parent = nullptr);
 	void remove(Object3D* obj);
 
 	Object3D* getRoot();
 	std::vector<Object3D*>& getObjects();
+	Object3D* getObject(uint index);
 
 	void autoUpdate(bool update);
 	bool autoUpdate() const;

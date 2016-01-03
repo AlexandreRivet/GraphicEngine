@@ -55,6 +55,9 @@
     <Filter Include="Fichiers sources\UI">
       <UniqueIdentifier>{744e54a8-1c57-4ba6-a448-b823dbd0cb12}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Engine">
+      <UniqueIdentifier>{af7a620a-9d26-4d8f-b0e6-06e776de484c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Math\Matrix3.h">
@@ -171,6 +174,15 @@
     <ClInclude Include="include\Objects\OpenGLBuffer.h">
       <Filter>Fichiers d%27en-tête\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="include\Engine\OpenGLEngine.h">
+      <Filter>Fichiers d%27en-tête\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Engine.h">
+      <Filter>Fichiers d%27en-tête\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Objects\ObjectLoader.h">
+      <Filter>Fichiers d%27en-tête\Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Math\Vector3.cpp">
@@ -273,6 +285,9 @@
       <Filter>Fichiers sources\Cameras</Filter>
     </ClCompile>
     <ClCompile Include="src\Objects\OpenGLBuffer.cpp">
+      <Filter>Fichiers sources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Objects\ObjectLoader.cpp">
       <Filter>Fichiers sources\Objects</Filter>
     </ClCompile>
   </ItemGroup>

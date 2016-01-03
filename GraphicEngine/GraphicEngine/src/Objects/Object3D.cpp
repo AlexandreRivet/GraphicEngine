@@ -13,8 +13,9 @@ Object3D::Object3D()
 	updateMatrix();
 }
 
-Object3D::Object3D(MeshSPtr m)
-	: mMesh(m),
+Object3D::Object3D(const std::string& name, MeshSPtr m)
+	: mName(name),
+	mMesh(m),
 	mPosition(Vector3::ZERO),
 	mRotation(Quaternion::IDENTITY),
 	mScale(Vector3::UNIT_SCALE),
@@ -24,6 +25,11 @@ Object3D::Object3D(MeshSPtr m)
 	mRenderMode(GL_TRIANGLES)
 {
 	updateMatrix();
+}
+
+const std::string& Object3D::getName() const
+{
+	return mName;
 }
 
 void Object3D::setPosition(const Vector3& v)

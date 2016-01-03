@@ -15,6 +15,7 @@ namespace UI
 
 		void setText(const std::string& text);
 		const std::string& getText() const;
+		void setCenterStyle(bool hor, bool ver);
 
 		void draw();
 
@@ -23,6 +24,9 @@ namespace UI
 
 	private:
 		std::string content;
+
+		bool mHorCentered;
+		bool mVerCentered;
 
 		Color bgColor;
 		Color lblColor;

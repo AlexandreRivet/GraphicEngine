@@ -14,6 +14,8 @@
     <ClInclude Include="include\Cameras\Camera.h" />
     <ClInclude Include="include\Cameras\OrthographicCamera.h" />
     <ClInclude Include="include\Cameras\PerspectiveCamera.h" />
+    <ClInclude Include="include\Engine\Engine.h" />
+    <ClInclude Include="include\Engine\OpenGLEngine.h" />
     <ClInclude Include="include\Materials\BasicMaterial.h" />
     <ClInclude Include="include\Materials\Material.h" />
     <ClInclude Include="include\Materials\Shader.h" />
@@ -28,6 +30,7 @@
     <ClInclude Include="include\Objects\Geometry.h" />
     <ClInclude Include="include\Objects\Mesh.h" />
     <ClInclude Include="include\Objects\Object3D.h" />
+    <ClInclude Include="include\Objects\ObjectLoader.h" />
     <ClInclude Include="include\Objects\OpenGLBuffer.h" />
     <ClInclude Include="include\Objects\Scene.h" />
     <ClInclude Include="include\prerequisites.h" />
@@ -68,6 +71,7 @@
     <ClCompile Include="src\Objects\Geometry.cpp" />
     <ClCompile Include="src\Objects\Mesh.cpp" />
     <ClCompile Include="src\Objects\Object3D.cpp" />
+    <ClCompile Include="src\Objects\ObjectLoader.cpp" />
     <ClCompile Include="src\Objects\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Objects\Scene.cpp" />
     <ClCompile Include="src\Render\Renderer.cpp" />

@@ -6,14 +6,22 @@ namespace UI
 		: Element(_x, _y, _width, _height, _ref),
 		content(_label),
 		bgColor({ 0.204f, 0.596f, 0.859f, 1.0f }),
-		lblColor({ 1.0f, 1.0f, 1.0f, 1.0f })
+		lblColor({ 1.0f, 1.0f, 1.0f, 1.0f }),
+		mHorCentered(true),
+		mVerCentered(true)
 	{
 
 	}
 
+	void Text::setCenterStyle(bool hor, bool ver)
+	{
+		mHorCentered = hor;
+		mVerCentered = ver;
+	}
+
 	void Text::draw()
 	{
-		drawStringCentered(content, Vector2(mViewportRect.x, mViewportRect.y), Vector2(mViewportRect.w, mViewportRect.h), lblColor, false, true);
+		drawStringCentered(content, Vector2(mViewportRect.x, mViewportRect.y), Vector2(mViewportRect.w, mViewportRect.h), lblColor, mHorCentered, mVerCentered);
 	}
 
 	const std::string& Text::getText() const
