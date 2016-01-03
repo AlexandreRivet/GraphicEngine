@@ -7,11 +7,11 @@ namespace UI
 		float_flag(_float_flag),
 		minValue(_minValue),
 		maxValue(_maxValue),
-		currentValue(*_float_flag),
 		bgColor({ 0.204f, 0.596f, 0.859f, 1.0f }),
 		handlerColor({ 1.0f, 1.0f, 1.0f, 1.0f })
 	{
-
+		if (_float_flag != nullptr)
+			currentValue = *_float_flag;
 	}
 
 	void Slider::setMinMax(float min, float max)
