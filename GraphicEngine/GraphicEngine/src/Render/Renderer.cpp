@@ -109,7 +109,7 @@ void Renderer::render(Scene& s, Camera& c)
 	s.updateObjectsList();
 
 	// Trier les objets du plus loin au plus près
-	std::vector<Object3D*>& objects = s.getObjects();
+	std::vector<Object3D*> objects = s.getObjects();
 
 	std::sort(objects.begin(), objects.end(), [&c](Object3D* a, Object3D* b) ->bool
 	{

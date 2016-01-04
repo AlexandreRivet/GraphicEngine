@@ -177,7 +177,7 @@ Vector3 Object3D::getWorldPosition()
 {
 	updateWorldMatrix(true);
 
-	return Vector3(mWorldMatrix[0][3], mWorldMatrix[1][3], mWorldMatrix[2][3]);
+	return Vector3(mWorldMatrix[3][0], mWorldMatrix[3][1], mWorldMatrix[3][2]);
 }
 
 Quaternion& Object3D::getRotation()
