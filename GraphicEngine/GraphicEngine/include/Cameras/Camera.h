@@ -12,7 +12,6 @@ public:
     const Matrix4& getProjectionMatrix() const;
 	Vector3 getWorldDirection() const;
 
-	void lookAt(const Vector3& target, bool yawFixed = true);
 	void setDirection(const Vector3& direction, bool yawFixed = true);
 
 	virtual void updateProjectionMatrix();

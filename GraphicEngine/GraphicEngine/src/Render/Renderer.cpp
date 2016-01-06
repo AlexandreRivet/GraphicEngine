@@ -118,7 +118,19 @@ void Renderer::render(Scene& s, Camera& c)
 
 		return distA < distB;
 	});
-	
+
+	static float proj[16];
+	static float view[16];
+
+	c.getProjectionMatrix().toArray(proj);
+	c.getWorldMatrix().inverse().toArray(view);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(proj);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(view);
+
 	// Parcourir les objets et faire les draw
 	for (uint i = 0; i < objects.size(); ++i)
 	{
@@ -161,6 +173,37 @@ void Renderer::render(Scene& s, Camera& c)
 
 		// On unbind le material
 		mat->unbind();
+
+		// Dessin des axes
+		/*
+		Vector3 worldPos = obj->getWorldPosition();
+		Quaternion worldRot = obj->getWorldRotation();
+
+		Vector3 newX = worldRot * Vector3(worldPos.x + 10.0f, worldPos.y, worldPos.z);
+		Vector3 newY = worldRot * Vector3(worldPos.x, worldPos.y + 10.0f, worldPos.z);
+		Vector3 newZ = worldRot * Vector3(worldPos.x, worldPos.y, worldPos.z + 10.0f);
+
+		// X
+		glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+		glBegin(GL_LINES);
+		glVertex3f(worldPos.x, worldPos.y, worldPos.z);
+		glVertex3f(newX.x, newX.y, newX.z);
+		glEnd();
+
+		// Y
+		glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+		glBegin(GL_LINES);
+		glVertex3f(worldPos.x, worldPos.y, worldPos.z);
+		glVertex3f(newY.x, newY.y, newY.z);
+		glEnd();
+
+		// Z
+		glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+		glBegin(GL_LINES);
+		glVertex3f(worldPos.x, worldPos.y, worldPos.z);
+		glVertex3f(newZ.x, newZ.y, newZ.z);
+		glEnd();
+		*/
 	}
 	
 }

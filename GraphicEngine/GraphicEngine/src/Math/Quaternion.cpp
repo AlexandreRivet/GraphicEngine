@@ -42,7 +42,7 @@ void Quaternion::FromRotationMatrix(const Matrix3& kRot)
 
 		fRoot = std::sqrt(kRot[i][i] - kRot[j][j] - kRot[k][k] + 1.0f);
 		float* apkQuat[3] = { &x, &y, &z };
-		*apkQuat[i] = 0.5f*fRoot;
+		*apkQuat[i] = 0.5f * fRoot;
 		fRoot = 0.5f / fRoot;
 		w = (kRot[k][j] - kRot[j][k])*fRoot;
 		*apkQuat[j] = (kRot[j][i] + kRot[i][j])*fRoot;
@@ -55,15 +55,15 @@ void Quaternion::ToRotationMatrix(Matrix3& kRot) const
 	float fTx = x + x;
 	float fTy = y + y;
 	float fTz = z + z;
-	float fTwx = fTx*w;
-	float fTwy = fTy*w;
-	float fTwz = fTz*w;
-	float fTxx = fTx*x;
-	float fTxy = fTy*x;
-	float fTxz = fTz*x;
-	float fTyy = fTy*y;
-	float fTyz = fTz*y;
-	float fTzz = fTz*z;
+	float fTwx = fTx * w;
+	float fTwy = fTy * w;
+	float fTwz = fTz * w;
+	float fTxx = fTx * x;
+	float fTxy = fTy * x;
+	float fTxz = fTz * x;
+	float fTyy = fTy * y;
+	float fTyz = fTz * y;
+	float fTzz = fTz * z;
 
 	kRot[0][0] = 1.0f - (fTyy + fTzz);
 	kRot[0][1] = fTxy - fTwz;

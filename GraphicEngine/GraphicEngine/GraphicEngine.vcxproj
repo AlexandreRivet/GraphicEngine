@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="external\include\tiny_obj_loader.h" />
     <ClInclude Include="include\Cameras\Camera.h" />
     <ClInclude Include="include\Cameras\OrthographicCamera.h" />
     <ClInclude Include="include\Cameras\PerspectiveCamera.h" />
@@ -54,6 +55,7 @@
     <ClInclude Include="include\Utils\Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="external\src\tiny_obj_loader.cc" />
     <ClCompile Include="src\Cameras\Camera.cpp" />
     <ClCompile Include="src\Cameras\OrthographicCamera.cpp" />
     <ClCompile Include="src\Cameras\PerspectiveCamera.cpp" />
@@ -137,7 +139,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>NOMINMAX;_USE_MATH_DEFINES;WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.\include;$(Lib_FreeGLUT)\include;$(Lib_Glew)\include;$(Lib_Stb);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\include;.\external\include;$(Lib_FreeGLUT)\include;$(Lib_Glew)\include;$(Lib_Stb);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -157,7 +159,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NOMINMAX;_USE_MATH_DEFINES;WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.\include;$(Lib_FreeGLUT)\include;$(Lib_Glew)\include;$(Lib_Stb);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\include;.\external\include;$(Lib_FreeGLUT)\include;$(Lib_Glew)\include;$(Lib_Stb);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>

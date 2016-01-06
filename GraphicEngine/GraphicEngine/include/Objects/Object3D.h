@@ -38,6 +38,8 @@ public:
 	void scaleY(float scale);
 	void scaleZ(float scale);
 
+	void lookAt(const Vector3& target, bool yawFixed = true);
+
 	void setMesh(MeshSPtr m);
 	MeshSPtr& getMesh();
 	bool hasMesh() const;

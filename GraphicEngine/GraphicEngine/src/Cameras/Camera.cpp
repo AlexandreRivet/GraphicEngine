@@ -19,18 +19,6 @@ void Camera::updateProjectionMatrix()
 {
 }
 
-void Camera::lookAt(const Vector3& target, bool yawFixed)
-{
-	updateMatrix();
-
-	Matrix4 m1 = mMatrix.lookAt(mPosition, target, Vector3::UNIT_Y);
-	Matrix3 m2;
-	m1.extract3x3Matrix(m2);
-	mRotation.FromRotationMatrix(m2);
-
-	updateWorldMatrix(true);
-}
-
 void Camera::setDirection(const Vector3& direction, bool yawFixed)
 {
 	Vector3 mYawFixedAxis = Vector3::UNIT_Z;

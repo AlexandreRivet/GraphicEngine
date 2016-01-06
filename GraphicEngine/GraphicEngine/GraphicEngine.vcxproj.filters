@@ -58,6 +58,12 @@
     <Filter Include="Fichiers d%27en-tête\Engine">
       <UniqueIdentifier>{af7a620a-9d26-4d8f-b0e6-06e776de484c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\external">
+      <UniqueIdentifier>{7fc4fcc8-d6d6-4537-94af-ac07311463e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\external">
+      <UniqueIdentifier>{a8ad5797-7d9b-4203-b7a5-a5c1d94e9da1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Math\Matrix3.h">
@@ -183,6 +189,9 @@
     <ClInclude Include="include\Objects\ObjectLoader.h">
       <Filter>Fichiers d%27en-tête\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="external\include\tiny_obj_loader.h">
+      <Filter>Fichiers d%27en-tête\external</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Math\Vector3.cpp">
@@ -289,6 +298,9 @@
     </ClCompile>
     <ClCompile Include="src\Objects\ObjectLoader.cpp">
       <Filter>Fichiers sources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="external\src\tiny_obj_loader.cc">
+      <Filter>Fichiers sources\external</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

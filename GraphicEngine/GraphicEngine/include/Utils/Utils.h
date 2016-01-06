@@ -10,11 +10,10 @@
 #include <iostream>
 #include <sstream>
 
-class Utils
+namespace Utils
 {
-public:
-	static bool fileToString(const std::string& fileName, std::string& content);
-	static std::vector<std::string> Utils::split(const std::string &s, char delim);
+	bool fileToString(const std::string& fileName, std::string& content);
+	std::vector<std::string> split(const std::string &s, char delim);
 };
 
 namespace tools

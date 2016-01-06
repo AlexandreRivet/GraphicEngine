@@ -127,6 +127,17 @@ void Object3D::scaleZ(float scale)
 	scaleOnAxis(scale, Vector3::UNIT_Z);
 }
 
+void Object3D::lookAt(const Vector3& target, bool yawFixed)
+{
+	Matrix4 m1 = mMatrix.lookAt(mPosition, target, Vector3::UNIT_Y);
+	Matrix3 m2;
+	m1.extract3x3Matrix(m2);
+	mRotation.FromRotationMatrix(m2);
+
+	updateMatrix();
+}
+
+
 void Object3D::setMesh(MeshSPtr m)
 {
 	mMesh = m;
