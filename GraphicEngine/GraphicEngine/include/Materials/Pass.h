@@ -40,11 +40,11 @@ public:
 	ShaderProgram* m_geometryProgram;
 	ShaderProgram* m_computeProgram;
 	std::map<std::string, Texture*> m_textures;
+	std::map<std::string, std::string> m_parameters;
 
 private:
 
 	std::string m_name;
-	std::map<std::string, std::string> m_parameters;
 
 	bool m_useGeometryProgram;
 	bool m_useComputeProgram;

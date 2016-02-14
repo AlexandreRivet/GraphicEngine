@@ -198,6 +198,18 @@ template <typename T> void Renderer::_renderPassList(T start, T end, Camera* c)
 		if (!p->checkLinked())
 			continue;
 
+		// Reset des valeurs GL
+		glBlendFunc(GL_ONE, GL_ZERO);
+		glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ONE, GL_ZERO);
+		glDisable(GL_BLEND);
+		glEnable(GL_CULL_FACE);
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LEQUAL);
+		glDepthMask(GL_TRUE);
+		glDepthRange(0.f, 1.f);
+		glCullFace(GL_BACK);
+		glFrontFace(GL_CCW);
+
 		MeshSPtr mesh = obj->getMesh();
 		OpenGLBuffer buffers = mesh->getBuffers();
 
@@ -207,16 +219,16 @@ template <typename T> void Renderer::_renderPassList(T start, T end, Camera* c)
 		_renderShaderProgram(p->m_fragmentProgram, p, obj, c);
 		_renderShaderProgram(p->m_geometryProgram, p, obj, c);
 
-		// glBlendFunc(GL_ONE, GL_ZERO);
-		// glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ONE, GL_ZERO);
-		// glDisable(GL_BLEND);
-		glDisable(GL_CULL_FACE);
-		glEnable(GL_DEPTH_TEST);
-		// glDepthFunc(GL_LEQUAL);
-		// glDepthMask(GL_TRUE);
-		// glDepthRange(0.f, 1.f);
-		// glCullFace(GL_BACK);
-		// glFrontFace(GL_CCW);
+		// Ici on lit la pass
+
+		for (auto jt = p->m_parameters.begin(); jt != p->m_parameters.end(); ++jt)
+		{
+			std::pair<std::string, std::string> params_pass = *jt;
+			PassParamDef ppd = MaterialManager::m_passParamDef.at(params_pass.first);
+			std::vector<std::string> values = Utils::split(params_pass.second, ' ');
+			ppd.render(values);
+		}
+
 
 		if (buffers.mIndexBuffer != nullptr && buffers.mIndexBuffer->numItems > 0)
 		{

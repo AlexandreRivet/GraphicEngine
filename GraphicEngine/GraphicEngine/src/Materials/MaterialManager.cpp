@@ -16,7 +16,7 @@ std::map<std::string, UniformNoAuto> MaterialManager::m_uniformsNoAuto;
 
 MaterialManager::MaterialManager()
 {
-	std::cout << "kek" << std::endl;
+
 }
 
 void MaterialManager::loadFromFile(const std::string& filename)
@@ -236,7 +236,7 @@ void MaterialManager::loadFromFile(const std::string& filename)
 		}
 	}
 
-	std::cout << currentBloc->name << std::endl;
+	std::cout << "Material: " << currentBloc->name << " successfully loaded." << std::endl;
 
 	int i = 0;
 
