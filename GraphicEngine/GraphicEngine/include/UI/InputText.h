@@ -33,7 +33,7 @@ namespace UI
 		Vector2 mSelection;			// start and end selection
 		bool mSelected;
 
-		Color lblColor;
+		ColorStruct lblColor;
 	};
 
 

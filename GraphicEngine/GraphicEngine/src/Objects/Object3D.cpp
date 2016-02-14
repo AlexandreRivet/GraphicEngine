@@ -10,7 +10,9 @@ Object3D::Object3D()
 	mWorldMatrixNeedsUpdate(true),
 	mRenderGroupIndex(50),
 	mVisible(true),
-	mAbsoluteVisible(true)
+	mAbsoluteVisible(true),
+	mCastShadow(true),
+	mReceiveShadow(true)
 {
 
 }
@@ -25,7 +27,9 @@ Object3D::Object3D(const std::string& name)
 	mWorldMatrixNeedsUpdate(true),
 	mRenderGroupIndex(50),
 	mVisible(true),
-	mAbsoluteVisible(true)
+	mAbsoluteVisible(true),
+	mCastShadow(true),
+	mReceiveShadow(true)
 {
 	updateMatrix();
 }
@@ -40,7 +44,9 @@ Object3D::Object3D(const std::string& name, MeshSPtr m)
 	mWorldMatrixNeedsUpdate(true),
 	mRenderGroupIndex(50),
 	mVisible(true),
-	mAbsoluteVisible(true)
+	mAbsoluteVisible(true),
+	mCastShadow(true),
+	mReceiveShadow(true)
 {
 	updateMatrix();
 }
@@ -319,7 +325,6 @@ void Object3D::updateMatrix()
 
 Matrix4& Object3D::getWorldMatrix()
 {
-	Object3D* kek = this;
 	if (mMatrixNeedsUpdate)
 		updateMatrix();
 
@@ -369,4 +374,24 @@ int Object3D::getRenderGroupIndex() const
 void Object3D::setRenderGroupIndex(int index)
 {
 	mRenderGroupIndex = index;
+}
+
+void Object3D::castShadow(bool cast)
+{
+	mCastShadow = cast;
+}
+
+bool Object3D::canCastShadow() const
+{
+	return mCastShadow;
+}
+
+void Object3D::receiveShadow(bool receive)
+{
+	mReceiveShadow = receive;
+}
+
+bool Object3D::canReceiveShadow() const
+{
+	return mReceiveShadow;
 }

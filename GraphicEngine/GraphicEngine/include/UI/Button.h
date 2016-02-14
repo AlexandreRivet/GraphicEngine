@@ -36,7 +36,7 @@ namespace UI
 		bool mIs3D;
         std::function<void(MouseButton, MouseState, const Vector2& mousePosition)> mCallBack;
 
-		Color mLabelColor;
+		ColorStruct mLabelColor;
 
 		// Variable saved for calculations 
 		Rect<float> mFirstRect;

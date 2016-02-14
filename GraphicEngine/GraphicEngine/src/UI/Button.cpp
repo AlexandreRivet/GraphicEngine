@@ -11,7 +11,7 @@ namespace UI
 		mLabelColor(1.0, 1.0, 1.0, 1.0),
 		mIs3D(true)
 	{
-		mBackgroundColor = Color(0.204f, 0.596f, 0.859f, 1.0f);
+		mBackgroundColor = ColorStruct(0.204f, 0.596f, 0.859f, 1.0f);
 	}
 
     Button::Button(const std::string& label, const std::function<void(char, char, const Vector2& mousePosition)>& f, const Rect<RefValue>& localRect)
@@ -23,7 +23,7 @@ namespace UI
 		mLabelColor(1.0f, 1.0f, 1.0f, 1.0f),
 		mIs3D(true)
 	{
-		mBackgroundColor = Color(0.204f, 0.596f, 0.859f, 1.0f);
+		mBackgroundColor = ColorStruct(0.204f, 0.596f, 0.859f, 1.0f);
 	}
 
 	void Button::computeState()
@@ -54,7 +54,7 @@ namespace UI
 		drawSquare(Vector2(mFirstRect.x, mFirstRect.y), static_cast<int>(mFirstRect.w), static_cast<int>(mFirstRect.h), mBackgroundColor, { 1.0f, 0.0f, 0.0f, 0.0f });
 
 		// Effet 3D
-		Color secondSquare(mBackgroundColor.r - 0.2f, mBackgroundColor.g - 0.2f, mBackgroundColor.b - 0.2f, mBackgroundColor.a);
+		ColorStruct secondSquare(mBackgroundColor.r - 0.2f, mBackgroundColor.g - 0.2f, mBackgroundColor.b - 0.2f, mBackgroundColor.a);
 		drawSquare(Vector2(mSecondRect.x, mSecondRect.y), static_cast<int>(mSecondRect.w), static_cast<int>(mSecondRect.h), secondSquare, { 1.0f, 0.0f, 0.0f, 0.0f });
 		
 		// Survol => ombre

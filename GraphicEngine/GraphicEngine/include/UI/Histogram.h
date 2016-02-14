@@ -10,9 +10,9 @@ namespace UI
 	struct HistoBar
 	{
 		float value;
-		Color color;
+		ColorStruct color;
 
-		HistoBar(float _value = 0.0f, Color _color = Color(0.0f, 0.0f, 0.0f, 1.0f))
+		HistoBar(float _value = 0.0f, ColorStruct _color = ColorStruct(0.0f, 0.0f, 0.0f, 1.0f))
 			: value(_value),
 			color(_color)
 		{}
@@ -25,7 +25,7 @@ namespace UI
 		Histogram(const std::string& title, float x, float y, float width, float height, Type ref = PIXEL);
 		Histogram(const std::string& title, const Rect<RefValue>& localRect);
 
-		void addValue(const std::string& key, float value, Color c = Color(0.3f, 0.7f, 0.8f, 1.0f));
+		void addValue(const std::string& key, float value, ColorStruct c = ColorStruct(0.3f, 0.7f, 0.8f, 1.0f));
 		void setAxis(const std::string& x, const std::string &y);
 		void clear();
 
@@ -51,8 +51,8 @@ namespace UI
 
 		std::map<std::string, HistoBar> mValues;
 
-		Color mLabelColor;
-		Color mBarColor;
+		ColorStruct mLabelColor;
+		ColorStruct mBarColor;
 
 		// Variable saved for calculations 
 		std::vector<Vector2> mXAxis;

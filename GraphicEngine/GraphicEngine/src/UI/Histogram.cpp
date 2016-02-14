@@ -12,7 +12,7 @@ namespace UI
 		mLabelColor(0.2f, 0.2f, 0.2f, 1.0f),
 		mBarColor(0.133f, 0.192f, 0.247f, 1.0f)
 	{
-		mBackgroundColor = Color(0.992f, 0.890f, 0.655f, 1.0f);
+		mBackgroundColor = ColorStruct(0.992f, 0.890f, 0.655f, 1.0f);
 	}
 
 	Histogram::Histogram(const std::string& title, const Rect<RefValue>& localRect)
@@ -26,7 +26,7 @@ namespace UI
 
 	}
 
-	void Histogram::addValue(const std::string& key, float value, Color c)
+	void Histogram::addValue(const std::string& key, float value, ColorStruct c)
 	{
 		if (value > mYAxisMax)
 			mYAxisMax = value;
@@ -127,7 +127,7 @@ namespace UI
 		drawLine(mXAxis[0], mXAxis[1], mLabelColor, 1);
 
 		// Bars
-		Color barColor = mBarColor;
+		ColorStruct barColor = mBarColor;
 		for (auto it = mBars.begin(); it != mBars.end(); ++it)
 		{
 			Rect<float> r = (*it).second;
@@ -135,7 +135,7 @@ namespace UI
 			Rect<float> text = mTexts[(*it).first];
 			std::vector<Vector2> tri = mTriangles[(*it).first];
 			std::vector<Vector2> dash = mSeparationDashes[(*it).first];
-			Color c = mValues[(*it).first].color;
+			ColorStruct c = mValues[(*it).first].color;
 			
 			// Bar
 			drawSquare(Vector2(r.x, r.y), r.w, r.h, c, { 0.0f, 0.0f, 0.0f, 0.0f });

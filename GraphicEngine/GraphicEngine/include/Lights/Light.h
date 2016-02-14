@@ -20,17 +20,36 @@ public:
 	void setShadowBias(float value);
 	void setShadowMapWidth(float width);
 	void setShadowMapHeight(float height);
+	uint getShadowMapWidth() const;
+	uint getShadowMapHeight() const;
+	GLuint getDepthMapFBO() const;
+	GLuint getDepthMapTexture() const;
+
+	Color getColor() const;
+	bool isBlinn() const;
+	float getIntensity() const;
+	float getShininess() const;
+	Matrix4 getProjectionLight() const;
+
+	void updateDepthMapObject();
+
 
 protected:
 
 	Color m_color;
+	bool m_isBlinn;
+	float m_intensity;
+	float m_shininess;
 
 	// For shadows
-	bool m_castShadow;
 	Camera* m_shadowCamera;
 	float m_shadowBias;
-	float m_shadowMapWidth;
-	float m_shadowMapHeight;
+	uint m_shadowMapWidth;
+	uint m_shadowMapHeight;
+
+	bool m_depthMapObjectsInit;
+	GLuint m_depthMapFBO;
+	GLuint m_depthMapTexture;
 };
 
 #endif

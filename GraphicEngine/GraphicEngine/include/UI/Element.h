@@ -79,7 +79,7 @@ namespace UI
 		bool mVisible;								// Draw or not this element and children 
 
 		// List of style
-		Color mBackgroundColor;
+		ColorStruct mBackgroundColor;
 	};
 
 }

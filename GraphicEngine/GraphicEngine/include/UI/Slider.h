@@ -39,8 +39,8 @@ namespace UI
 		float* float_flag;
 		std::function<void()> mOnChange;
 
-		Color bgColor;
-		Color handlerColor;
+		ColorStruct bgColor;
+		ColorStruct handlerColor;
 	};
 
 

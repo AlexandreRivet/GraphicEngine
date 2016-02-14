@@ -108,6 +108,10 @@ void Renderer::render(Scene& s, Camera& c)
 	s.updateObjectsList();
 	std::vector<Object3D*> objects = s.getObjects();
 
+	// Première chose à faire, c'est de mettre à jour les shadow map
+	if(!_renderShadowMap(&s, &c))
+		return;
+
 	// On va trier par renderGroup
 	std::list<RenderGroup> renderGroups;
 
@@ -174,20 +178,33 @@ void Renderer::render(Scene& s, Camera& c)
 		}
 
 		// On va faire le rendu => opaques puis transparents
-		_renderPassListFromType(rg.passList.opaques, &c, false);
-		_renderPassListFromType(rg.passList.transparents, &c, true);
+		_renderPassListFromType(rg.passList.opaques, &s, &c, false);
+		_renderPassListFromType(rg.passList.transparents, &s, &c, true);
 	}	
+
+	// Dernier reset
+	glBlendFunc(GL_ONE, GL_ZERO);
+	glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ONE, GL_ZERO);
+	glDisable(GL_BLEND);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+	glDepthMask(GL_TRUE);
+	glDepthRange(0.f, 1.f);
+	glCullFace(GL_FRONT);
+	glFrontFace(GL_CCW);
+
 }
 
-void Renderer::_renderPassListFromType(std::vector<TypeRender>& p, Camera* c, bool reverse)
+void Renderer::_renderPassListFromType(std::vector<TypeRender>& p, Scene* s, Camera* c, bool reverse)
 {
 	if (reverse)
-		_renderPassList(p.rbegin(), p.rend(), c);
+		_renderPassList(p.rbegin(), p.rend(), s, c);
 	else
-		_renderPassList(p.begin(), p.end(), c);
+		_renderPassList(p.begin(), p.end(), s, c);
 }
 
-template <typename T> void Renderer::_renderPassList(T start, T end, Camera* c)
+template <typename T> void Renderer::_renderPassList(T start, T end,Scene* s, Camera* c)
 {
 	for (auto it = start; it != end; ++it)
 	{
@@ -197,6 +214,9 @@ template <typename T> void Renderer::_renderPassList(T start, T end, Camera* c)
 
 		if (!p->checkLinked())
 			continue;
+
+		if (obj->getName() == "Ground")
+			int k = 0;
 
 		// Reset des valeurs GL
 		glBlendFunc(GL_ONE, GL_ZERO);
@@ -215,9 +235,9 @@ template <typename T> void Renderer::_renderPassList(T start, T end, Camera* c)
 
 		glUseProgram(p->m_OpenGLProgram);
 
-		_renderShaderProgram(p->m_vertexProgram, p, obj, c);
-		_renderShaderProgram(p->m_fragmentProgram, p, obj, c);
-		_renderShaderProgram(p->m_geometryProgram, p, obj, c);
+		_renderShaderProgram(p->m_vertexProgram, p, s, obj, c);
+		_renderShaderProgram(p->m_fragmentProgram, p, s, obj, c);
+		_renderShaderProgram(p->m_geometryProgram, p, s, obj, c);
 
 		// Ici on lit la pass
 
@@ -229,20 +249,21 @@ template <typename T> void Renderer::_renderPassList(T start, T end, Camera* c)
 			ppd.render(values);
 		}
 
-
 		if (buffers.mIndexBuffer != nullptr && buffers.mIndexBuffer->numItems > 0)
 		{
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers.mIndexBuffer->id);
-			glDrawElements(GL_TRIANGLES, mesh->getGeometry().getNbIndices(), GL_UNSIGNED_INT, 0);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers.mIndexBuffer->id); 
+			glDrawElements(GL_TRIANGLES, mesh->getGeometry().getNbIndices(), GL_UNSIGNED_INT, 0);			
 		}
-
-		// glDrawArrays(GL_TRIANGLES, 0, mesh->getGeometry().getNbVertices());
+		else
+		{
+			glDrawArrays(GL_TRIANGLES, 0, mesh->getGeometry().getNbVertices());
+		}		
 
 		glUseProgram(0);
 	}
 }
 
-void Renderer::_renderShaderProgram(ShaderProgram* sp, Pass* p, Object3D* obj, Camera* c)
+void Renderer::_renderShaderProgram(ShaderProgram* sp, Pass* p, Scene* s, Object3D* obj, Camera* c)
 {
 	if (sp == nullptr)
 		return;
@@ -253,56 +274,158 @@ void Renderer::_renderShaderProgram(ShaderProgram* sp, Pass* p, Object3D* obj, C
 	// On envoie les attributes à la CG
 	for (auto jt = sp->m_attributes_auto.begin(); jt != sp->m_attributes_auto.end(); ++jt)
 	{
-		ShaderParameter sp = (*jt).second;
-		AttributeAuto aa = MaterialManager::m_attributesAuto.at(sp.key);
-		if (!sp.isInit)
+		ShaderParameter* shaderParam = &(*jt).second;
+		AttributeAuto aa = MaterialManager::m_attributesAuto.at(shaderParam->key);
+		if (!shaderParam->isInit)
 		{
-			sp.location = aa.init(p->m_OpenGLProgram, (*jt).first);
-			sp.isInit = true;
+			shaderParam->location = aa.init(p->m_OpenGLProgram, (*jt).first);
+			shaderParam->isInit = true;
 		}
-		aa.render(p->m_OpenGLProgram, sp.location, buffers);
-	}
-
-	// On envoie les uniform à la CG
-	for (auto jt = sp->m_uniforms_auto.begin(); jt != sp->m_uniforms_auto.end(); ++jt)
-	{
-		ShaderParameter sp = (*jt).second;
-		UniformAuto ua = MaterialManager::m_uniformsAuto.at(sp.key);
-		if (!sp.isInit)
-		{
-			sp.location = ua.init(p->m_OpenGLProgram, (*jt).first);
-			sp.isInit = true;
-		}
-		ua.render(p->m_OpenGLProgram, sp.location, obj, c);
+		aa.render(p->m_OpenGLProgram, shaderParam->location, buffers);
 	}
 
 	// On envoie les sampler
 	int numSampler = 0;
 	for (auto jt = sp->m_samplers.begin(); jt != sp->m_samplers.end(); ++jt)
 	{
-		StringParameter sp = (*jt).second;
-		Sampler s = MaterialManager::m_samplers.at(sp.key);
-		if (!sp.isInit)
+		StringParameter* shaderParam = &(*jt).second;
+		Sampler s = MaterialManager::m_samplers.at(shaderParam->key);
+		if (!shaderParam->isInit)
 		{
-			sp.location = s.init(p->m_OpenGLProgram, (*jt).first);
-			sp.isInit = true;
+			shaderParam->location = s.init(p->m_OpenGLProgram, (*jt).first);
+			shaderParam->isInit = true;
 		}
-		s.render(p->m_OpenGLProgram, sp.location, p, sp.value, numSampler);
+		s.render(p->m_OpenGLProgram, shaderParam->location, p, shaderParam->value, numSampler);
 		numSampler++;
+	}
+
+	// On envoie les uniform à la CG
+	for (auto jt = sp->m_uniforms_auto.begin(); jt != sp->m_uniforms_auto.end(); ++jt)
+	{
+		ShaderParameter* shaderParam = &(*jt).second;
+		UniformAuto ua = MaterialManager::m_uniformsAuto.at(shaderParam->key);
+		if (!shaderParam->isInit)
+		{
+			shaderParam->location = ua.init(p->m_OpenGLProgram, (*jt).first);
+			shaderParam->isInit = true;
+		}
+		ua.render(p->m_OpenGLProgram, shaderParam->location, (*jt).first, s, obj, c, numSampler);
 	}
 
 	// On envoie les uniform non auto
 	for (auto jt = sp->m_uniforms_noauto.begin(); jt != sp->m_uniforms_noauto.end(); ++jt)
 	{
-		FloatParameter fp = (*jt).second;
-		if (!fp.isInit)
+		FloatParameter* floatParam = &(*jt).second;
+		if (!floatParam->isInit)
 		{
-			fp.location = MaterialManager::_initShaderProgramUniformAuto(p->m_OpenGLProgram, (*jt).first);			// Pour acquérir la location on peut considérer que c'est comme un uniform auto
-			fp.isInit = true;
+			floatParam->location = MaterialManager::_initShaderProgramUniformAuto(p->m_OpenGLProgram, (*jt).first);			// Pour acquérir la location on peut considérer que c'est comme un uniform auto
+			floatParam->isInit = true;
 		}
-		MaterialManager::_renderShaderProgramUniformNoAuto(p->m_OpenGLProgram, fp.location, fp.values);
+		MaterialManager::_renderShaderProgramUniformNoAuto(p->m_OpenGLProgram, floatParam->location, floatParam->values);
+	}
+}
+
+bool Renderer::_renderShadowMap(Scene* s, Camera* c)
+{
+	std::vector<Light*> lights = s->getLights();
+	std::vector<Object3D*> objects = s->getObjects();
+
+	glBlendFunc(GL_ONE, GL_ZERO);
+	glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ONE, GL_ZERO);
+	glDisable(GL_BLEND);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+	glDepthMask(GL_TRUE);
+	glDepthRange(0.f, 1.f);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
+
+	// On parcourt chaque light
+	for (auto it = lights.begin(); it != lights.end(); ++it)
+	{
+		Light* l = *it;
+
+		if (!l->canCastShadow())
+			continue;
+
+		OrthographicCamera* ortho = new OrthographicCamera(-(mViewportWidth / 2.f), (mViewportWidth / 2.f), -(mViewportHeight / 2.f), (mViewportHeight / 2.f), 0.1f, 30000.f);
+		// OrthographicCamera* ortho = new OrthographicCamera(0.f, mViewportWidth, 0.f, mViewportHeight);
+		l->setShadowCamera(ortho);
+
+		glViewport(0, 0, l->getShadowMapWidth(), l->getShadowMapHeight());
+		glBindFramebuffer(GL_FRAMEBUFFER, l->getDepthMapFBO());
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		// On parcourt chaque objets dans la scène
+		for (auto jt = objects.begin(); jt != objects.end(); ++jt)
+		{
+			Object3D* obj = *jt;
+
+			if (!obj->isAbsoluteVisible() || !obj->hasMesh() || !obj->canCastShadow())
+				continue;
+
+			// ici on est sûr des noms c'est dépendant du moteur
+			Material* mat = MaterialManager::getMaterial("ShadowMapMaterial");
+			Pass* pass = mat->getPass("FirstPass");
+
+			if (!pass->checkLinked())
+				return false;
+
+			MeshSPtr mesh = obj->getMesh();
+			OpenGLBuffer buffers = mesh->getBuffers();
+
+			glUseProgram(pass->m_OpenGLProgram);
+
+			// On envoit toutes les infos simples
+			float arr[16];
+
+			// World
+			obj->getWorldMatrix().toArray(arr);
+			glUniformMatrix4fv(glGetUniformLocation(pass->m_OpenGLProgram, "uWorldMatrix"), 1, GL_FALSE, arr);
+
+			// LightSpaceMatrix
+			Matrix4 lightSpaceMatrix = l->getProjectionLight() * l->getWorldMatrix().inverse();
+			lightSpaceMatrix.toArray(arr);
+			glUniformMatrix4fv(glGetUniformLocation(pass->m_OpenGLProgram, "uLightSpaceMatrix"), 1, GL_FALSE, arr);
+			
+			// Vertex buffer
+			glBindBuffer(GL_ARRAY_BUFFER, buffers.mVertexBuffer->id);
+			GLuint location = glGetAttribLocation(pass->m_OpenGLProgram, "aPosition");
+			glVertexAttribPointer(location, buffers.mVertexBuffer->itemSize, GL_FLOAT, false, 0, 0);
+			glEnableVertexAttribArray(location);
+
+			if (buffers.mIndexBuffer != nullptr && buffers.mIndexBuffer->numItems > 0)
+			{
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers.mIndexBuffer->id);
+				glDrawElements(GL_TRIANGLES, mesh->getGeometry().getNbIndices(), GL_UNSIGNED_INT, 0);
+			}
+			else
+			{
+				glDrawArrays(GL_TRIANGLES, 0, mesh->getGeometry().getNbVertices());
+			}
+			
+
+			glUseProgram(0);
+
+		}
+
+		l->setShadowCamera(nullptr);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	}
+
+	// On remet le viewport correctement
+	glViewport(0, 0, mViewportWidth, mViewportHeight);
+	if (mAutoClear)
+	{
+		glClearColor(mClearColor.x, mClearColor.y, mClearColor.z, 1.0f);
+		glClearDepth(1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
+	return true;
+
 }
 
 void Renderer::setAutoUpdate(bool update)

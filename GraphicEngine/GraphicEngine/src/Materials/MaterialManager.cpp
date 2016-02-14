@@ -955,8 +955,8 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 			return MaterialManager::_initShaderProgramUniformAuto(program, name);
 		},
-		[](GLuint program, GLint location, Object3D* obj, Camera* cam) {
-			MaterialManager::_renderShaderProgramUniformAuto(program, location, "world_matrix", obj, cam);
+		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+			MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "world_matrix", s, obj, cam);
 		}
 	);
 	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("world_matrix", ua));
@@ -966,8 +966,8 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 			return MaterialManager::_initShaderProgramUniformAuto(program, name);
 		},
-		[](GLuint program, GLint location, Object3D* obj, Camera* cam) {
-			MaterialManager::_renderShaderProgramUniformAuto(program, location, "view_matrix", obj, cam);
+		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+			MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "view_matrix", s, obj, cam);
 		}
 	);
 	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("view_matrix", ua));
@@ -977,8 +977,8 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 			return MaterialManager::_initShaderProgramUniformAuto(program, name);
 		},
-		[](GLuint program, GLint location, Object3D* obj, Camera* cam) {
-			MaterialManager::_renderShaderProgramUniformAuto(program, location, "proj_matrix", obj, cam);
+		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+			MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "proj_matrix", s, obj, cam);
 		}
 	);
 	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("proj_matrix", ua));
@@ -988,8 +988,8 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 			return MaterialManager::_initShaderProgramUniformAuto(program, name);
 		},
-		[](GLuint program, GLint location, Object3D* obj, Camera* cam) {
-			MaterialManager::_renderShaderProgramUniformAuto(program, location, "viewproj_matrix", obj, cam);
+		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+			MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "viewproj_matrix", s, obj, cam);
 		}
 	);
 	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("viewproj_matrix", ua));
@@ -999,8 +999,8 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 			return MaterialManager::_initShaderProgramUniformAuto(program, name);
 		},
-		[](GLuint program, GLint location, Object3D* obj, Camera* cam) {
-			MaterialManager::_renderShaderProgramUniformAuto(program, location, "worldview_matrix", obj, cam);
+		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+			MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "worldview_matrix", s, obj, cam);
 		}
 	);
 	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("worldview_matrix", ua));
@@ -1010,8 +1010,8 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 			return MaterialManager::_initShaderProgramUniformAuto(program, name);
 		},
-		[](GLuint program, GLint location, Object3D* obj, Camera* cam) {
-			MaterialManager::_renderShaderProgramUniformAuto(program, location, "worldviewproj_matrix", obj, cam);
+		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+			MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "worldviewproj_matrix", s, obj, cam);
 		}
 	);
 	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("worldviewproj_matrix", ua));
@@ -1021,12 +1021,48 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 			return MaterialManager::_initShaderProgramUniformAuto(program, name);
 		},
-		[](GLuint program, GLint location, Object3D* obj, Camera* cam) {
-			MaterialManager::_renderShaderProgramUniformAuto(program, location, "camera_position", obj, cam);
+		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+			MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "camera_position", s, obj, cam);
 		}
 	);
 	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("camera_position", ua));
 	
+
+	// LIGHTS
+	ua = UniformAuto(
+		[](GLuint program, const std::string& name) {
+		return MaterialManager::_initShaderProgramUniformAuto(program, name);
+	},
+	[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "lights", s, obj, cam);
+	}
+	);
+	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("lights", ua));
+
+	// LIGHTS COUNT
+	ua = UniformAuto(
+		[](GLuint program, const std::string& name) {
+		return MaterialManager::_initShaderProgramUniformAuto(program, name);
+	},
+	[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "light_count", s, obj, cam);
+	}
+	);
+	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("light_count", ua));
+
+	// SHADOWMAP
+	ua = UniformAuto(
+		[](GLuint program, const std::string& name) {
+		return MaterialManager::_initShaderProgramUniformAuto(program, name);
+	},
+	[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "shadow_map", s, obj, cam, numSampler);
+	}
+	);
+	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("shadow_map", ua));
+
+
+
 
 	/* *************
 
@@ -1087,8 +1123,11 @@ GLint MaterialManager::_initShaderProgramUniformAuto(GLuint program, const std::
 	return glGetUniformLocation(program, name.c_str());
 }
 
-void MaterialManager::_renderShaderProgramUniformAuto(GLuint program, GLint location, const std::string& paramUniformName, Object3D* obj, Camera* cam)
+void MaterialManager::_renderShaderProgramUniformAuto(GLuint program, GLint location, const std::string& paramName, const std::string& paramUniformName, Scene* s, Object3D* obj, Camera* cam, int numSampler)
 {
+	if (location < 0)
+		return;
+
 	Matrix4 worldMatrix = obj->getWorldMatrix();
 	Matrix4 viewMatrix = cam->getWorldMatrix().inverse();
 	Matrix4 projMatrix = cam->getProjectionMatrix();
@@ -1096,12 +1135,15 @@ void MaterialManager::_renderShaderProgramUniformAuto(GLuint program, GLint loca
 	Matrix4 mat_tmp = Matrix4::IDENTITY;
 	float real = 0.f;
 	Vector3 vec3 = Vector3::ZERO;
+	std::vector<Light*> lights;
 
 	enum TypeData
 	{
 		MATRIX4,
 		REAL,
-		VECTOR3
+		VECTOR3,
+		LIGHT,
+		SHADOWMAP
 	};
 
 	TypeData t = TypeData::MATRIX4;
@@ -1125,6 +1167,24 @@ void MaterialManager::_renderShaderProgramUniformAuto(GLuint program, GLint loca
 		vec3 = cam->getWorldPosition();
 		t = TypeData::VECTOR3;
 	}
+	else if (paramUniformName == "lights")
+	{
+		lights = s->getLights();
+		real = lights.size();
+
+		t = TypeData::LIGHT;
+	}
+	else if (paramUniformName == "light_count")
+	{
+		real = s->getLights().size();
+		t = TypeData::REAL;
+	}
+	else if (paramUniformName == "shadow_map")
+	{
+		lights = s->getLights();
+		real = lights.size();
+		t = TypeData::SHADOWMAP;
+	}
 
 	// TODO Rajouter tout ce qu'il manque: la gestion du temps, les lights, etc.
 
@@ -1147,6 +1207,98 @@ void MaterialManager::_renderShaderProgramUniformAuto(GLuint program, GLint loca
 			glUniform1f(location, real);
 			break;
 		}
+		case TypeData::LIGHT:
+		{
+			// Un uniform buffer object aurait été pratique pour ce problème
+			// Cela va être très moche mais faut faire vite
+			int i = 0;
+			for (auto it = lights.begin(); it != lights.end(); ++it)
+			{
+				Light* l = *it;
+				Matrix4 view = l->getWorldMatrix();
+				Matrix4 proj = l->getProjectionLight();
+				Color c = l->getColor();
+				float intensity = l->getIntensity();
+				float shininess = l->getShininess();
+				bool blinn = l->isBlinn();
+
+				float arr[16];
+
+				// On va acquérir à chaque frame les location comme on n'a pas prévu cela en amont
+				// D'abord on construit la chaine (dégueu :P)
+				std::string base = paramName;
+				base = base.append("[" + std::to_string(i) + "]");
+
+				// Là on connait ce que l'on possède dans une light donc on envoit
+
+				// view
+				view.toArray(arr);
+				glUniformMatrix4fv(glGetUniformLocation(program, (base + ".viewMatrix").c_str()), 1, GL_FALSE, arr);
+
+				// proj
+				proj.toArray(arr);
+				glUniformMatrix4fv(glGetUniformLocation(program, (base + ".projMatrix").c_str()), 1, GL_FALSE, arr);
+
+				// light pos
+				Vector3 lightPos = l->getWorldPosition();
+				glUniform3f(glGetUniformLocation(program, (base + ".lightPos").c_str()), lightPos.x, lightPos.y, lightPos.z);
+
+				// color
+				glUniform3f(glGetUniformLocation(program, (base + ".color").c_str()), c.getRed(), c.getGreen(), c.getBlue());
+
+				// intensity
+				glUniform1f(glGetUniformLocation(program, (base + ".intensity").c_str()), intensity);
+
+				// shininess
+				glUniform1f(glGetUniformLocation(program, (base + ".shininess").c_str()), shininess);
+
+				// blinn
+				glUniform1i(glGetUniformLocation(program, (base + ".blinn").c_str()), blinn);
+
+				i++;
+			}
+								
+			break;
+		}
+		case TypeData::SHADOWMAP:
+			
+			if (numSampler < 0 || !obj->canReceiveShadow())
+				return;
+
+			int i = 0;
+			for (auto it = lights.begin(); it != lights.end(); ++it)
+			{
+				Light* l = *it;
+				Matrix4 view = l->getWorldMatrix();
+				Matrix4 proj = l->getProjectionLight();
+				Color c = l->getColor();
+				float intensity = l->getIntensity();
+				float shininess = l->getShininess();
+				bool blinn = l->isBlinn();
+				GLuint depthMap = l->getDepthMapTexture();
+
+				// On va acquérir à chaque frame les location comme on n'a pas prévu cela en amont
+				// D'abord on construit la chaine (dégueu :P)
+				std::string base = paramName;
+				// base = base.append("[" + std::to_string(i) + "]");
+
+				// Là on connait ce que l'on possède dans une light donc on envoie
+				// Calcul du LightSpaceMatrix
+				float arr[16];
+				Matrix4 lightSpaceMatrix = l->getProjectionLight() * l->getWorldMatrix().inverse();
+				static Matrix4 biasMatrix = Matrix4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);
+				Matrix4 depthBiasMatrix = biasMatrix * lightSpaceMatrix;
+				depthBiasMatrix.toArray(arr);
+				glUniformMatrix4fv(glGetUniformLocation(program, "uDepthBiasMatrix"), 1, GL_FALSE, arr);
+
+				// On envoie cette fois-ci le sampler de la depthMap
+				GLint location_tmp = glGetUniformLocation(program, base.c_str());
+				_renderSampler(location_tmp, depthMap, numSampler);
+
+				i++;
+			}
+
+			break;
 	}
 }
 
@@ -1157,6 +1309,11 @@ void MaterialManager::_renderShaderProgramSampler(GLuint program, GLint location
 	if (t == nullptr)
 		return;
 
+	_renderSampler(location, t->mGLuid, numSampler);
+}
+
+void MaterialManager::_renderSampler(GLint location, GLuint idTexture, int numSampler)
+{
 	switch (numSampler)
 	{
 	case 0: glActiveTexture(GL_TEXTURE0); break;
@@ -1168,7 +1325,7 @@ void MaterialManager::_renderShaderProgramSampler(GLuint program, GLint location
 	default: return;
 	}
 
-	glBindTexture(GL_TEXTURE_2D, t->mGLuid);
+	glBindTexture(GL_TEXTURE_2D, idTexture);
 	glUniform1i(location, numSampler);
 }
 

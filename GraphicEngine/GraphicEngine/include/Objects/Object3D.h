@@ -77,6 +77,12 @@ public:
 	int getRenderGroupIndex() const;
 	void setRenderGroupIndex(int index);
 
+	void castShadow(bool cast);
+	bool canCastShadow() const;
+
+	void receiveShadow(bool receive);
+	bool canReceiveShadow() const;
+
 protected:
 
 	std::string mName;				// Histoire qu'on sache quand même un peu ce que c'est
@@ -103,6 +109,9 @@ protected:
 	bool mAbsoluteVisible;
 
 	uint mRenderGroupIndex;
+
+	bool mReceiveShadow;
+	bool mCastShadow;
 };
 
 typedef std::shared_ptr<Object3D> Object3DSPtr;

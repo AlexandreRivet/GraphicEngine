@@ -40,7 +40,7 @@ namespace UI
 		drawSquare(Vector2(mFirstRect.x, mFirstRect.y), static_cast<int>(mFirstRect.w), static_cast<int>(mFirstRect.h), mBackgroundColor, { 0.0f, 0.0f, 0.0f, 1.0f });
 
 		// Tick
-		Color checked(0.8f, 0.8f, 0.8f, 1.0f);
+		ColorStruct checked(0.8f, 0.8f, 0.8f, 1.0f);
 		if (mIsChecked)
 			checked = { 0.0f, 0.0f, 0.0f, 1.0f };
 		

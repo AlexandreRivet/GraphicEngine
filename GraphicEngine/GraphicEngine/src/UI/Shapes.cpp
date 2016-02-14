@@ -4,7 +4,7 @@
 
 #include "Utils/utils.h"
 
-void drawPoint(Vector2 point, Color color)
+void drawPoint(Vector2 point, ColorStruct color)
 {
 	static float oldColor[4] = { 0 };
 	glGetFloatv(GL_CURRENT_COLOR, oldColor);
@@ -17,7 +17,7 @@ void drawPoint(Vector2 point, Color color)
 	glColor4f(oldColor[0], oldColor[1], oldColor[2], oldColor[3]);
 }
 
-void drawLines(std::vector<Vector2*> points, Color color, int thickness, bool close)
+void drawLines(std::vector<Vector2*> points, ColorStruct color, int thickness, bool close)
 {
 	uint nbPoints = points.size();
 	if (nbPoints < 2)
@@ -47,7 +47,7 @@ void drawLines(std::vector<Vector2*> points, Color color, int thickness, bool cl
 	glColor4f(oldColor[0], oldColor[1], oldColor[2], oldColor[3]);
 }
 
-void drawLines(std::vector<Vector2> points, Color color, int thickness, bool close)
+void drawLines(std::vector<Vector2> points, ColorStruct color, int thickness, bool close)
 {
 	uint nbPoints = points.size();
 	if (nbPoints < 2)
@@ -77,7 +77,7 @@ void drawLines(std::vector<Vector2> points, Color color, int thickness, bool clo
 	glColor4f(oldColor[0], oldColor[1], oldColor[2], oldColor[3]);
 }
 
-void drawLine(Vector2 start, Vector2 end, Color color, int thickness, int dashed)
+void drawLine(Vector2 start, Vector2 end, ColorStruct color, int thickness, int dashed)
 {
 	static float oldColor[4] = { 0 };
 	glGetFloatv(GL_CURRENT_COLOR, oldColor);
@@ -115,7 +115,7 @@ void drawLine(Vector2 start, Vector2 end, Color color, int thickness, int dashed
 
 }
 
-void drawSquareCentered(Vector2 point, int w, int h, Color fill, Color stroke)
+void drawSquareCentered(Vector2 point, int w, int h, ColorStruct fill, ColorStruct stroke)
 {
 	std::vector<Vector2> points;
 	int half_w = w / 2;
@@ -129,7 +129,7 @@ void drawSquareCentered(Vector2 point, int w, int h, Color fill, Color stroke)
 }
 
 // Réfléchir comment utiliser le stroke et le fill proprement
-void drawSquare(Vector2 point, int w, int h, Color fill, Color stroke)
+void drawSquare(Vector2 point, int w, int h, ColorStruct fill, ColorStruct stroke)
 {
 	std::vector<Vector2> points;
 	points.push_back(Vector2(point.x, point.y));
@@ -140,7 +140,7 @@ void drawSquare(Vector2 point, int w, int h, Color fill, Color stroke)
 	drawPolygon(points, fill, stroke);
 }
 
-void drawPolygon(std::vector<Vector2> points, Color fill, Color stroke)
+void drawPolygon(std::vector<Vector2> points, ColorStruct fill, ColorStruct stroke)
 {
     tools::unusedArg(stroke);
 
@@ -158,7 +158,7 @@ void drawPolygon(std::vector<Vector2> points, Color fill, Color stroke)
 	glColor4f(oldColor[0], oldColor[1], oldColor[2], oldColor[3]);
 }
 
-void drawString(std::string label, Vector2 point, Color color)
+void drawString(std::string label, Vector2 point, ColorStruct color)
 {
 	const char* msg = label.c_str();
 	//int len = (int)strlen(msg);
@@ -178,7 +178,7 @@ void drawString(std::string label, Vector2 point, Color color)
 	glColor4f(oldColor[0], oldColor[1], oldColor[2], oldColor[3]);
 }
 
-void drawStringCentered(std::string label, Vector2 point, Vector2 rect, Color color, bool centeredOnX, bool centeredOnY)
+void drawStringCentered(std::string label, Vector2 point, Vector2 rect, ColorStruct color, bool centeredOnX, bool centeredOnY)
 {
 	const unsigned char* msg = (unsigned char*)label.c_str();
 	float fontx = point.x;
@@ -192,7 +192,7 @@ void drawStringCentered(std::string label, Vector2 point, Vector2 rect, Color co
 	drawString(label, Vector2(fontx, fonty), color);
 }
 
-void drawCircle(Vector2 center, float radius, Color color, float step)
+void drawCircle(Vector2 center, float radius, ColorStruct color, float step)
 {
 	std::vector<Vector2>points;
 

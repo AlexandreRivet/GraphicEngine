@@ -3,6 +3,7 @@
 
 #include "Materials/Material.h"
 #include "Cameras/Camera.h"
+#include "Objects/Scene.h"
 #include <functional>
 
 enum BlocType
@@ -60,9 +61,9 @@ struct AttributeAuto
 struct UniformAuto
 {
 	std::function<GLint(GLuint program, const std::string& name)> init;
-	std::function<void(GLuint program, GLint location, Object3D* obj, Camera* cam)> render;
+	std::function<void(GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler)> render;
 
-	UniformAuto(const std::function<GLint(GLuint program, const std::string& name)>& _init, const std::function<void(GLuint program, GLint location, Object3D* obj, Camera* cam)>& _render)
+	UniformAuto(const std::function<GLint(GLuint program, const std::string& name)>& _init, const std::function<void(GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler)>& _render)
 		: init(_init),
 		render(_render)
 	{
@@ -121,10 +122,11 @@ public:
 
 	// Uniform auto
 	static GLint _initShaderProgramUniformAuto(GLuint program, const std::string& name);
-	static void _renderShaderProgramUniformAuto(GLuint program, GLint location, const std::string& paramUniformName, Object3D* obj, Camera* cam);
+	static void _renderShaderProgramUniformAuto(GLuint program, GLint location, const std::string& paramName, const std::string& paramUniformName, Scene* s, Object3D* obj, Camera* cam, int numSampler = -1);
 
 	// Sampler
 	static void _renderShaderProgramSampler(GLuint program, GLint location, Pass* pass, const std::string& textureName, int numSampler);
+	static void _renderSampler(GLint location, GLuint idTexture, int numSampler);
 
 	// Uniform No Auto
 	static void _renderShaderProgramUniformNoAuto(GLuint program, GLint location, const std::vector<float>& values);

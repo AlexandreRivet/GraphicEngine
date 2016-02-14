@@ -46,8 +46,8 @@ namespace UI
 		float pos_y = -1;
 		float delta_sum = 0;
 
-		Color bgColor;
-		Color lblColor;
+		ColorStruct bgColor;
+		ColorStruct lblColor;
 	};
 
 

@@ -28,8 +28,8 @@ namespace UI
 		bool mHorCentered;
 		bool mVerCentered;
 
-		Color bgColor;
-		Color lblColor;
+		ColorStruct bgColor;
+		ColorStruct lblColor;
 	};
 
 }

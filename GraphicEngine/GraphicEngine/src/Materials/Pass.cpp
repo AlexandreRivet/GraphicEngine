@@ -100,6 +100,7 @@ bool Pass::checkLinked()
 		return 0;
 	}
 
+	/*
 	glValidateProgram(m_OpenGLProgram);
 	glGetProgramiv(m_OpenGLProgram, GL_INFO_LOG_LENGTH, &infoLen);
 
@@ -114,7 +115,7 @@ bool Pass::checkLinked()
 
 		free(errorMessage);
 	}
-
+	*/
 	return m_isLinked;
 	
 }

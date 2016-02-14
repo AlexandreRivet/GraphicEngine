@@ -69,7 +69,8 @@ public:
 	void render(Scene& s, Camera& c);
 	void render(UI::UIManager& uiManager);
 	
-	void _renderShaderProgram(ShaderProgram* sp, Pass* p, Object3D* obj, Camera* c);
+
+	void _renderShaderProgram(ShaderProgram* sp, Pass* p, Scene* s, Object3D* obj, Camera* c);
 
 	void setAutoClear(bool clear);
 	bool autoClear() const;
@@ -77,10 +78,9 @@ public:
 	void setAutoUpdate(bool update);
 	bool autoUpdate() const;
 
-protected:
-
-	void _renderPassListFromType(std::vector<TypeRender>& p, Camera* c, bool reverse);
-	template <typename T> void _renderPassList(T start, T end, Camera* c);
+	void _renderPassListFromType(std::vector<TypeRender>& p, Scene* s, Camera* c, bool reverse);
+	template <typename T> void _renderPassList(T start, T end, Scene* s, Camera* c);
+	bool _renderShadowMap(Scene* s, Camera* c);
 
 private:
 
