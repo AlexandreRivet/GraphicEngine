@@ -1,97 +1,85 @@
 #include "Objects/Geometry.h"
 
-Geometry::Geometry(const std::vector<float>& vertices, const std::vector<unsigned int>& indices, const std::vector<float>& uvs, const std::vector<float>& normals)
+
+Geometry::Geometry(const floatVector& vertices, const uintVector& indices, const std::vector<floatVector>& uvs, const floatVector& colors,
+	const floatVector& normals, const floatVector& tangents, const floatVector& binormals)
 	: mVertices(vertices),
 	mIndices(indices),
 	mUvs(uvs),
+	mColors(colors),
 	mNormals(normals),
-	mNeedsUpdate(true)
+	mTangents(tangents),
+	mBinormals(binormals)
 {
-	mHasUvs = mUvs.size() > 0;
-	mHasNormals = mNormals.size() > 0;
 }
 
-void Geometry::setVertices(const std::vector<float>& vertices)
-{
-	mVertices = vertices;
-	mNeedsUpdate = true;
-}
 
-void Geometry::setIndices(const std::vector<uint>& indices)
-{
-	mIndices = indices;
-	mNeedsUpdate = true;
-}
-
-void Geometry::setUvs(const std::vector<float>& uvs)
-{
-	mUvs = uvs;
-	mHasUvs = uvs.size() > 0;
-	mNeedsUpdate = true;
-}
-
-void Geometry::setNormals(const std::vector<float>& normals)
-{
-	mNormals = normals;
-	mHasNormals = normals.size() > 0;
-	mNeedsUpdate = true;
-}
-
-const std::vector<float>& Geometry::getVertices() const
+const floatVector& Geometry::getVertices() const
 {
 	return mVertices;
-}
+};
 
-const std::vector<uint>& Geometry::getIndices() const
+const uintVector& Geometry::getIndices() const
 {
 	return mIndices;
 }
 
-const std::vector<float>& Geometry::getUvs() const
+const std::vector<floatVector>& Geometry::getUvs() const
 {
 	return mUvs;
 }
 
-const std::vector<float>& Geometry::getNormals() const
+const floatVector& Geometry::getNormals() const
 {
 	return mNormals;
 }
 
-int Geometry::getNbVertices() const
+const floatVector& Geometry::getColors() const
+{
+	return mColors;
+}
+
+const floatVector& Geometry::getTangents() const
+{
+	return mTangents;
+}
+
+const floatVector& Geometry::getBinormals() const
+{
+	return mBinormals;
+}
+
+uint Geometry::getNbVertices() const
 {
 	return mVertices.size();
 }
 
-int Geometry::getNbIndices() const
+uint Geometry::getNbIndices() const
 {
 	return mIndices.size();
 }
 
-int Geometry::getNbUvs() const
+uint Geometry::getNbUvs() const
 {
 	return mUvs.size();
 }
 
-int Geometry::getNbNormals() const
+uint Geometry::getNbNormals() const
 {
 	return mNormals.size();
 }
 
-bool Geometry::hasUvs() const
+uint Geometry::getNbColors() const
 {
-	return mHasUvs;
-}
-bool Geometry::hasNormals() const
-{
-	return mHasNormals;
+	return mColors.size();
 }
 
-bool Geometry::needsUpdate() const
+uint Geometry::getNbTangents() const
 {
-	return mNeedsUpdate;
+	return mTangents.size();
 }
 
-void Geometry::setNeedsUpdate(bool update)
+uint Geometry::getNbBinormals() const
 {
-	mNeedsUpdate = update;
+	return mBinormals.size();
 }

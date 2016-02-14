@@ -12,23 +12,19 @@ Texture::Texture()
 	mFormat(GL_RGBA),
 	mGlobalFormat(GL_RGBA),
 	mGLuid(0),
-	mGLunit(0),
-	mIndex(0),
 	mMinFilter(GL_LINEAR),
 	mMagFilter(GL_LINEAR)
 {
 
 }
 
-Texture::Texture(const std::string& filename, uint index)
+Texture::Texture(const std::string& filename)
 	: mWidth(0),
 	mHeight(0),
 	mHasImage(false),
 	mFormat(GL_RGBA),
 	mGlobalFormat(GL_RGBA),
 	mGLuid(0),
-	mGLunit(unitFromIndex(index)),
-	mIndex(index),
 	mMinFilter(GL_NEAREST),
 	mMagFilter(GL_LINEAR)
 {
@@ -58,7 +54,6 @@ bool Texture::hasImage() const
 
 void Texture::init()
 {
-	glActiveTexture(mGLunit);
 	glGenTextures(1, &mGLuid);
 	glBindTexture(GL_TEXTURE_2D, mGLuid);
 
@@ -75,12 +70,8 @@ void Texture::init()
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mMinFilter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mMagFilter);
-}
 
-void Texture::bind()
-{
-	glActiveTexture(mGLunit);
-	glBindTexture(GL_TEXTURE_2D, mGLuid);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Texture::resize(uint w, uint h)
@@ -92,6 +83,11 @@ void Texture::setFilters(uint min, uint mag)
 {
 	mMinFilter = min;
 	mMagFilter = mag;
+
+	glBindTexture(GL_TEXTURE_2D, mGLuid);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mMinFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mMagFilter);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 int Texture::getWidth() const
@@ -102,21 +98,4 @@ int Texture::getWidth() const
 int Texture::getHeight() const
 {
 	return mHeight;
-}
-
-GLuint Texture::unitFromIndex(uint index)
-{
-	switch (index)
-	{
-		case 1: return GL_TEXTURE1;
-		case 2: return GL_TEXTURE2;
-		case 3: return GL_TEXTURE3;
-		case 4: return GL_TEXTURE4;
-		case 5: return GL_TEXTURE5;
-		case 6: return GL_TEXTURE6;
-		case 7: return GL_TEXTURE7;
-		case 8: return GL_TEXTURE8;
-		case 9: return GL_TEXTURE9;
-		default: return GL_TEXTURE0;
-	}
 }

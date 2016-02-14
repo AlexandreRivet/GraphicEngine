@@ -1,5 +1,36 @@
 #include "Objects/Mesh.h"
 
+#include "Objects/Mesh.h"
+
+Mesh::Mesh(Geometry geo, Material* mat)
+	: mGeometry(geo),
+	mMaterial(mat),
+	mBuffers(mGeometry.getVertices(), mGeometry.getIndices(), mGeometry.getUvs(), mGeometry.getColors(), mGeometry.getNormals(), mGeometry.getTangents(), mGeometry.getBinormals())
+{
+}
+
+Mesh::~Mesh()
+{
+
+}
+
+Geometry& Mesh::getGeometry()
+{
+	return mGeometry;
+}
+
+Material* Mesh::getMaterial()
+{
+	return mMaterial;
+}
+
+OpenGLBuffer& Mesh::getBuffers()
+{
+	return mBuffers;
+}
+
+/*
+
 Mesh::Mesh(Geometry geo, MaterialSPtr mat, bool useVBO)
 	: mGeometry(geo),
 	mMaterial(mat),
@@ -125,3 +156,4 @@ MaterialSPtr& Mesh::getMaterial()
 {
 	return mMaterial;
 }
+*/

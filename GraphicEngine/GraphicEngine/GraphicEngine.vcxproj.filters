@@ -64,6 +64,12 @@
     <Filter Include="Fichiers sources\external">
       <UniqueIdentifier>{a8ad5797-7d9b-4203-b7a5-a5c1d94e9da1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\Lights">
+      <UniqueIdentifier>{76e92264-4e2c-40bb-a53c-4aaf0ac74dc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Lights">
+      <UniqueIdentifier>{4a6b1014-bbe4-453f-872d-fd340b1ed87e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Math\Matrix3.h">
@@ -103,9 +109,6 @@
       <Filter>Fichiers d%27en-tête\Materials</Filter>
     </ClInclude>
     <ClInclude Include="include\Materials\ShaderLoader.h">
-      <Filter>Fichiers d%27en-tête\Materials</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Materials\BasicMaterial.h">
       <Filter>Fichiers d%27en-tête\Materials</Filter>
     </ClInclude>
     <ClInclude Include="include\Objects\Object3D.h">
@@ -192,6 +195,24 @@
     <ClInclude Include="external\include\tiny_obj_loader.h">
       <Filter>Fichiers d%27en-tête\external</Filter>
     </ClInclude>
+    <ClInclude Include="include\Utils\Color.h">
+      <Filter>Fichiers d%27en-tête\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Lights\PointLight.h">
+      <Filter>Fichiers d%27en-tête\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Lights\Light.h">
+      <Filter>Fichiers d%27en-tête\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Materials\ShaderProgram.h">
+      <Filter>Fichiers d%27en-tête\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Materials\Pass.h">
+      <Filter>Fichiers d%27en-tête\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Materials\MaterialManager.h">
+      <Filter>Fichiers d%27en-tête\Materials</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Math\Vector3.cpp">
@@ -222,9 +243,6 @@
       <Filter>Fichiers sources\Materials</Filter>
     </ClCompile>
     <ClCompile Include="src\Materials\Material.cpp">
-      <Filter>Fichiers sources\Materials</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Materials\BasicMaterial.cpp">
       <Filter>Fichiers sources\Materials</Filter>
     </ClCompile>
     <ClCompile Include="src\Cameras\Camera.cpp">
@@ -301,6 +319,21 @@
     </ClCompile>
     <ClCompile Include="external\src\tiny_obj_loader.cc">
       <Filter>Fichiers sources\external</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\Color.cpp">
+      <Filter>Fichiers sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lights\Lights.cpp">
+      <Filter>Fichiers sources\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Materials\MaterialManager.cpp">
+      <Filter>Fichiers sources\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Materials\Pass.cpp">
+      <Filter>Fichiers sources\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Materials\ShaderProgram.cpp">
+      <Filter>Fichiers sources\Materials</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

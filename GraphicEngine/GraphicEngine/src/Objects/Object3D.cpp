@@ -1,14 +1,31 @@
 #include "Objects/Object3D.h"
 
 Object3D::Object3D()
-	: mMesh(nullptr),
-	mPosition(Vector3(0, 0, 0)),
-	mRotation(Quaternion(1, 0, 0, 0)),
-	mScale(Vector3(1, 1, 1)),
-	mHasMesh(false),
+	: mName("Unknown"),
+	mMesh(nullptr),
+	mPosition(Vector3::ZERO),
+	mRotation(Quaternion::IDENTITY),
+	mScale(Vector3::UNIT_SCALE),
+	mMatrixNeedsUpdate(true),
+	mWorldMatrixNeedsUpdate(true),
+	mRenderGroupIndex(50),
 	mVisible(true),
-	mActive(true),
-	mRenderMode(GL_TRIANGLES)
+	mAbsoluteVisible(true)
+{
+
+}
+
+Object3D::Object3D(const std::string& name)
+	: mName(name),
+	mMesh(nullptr),
+	mPosition(Vector3::ZERO),
+	mRotation(Quaternion::IDENTITY),
+	mScale(Vector3::UNIT_SCALE),
+	mMatrixNeedsUpdate(true),
+	mWorldMatrixNeedsUpdate(true),
+	mRenderGroupIndex(50),
+	mVisible(true),
+	mAbsoluteVisible(true)
 {
 	updateMatrix();
 }
@@ -19,10 +36,11 @@ Object3D::Object3D(const std::string& name, MeshSPtr m)
 	mPosition(Vector3::ZERO),
 	mRotation(Quaternion::IDENTITY),
 	mScale(Vector3::UNIT_SCALE),
-	mHasMesh(true),
+	mMatrixNeedsUpdate(true),
+	mWorldMatrixNeedsUpdate(true),
+	mRenderGroupIndex(50),
 	mVisible(true),
-	mActive(true),
-	mRenderMode(GL_TRIANGLES)
+	mAbsoluteVisible(true)
 {
 	updateMatrix();
 }
@@ -35,19 +53,19 @@ const std::string& Object3D::getName() const
 void Object3D::setPosition(const Vector3& v)
 {
 	mPosition = v;
-	updateMatrix();
+	notifyUpdate(true);
 }
 
 void Object3D::setRotation(const Quaternion& q)
 {
 	mRotation = q;
-	updateMatrix();
+	notifyUpdate(true);
 }
 
 void Object3D::setScale(const Vector3& v)
 {
 	mScale = v;
-	updateMatrix();
+	notifyUpdate(true);
 }
 
 void Object3D::translateOnAxis(float distance, const Vector3& axis)
@@ -55,7 +73,7 @@ void Object3D::translateOnAxis(float distance, const Vector3& axis)
 	Vector3 v1;
 	v1 = mRotation * axis;
 	mPosition += v1 * distance;
-	updateMatrix();
+	notifyUpdate(true);
 }
 
 void Object3D::translateX(float distance)
@@ -78,7 +96,7 @@ void Object3D::rotateOnAxis(float angle, const Vector3& axis)
 	Quaternion q;
 	q.FromAngleAxis(angle, axis);
 	mRotation = mRotation * q;
-	updateMatrix();
+	notifyUpdate(true);
 }
 
 void Object3D::rotateX(float angle)
@@ -109,7 +127,7 @@ void Object3D::scaleOnAxis(float scale, const Vector3& axis)
 		v.z = 1.0f;
 
 	mScale *= v;
-	updateMatrix();
+	notifyUpdate(true);
 }
 
 void Object3D::scaleX(float scale)
@@ -134,7 +152,7 @@ void Object3D::lookAt(const Vector3& target, bool yawFixed)
 	m1.extract3x3Matrix(m2);
 	mRotation.FromRotationMatrix(m2);
 
-	updateMatrix();
+	notifyUpdate(true);
 }
 
 
@@ -157,6 +175,8 @@ void Object3D::addChild(Object3D* child)
 {
 	child->setParent(this);
 	mChildren.push_back(child);
+
+	child->refreshAbsoluteVisible();
 }
 
 void Object3D::removeChild(Object3D* child)
@@ -167,6 +187,9 @@ void Object3D::removeChild(Object3D* child)
 void Object3D::setParent(Object3D* object)
 {
 	mParent = object;
+
+	notifyUpdate();
+	refreshAbsoluteVisible();
 }
 
 Object3D* Object3D::getParent()
@@ -186,9 +209,13 @@ Vector3& Object3D::getPosition()
 
 Vector3 Object3D::getWorldPosition()
 {
-	updateWorldMatrix(true);
+	if (mMatrixNeedsUpdate)
+		updateMatrix();
 
-	return Vector3(mWorldMatrix[3][0], mWorldMatrix[3][1], mWorldMatrix[3][2]);
+	if (mMatrixNeedsUpdate || mWorldMatrixNeedsUpdate)
+		updateWorldMatrix();
+
+	return mDerivedPosition;
 }
 
 Quaternion& Object3D::getRotation()
@@ -198,9 +225,13 @@ Quaternion& Object3D::getRotation()
 
 Quaternion Object3D::getWorldRotation()
 {
-	updateWorldMatrix(true);
+	if (mMatrixNeedsUpdate)
+		updateMatrix();
 
-	return mWorldMatrix.extractQuaternion();
+	if (mMatrixNeedsUpdate || mWorldMatrixNeedsUpdate)
+		updateWorldMatrix();
+
+	return mDerivedOrientation;
 }
 
 Vector3& Object3D::getScale()
@@ -210,31 +241,92 @@ Vector3& Object3D::getScale()
 
 Vector3 Object3D::getWorldScale()
 {
-	updateWorldMatrix(true);
+	if (mMatrixNeedsUpdate)
+		updateMatrix();
 
-	Vector3 scale;
-	mWorldMatrix.getScale(scale);
-	return scale;
+	if (mMatrixNeedsUpdate || mWorldMatrixNeedsUpdate)
+		updateWorldMatrix();
+
+	return mDerivedScale;
 }
+
+void Object3D::setVisible(bool visible, bool cascade)
+{
+	mVisible = visible;
+	mAbsoluteVisible = ((mParent != nullptr) ? mParent->isAbsoluteVisible() : true) && mVisible;
+
+	std::vector<Object3D*>::iterator iter = mChildren.begin();
+	std::vector<Object3D*>::iterator end = mChildren.end();
+
+	if (cascade)
+	{
+		for (; iter != end; ++iter)
+			(*iter)->setVisible(visible, cascade);
+	}
+	else
+	{
+		for (; iter != end; ++iter)
+			(*iter)->refreshAbsoluteVisible();
+	}
+}
+
+bool Object3D::isVisble() const
+{
+	return mVisible;
+}
+
+void Object3D::refreshAbsoluteVisible()
+{
+	mAbsoluteVisible = ((mParent != nullptr) ? mParent->isAbsoluteVisible() : true) && mVisible;
+}
+
+bool Object3D::isAbsoluteVisible() const
+{
+	return mAbsoluteVisible;
+}
+
+void Object3D::flipVisibility(bool cascade)
+{
+	mVisible = !mVisible;
+	mAbsoluteVisible = ((mParent != nullptr) ? mParent->isAbsoluteVisible() : true) && mVisible;
+
+	std::vector<Object3D*>::iterator iter = mChildren.begin();
+	std::vector<Object3D*>::iterator end = mChildren.end();
+
+	if (cascade)
+	{
+		for (; iter != end; ++iter)
+			(*iter)->flipVisibility(cascade);
+	}
+	else
+	{
+		for (; iter != end; ++iter)
+			(*iter)->refreshAbsoluteVisible();
+	}
+}
+
 
 Matrix4& Object3D::getMatrix()
 {
 	return mMatrix;
 }
 
+void Object3D::updateMatrix()
+{
+	mMatrixNeedsUpdate = false;
+	mMatrix.makeTransform(mPosition, mScale, mRotation);
+}
+
 Matrix4& Object3D::getWorldMatrix()
 {
-	if (mWorldMatrixNeedsUpdate)
+	Object3D* kek = this;
+	if (mMatrixNeedsUpdate)
+		updateMatrix();
+
+	if (mMatrixNeedsUpdate || mWorldMatrixNeedsUpdate)
 		updateWorldMatrix();
 
 	return mWorldMatrix;
-}
-
-void Object3D::updateMatrix()
-{
-	mMatrix.makeTransform(mPosition, mScale, mRotation);
-
-	mWorldMatrixNeedsUpdate = true;
 }
 
 void Object3D::updateWorldMatrix(bool force)
@@ -250,48 +342,31 @@ void Object3D::updateWorldMatrix(bool force)
 			mWorldMatrix = mParent->getWorldMatrix() * mMatrix;
 		}
 
+		Matrix4 m = mWorldMatrix;
+		mDerivedPosition = mWorldMatrix.getTrans();
+		mDerivedOrientation = mWorldMatrix.extractQuaternion();
+		mDerivedScale = mWorldMatrix.getScaleV3();
+
 		mWorldMatrixNeedsUpdate = false;
-
 	}
 }
 
-void Object3D::setVisible(bool visible, bool cascade)
+
+void Object3D::notifyUpdate(bool mustUpdateLocalMatrix)
 {
-	mVisible = false;
+	mMatrixNeedsUpdate = mMatrixNeedsUpdate || mustUpdateLocalMatrix;
+	mWorldMatrixNeedsUpdate = true;
 
-	if (cascade)
-	{
-		std::vector<Object3D*>::iterator iter = mChildren.begin();
-		std::vector<Object3D*>::iterator end = mChildren.end();
-
-		for (; iter != end; ++iter)
-		{
-			(*iter)->setVisible(visible, cascade);
-		}
-	}
+	for (uint i = 0; i < mChildren.size(); ++i)
+		mChildren.at(i)->notifyUpdate();
 }
 
-bool Object3D::isVisble() const
+int Object3D::getRenderGroupIndex() const
 {
-	return mVisible;
+	return mRenderGroupIndex;
 }
 
-void Object3D::setActive(bool active)
+void Object3D::setRenderGroupIndex(int index)
 {
-	mActive = active;
-}
-
-bool Object3D::isActive() const
-{
-	return mActive;
-}
-
-GLenum Object3D::getRenderMode()
-{
-	return mRenderMode;
-}
-
-void Object3D::setRenderMode(GLenum mode)
-{
-	mRenderMode = mode;
+	mRenderGroupIndex = index;
 }

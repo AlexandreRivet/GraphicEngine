@@ -1,6 +1,8 @@
 #include "Render/Renderer.h"
 
 #include "Utils/freeglut_include.h"
+#include <list>
+#include "Materials/MaterialManager.h"
 
 Renderer::Renderer()
 	: mClearColor(Vector3::ZERO),
@@ -102,110 +104,193 @@ void Renderer::render(UI::UIManager& uiManager)
 
 void Renderer::render(Scene& s, Camera& c)
 {
-	// On met à jour la position de la cam dans le monde
-	c.updateWorldMatrix();
-
 	// Mise à jour des objets à traiter
 	s.updateObjectsList();
-
-	// Trier les objets du plus loin au plus près
 	std::vector<Object3D*> objects = s.getObjects();
 
-	std::sort(objects.begin(), objects.end(), [&c](Object3D* a, Object3D* b) ->bool
-	{
-		float distA = a->getWorldPosition().distance(c.getWorldPosition());
-		float distB = b->getWorldPosition().distance(c.getWorldPosition());
+	// On va trier par renderGroup
+	std::list<RenderGroup> renderGroups;
 
-		return distA < distB;
-	});
-
-	static float proj[16];
-	static float view[16];
-
-	c.getProjectionMatrix().toArray(proj);
-	c.getWorldMatrix().inverse().toArray(view);
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf(proj);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(view);
-
-	// Parcourir les objets et faire les draw
+	// Ici on trie par render group
 	for (uint i = 0; i < objects.size(); ++i)
 	{
 		Object3D* obj = objects[i];
-		obj->updateWorldMatrix();
 
-		if (obj->getRenderMode() == GL_POINTS)
+		if (!obj->isAbsoluteVisible() || !obj->hasMesh())
+			continue;
+
+		int renderGroupIndex = obj->getRenderGroupIndex();
+
+		std::list<RenderGroup>::iterator found = std::find_if(renderGroups.begin(), renderGroups.end(), [renderGroupIndex](RenderGroup rg) -> bool
 		{
-			glEnable(GL_POINT_SPRITE);
-			glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
-		}
-			
-		MeshSPtr mesh = obj->getMesh();
-		Geometry& geo = mesh->getGeometry();
-		MaterialSPtr& mat = mesh->getMaterial();
+			return rg.index == renderGroupIndex;
+		});
 
-		// On bind le VAO
-		glBindVertexArray(mesh->mVAO);
-
-		// On bind le material
-		mat->bind();
-
-		// On envoie le reste des uniformes
-
-		// Viewport
-		mat->getShader()->setUniform("u_viewport", mViewportWidth, mViewportHeight);
-
-		// Proj matrix
-		mat->getShader()->setUniform("u_proj", c.getProjectionMatrix());
-
-		// View matriw
-		mat->getShader()->setUniform("u_view", c.getWorldMatrix().inverse());
-
-		// World matrix
-		mat->getShader()->setUniform("u_world", obj->getWorldMatrix());
-
-		// On dessine
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mIBO);
-		glDrawElements(obj->getRenderMode(), geo.getNbIndices(), GL_UNSIGNED_INT, 0);
-
-		// On unbind le material
-		mat->unbind();
-
-		// Dessin des axes
-		/*
-		Vector3 worldPos = obj->getWorldPosition();
-		Quaternion worldRot = obj->getWorldRotation();
-
-		Vector3 newX = worldRot * Vector3(worldPos.x + 10.0f, worldPos.y, worldPos.z);
-		Vector3 newY = worldRot * Vector3(worldPos.x, worldPos.y + 10.0f, worldPos.z);
-		Vector3 newZ = worldRot * Vector3(worldPos.x, worldPos.y, worldPos.z + 10.0f);
-
-		// X
-		glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
-		glBegin(GL_LINES);
-		glVertex3f(worldPos.x, worldPos.y, worldPos.z);
-		glVertex3f(newX.x, newX.y, newX.z);
-		glEnd();
-
-		// Y
-		glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
-		glBegin(GL_LINES);
-		glVertex3f(worldPos.x, worldPos.y, worldPos.z);
-		glVertex3f(newY.x, newY.y, newY.z);
-		glEnd();
-
-		// Z
-		glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
-		glBegin(GL_LINES);
-		glVertex3f(worldPos.x, worldPos.y, worldPos.z);
-		glVertex3f(newZ.x, newZ.y, newZ.z);
-		glEnd();
-		*/
+		// On n'a pas trouvé ce render group
+		if (found == renderGroups.end())
+			renderGroups.push_back(RenderGroup(renderGroupIndex, obj));
+		else
+			found->objects.push_back(obj);
 	}
-	
+
+	renderGroups.sort([](RenderGroup a, RenderGroup b) {
+		return a.index < b.index;
+	});
+
+	// On parcours chaque rendergroup
+	for (auto it = renderGroups.begin(); it != renderGroups.end(); ++it)
+	{
+		RenderGroup rg = *it;
+
+		// On trie d'abord par rapport à la caméra
+		std::sort(rg.objects.begin(), rg.objects.end(), [&c](Object3D* a, Object3D* b) -> bool
+		{
+			float distA = a->getWorldPosition().distance(c.getWorldPosition());
+			float distB = b->getWorldPosition().distance(c.getWorldPosition());
+
+			return distA < distB;
+		});
+
+		// On va filtrer maintenant les opaques et les transparents
+		for (auto objIt = rg.objects.begin(); objIt != rg.objects.end(); ++objIt)
+		{
+			Object3D* obj = *objIt;
+			Material* mat = obj->getMesh()->getMaterial();
+
+			if (mat == nullptr)
+				continue;
+
+			std::map<std::string, Pass*> passList = mat->getPassList();
+
+			for (auto passIt = passList.begin(); passIt != passList.end(); ++passIt)
+			{
+				Pass* p = passIt->second;
+
+				if (p->isTransparent())
+					rg.passList.transparents.push_back(Transparent(p, obj));
+				else
+					rg.passList.opaques.push_back(Opaque(p, obj));
+			}
+		}
+
+		// On va faire le rendu => opaques puis transparents
+		_renderPassListFromType(rg.passList.opaques, &c, false);
+		_renderPassListFromType(rg.passList.transparents, &c, true);
+	}	
+}
+
+void Renderer::_renderPassListFromType(std::vector<TypeRender>& p, Camera* c, bool reverse)
+{
+	if (reverse)
+		_renderPassList(p.rbegin(), p.rend(), c);
+	else
+		_renderPassList(p.begin(), p.end(), c);
+}
+
+template <typename T> void Renderer::_renderPassList(T start, T end, Camera* c)
+{
+	for (auto it = start; it != end; ++it)
+	{
+		TypeRender tr = *it;
+		Pass* p = tr.pass;
+		Object3D* obj = tr.obj;
+
+		if (!p->checkLinked())
+			continue;
+
+		MeshSPtr mesh = obj->getMesh();
+		OpenGLBuffer buffers = mesh->getBuffers();
+
+		glUseProgram(p->m_OpenGLProgram);
+
+		_renderShaderProgram(p->m_vertexProgram, p, obj, c);
+		_renderShaderProgram(p->m_fragmentProgram, p, obj, c);
+		_renderShaderProgram(p->m_geometryProgram, p, obj, c);
+
+		// glBlendFunc(GL_ONE, GL_ZERO);
+		// glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ONE, GL_ZERO);
+		// glDisable(GL_BLEND);
+		glDisable(GL_CULL_FACE);
+		glEnable(GL_DEPTH_TEST);
+		// glDepthFunc(GL_LEQUAL);
+		// glDepthMask(GL_TRUE);
+		// glDepthRange(0.f, 1.f);
+		// glCullFace(GL_BACK);
+		// glFrontFace(GL_CCW);
+
+		if (buffers.mIndexBuffer != nullptr && buffers.mIndexBuffer->numItems > 0)
+		{
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers.mIndexBuffer->id);
+			glDrawElements(GL_TRIANGLES, mesh->getGeometry().getNbIndices(), GL_UNSIGNED_INT, 0);
+		}
+
+		// glDrawArrays(GL_TRIANGLES, 0, mesh->getGeometry().getNbVertices());
+
+		glUseProgram(0);
+	}
+}
+
+void Renderer::_renderShaderProgram(ShaderProgram* sp, Pass* p, Object3D* obj, Camera* c)
+{
+	if (sp == nullptr)
+		return;
+
+	MeshSPtr mesh = obj->getMesh();
+	OpenGLBuffer buffers = mesh->getBuffers();
+
+	// On envoie les attributes à la CG
+	for (auto jt = sp->m_attributes_auto.begin(); jt != sp->m_attributes_auto.end(); ++jt)
+	{
+		ShaderParameter sp = (*jt).second;
+		AttributeAuto aa = MaterialManager::m_attributesAuto.at(sp.key);
+		if (!sp.isInit)
+		{
+			sp.location = aa.init(p->m_OpenGLProgram, (*jt).first);
+			sp.isInit = true;
+		}
+		aa.render(p->m_OpenGLProgram, sp.location, buffers);
+	}
+
+	// On envoie les uniform à la CG
+	for (auto jt = sp->m_uniforms_auto.begin(); jt != sp->m_uniforms_auto.end(); ++jt)
+	{
+		ShaderParameter sp = (*jt).second;
+		UniformAuto ua = MaterialManager::m_uniformsAuto.at(sp.key);
+		if (!sp.isInit)
+		{
+			sp.location = ua.init(p->m_OpenGLProgram, (*jt).first);
+			sp.isInit = true;
+		}
+		ua.render(p->m_OpenGLProgram, sp.location, obj, c);
+	}
+
+	// On envoie les sampler
+	int numSampler = 0;
+	for (auto jt = sp->m_samplers.begin(); jt != sp->m_samplers.end(); ++jt)
+	{
+		StringParameter sp = (*jt).second;
+		Sampler s = MaterialManager::m_samplers.at(sp.key);
+		if (!sp.isInit)
+		{
+			sp.location = s.init(p->m_OpenGLProgram, (*jt).first);
+			sp.isInit = true;
+		}
+		s.render(p->m_OpenGLProgram, sp.location, p, sp.value, numSampler);
+		numSampler++;
+	}
+
+	// On envoie les uniform non auto
+	for (auto jt = sp->m_uniforms_noauto.begin(); jt != sp->m_uniforms_noauto.end(); ++jt)
+	{
+		FloatParameter fp = (*jt).second;
+		if (!fp.isInit)
+		{
+			fp.location = MaterialManager::_initShaderProgramUniformAuto(p->m_OpenGLProgram, (*jt).first);			// Pour acquérir la location on peut considérer que c'est comme un uniform auto
+			fp.isInit = true;
+		}
+		MaterialManager::_renderShaderProgramUniformNoAuto(p->m_OpenGLProgram, fp.location, fp.values);
+
+	}
 }
 
 void Renderer::setAutoUpdate(bool update)

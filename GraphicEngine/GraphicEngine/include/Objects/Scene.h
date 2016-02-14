@@ -16,6 +16,7 @@ public:
 
 	Object3D* getRoot();
 	std::vector<Object3D*>& getObjects();
+	std::vector<Object3D*>& getObjectsWithoutMesh();
 	Object3D* getObject(uint index);
 
 	void autoUpdate(bool update);
@@ -29,6 +30,7 @@ private:
 	
 	Object3D* mRoot;								// Root de la scène 
 	std::vector<Object3D*> mObjects;				// Liste des objets à rendre pendant la frame
+	std::vector<Object3D*> mObjectsWithoutMesh;		// Liste des objets sans mesh
 
 	bool mAutoUpdate;
 	bool mObjectsListNeedsUpdate;

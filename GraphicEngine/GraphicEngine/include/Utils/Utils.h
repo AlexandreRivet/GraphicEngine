@@ -14,6 +14,7 @@ namespace Utils
 {
 	bool fileToString(const std::string& fileName, std::string& content);
 	std::vector<std::string> split(const std::string &s, char delim);
+	std::string trim(const std::string& s);
 };
 
 namespace tools

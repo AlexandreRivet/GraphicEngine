@@ -7,7 +7,7 @@ class PerspectiveCamera : public Camera
 {
 public:
 
-	PerspectiveCamera::PerspectiveCamera(float fov = 50.0f, float w = 800.0f, float h = 600.0f, float near = 0.1f, float far = 300000.0f);
+	PerspectiveCamera::PerspectiveCamera(float fov = 50.f, float w = 800.f, float h = 600.f, float near = 0.1f, float far = 1000.f);
 
 	void set(float fov, float w, float h, float near, float far);
 

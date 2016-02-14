@@ -301,6 +301,15 @@ public:
         m[2][2] = v.z;
     }
 
+	inline Vector3 getScaleV3()
+	{
+		return Vector3(
+			Vector3(m[0][0], m[1][0], m[2][0]).length(),
+			Vector3(m[0][1], m[1][1], m[2][1]).length(),
+			Vector3(m[0][2], m[1][2], m[2][2]).length()
+		);
+	}
+
     inline static Matrix4 getScale(const Vector3& v)
     {
         Matrix4 r;
@@ -414,7 +423,7 @@ public:
 
     inline Matrix4 concatenateAffine(const Matrix4 &m2) const
     {
-        assert(isAffine() && m2.isAffine());
+        // assert(isAffine() && m2.isAffine());
 
         return Matrix4(
             m[0][0] * m2.m[0][0] + m[0][1] * m2.m[1][0] + m[0][2] * m2.m[2][0],

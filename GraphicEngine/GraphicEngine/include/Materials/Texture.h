@@ -12,14 +12,13 @@ class Texture
 public:
 
 	Texture();
-	Texture(const std::string& filename, uint index = 0);
+	Texture(const std::string& filename);
 	~Texture();
 
 	void load(const std::string& filename);
 	bool hasImage() const;
 
 	void init();
-	void bind();
 	void update();
 
 	void resize(uint w, uint h);
@@ -28,12 +27,8 @@ public:
 
 	int getWidth() const;
 	int getHeight() const;
-
-	static GLuint unitFromIndex(uint index);
 	
 	GLuint mGLuid;
-	GLuint mGLunit;
-	GLuint mIndex;
 
 private:
 

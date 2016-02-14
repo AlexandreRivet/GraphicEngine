@@ -17,10 +17,14 @@
     <ClInclude Include="include\Cameras\PerspectiveCamera.h" />
     <ClInclude Include="include\Engine\Engine.h" />
     <ClInclude Include="include\Engine\OpenGLEngine.h" />
-    <ClInclude Include="include\Materials\BasicMaterial.h" />
+    <ClInclude Include="include\Lights\Light.h" />
+    <ClInclude Include="include\Lights\PointLight.h" />
     <ClInclude Include="include\Materials\Material.h" />
+    <ClInclude Include="include\Materials\MaterialManager.h" />
+    <ClInclude Include="include\Materials\Pass.h" />
     <ClInclude Include="include\Materials\Shader.h" />
     <ClInclude Include="include\Materials\ShaderLoader.h" />
+    <ClInclude Include="include\Materials\ShaderProgram.h" />
     <ClInclude Include="include\Materials\Texture.h" />
     <ClInclude Include="include\Math\Math.h" />
     <ClInclude Include="include\Math\Matrix3.h" />
@@ -50,6 +54,7 @@
     <ClInclude Include="include\UI\Text.h" />
     <ClInclude Include="include\UI\UI.h" />
     <ClInclude Include="include\UI\UIManager.h" />
+    <ClInclude Include="include\Utils\Color.h" />
     <ClInclude Include="include\Utils\freeglut_include.h" />
     <ClInclude Include="include\Utils\Rect.h" />
     <ClInclude Include="include\Utils\Utils.h" />
@@ -59,10 +64,13 @@
     <ClCompile Include="src\Cameras\Camera.cpp" />
     <ClCompile Include="src\Cameras\OrthographicCamera.cpp" />
     <ClCompile Include="src\Cameras\PerspectiveCamera.cpp" />
-    <ClCompile Include="src\Materials\BasicMaterial.cpp" />
+    <ClCompile Include="src\Lights\Lights.cpp" />
     <ClCompile Include="src\Materials\Material.cpp" />
+    <ClCompile Include="src\Materials\MaterialManager.cpp" />
+    <ClCompile Include="src\Materials\Pass.cpp" />
     <ClCompile Include="src\Materials\Shader.cpp" />
     <ClCompile Include="src\Materials\ShaderLoader.cpp" />
+    <ClCompile Include="src\Materials\ShaderProgram.cpp" />
     <ClCompile Include="src\Materials\Texture.cpp" />
     <ClCompile Include="src\Math\Math.cpp" />
     <ClCompile Include="src\Math\Matrix3.cpp" />
@@ -89,6 +97,7 @@
     <ClCompile Include="src\UI\Slider.cpp" />
     <ClCompile Include="src\UI\Text.cpp" />
     <ClCompile Include="src\UI\UIManager.cpp" />
+    <ClCompile Include="src\Utils\Color.cpp" />
     <ClCompile Include="src\Utils\Rect.cpp" />
     <ClCompile Include="src\Utils\Utils.cpp" />
   </ItemGroup>

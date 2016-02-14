@@ -30,6 +30,11 @@ Object3D* Scene::getRoot()
 	return mRoot;
 }
 
+std::vector<Object3D*>& Scene::getObjectsWithoutMesh()
+{
+	return mObjectsWithoutMesh;
+}
+
 std::vector<Object3D*>& Scene::getObjects()
 {
 	return mObjects;
@@ -64,10 +69,9 @@ void Scene::updateObjectsList()
 
 void Scene::addObjectInList(Object3D* obj)
 {
-	if (!obj->isActive())
-		return;
-
-	if (obj->isVisble() && obj->hasMesh())
+	if (!obj->hasMesh())
+		mObjectsWithoutMesh.push_back(obj);
+	else
 		mObjects.push_back(obj);
 
 	std::vector<Object3D*>& children = obj->getChildren();

@@ -38,6 +38,18 @@ std::vector<std::string> Utils::split(const std::string &s, char delim)
 	return elems;
 }
 
+std::string Utils::trim(const std::string& s)
+{
+	if (s.empty())
+		return s;
+
+	std::size_t firstScan = s.find_first_not_of(' ');
+	std::size_t first = firstScan == std::string::npos ? s.length() : firstScan;
+	std::size_t last = s.find_last_not_of(' ');
+
+	return s.substr(first, last - first + 1);
+}
+
 std::string tools::to_string_presision(float f, int precision)
 {
 	std::stringstream ss;

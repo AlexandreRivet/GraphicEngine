@@ -1,28 +1,24 @@
 #ifndef _MATERIALS_H_
 #define _MATERIALS_H_
 
-#include "prerequisites.h"
-
-#include "Materials/Shader.h"
+#include "Materials/Pass.h"
 
 class Material
 {
 public:
 	
 	Material(const std::string& name);
-	Material(ShaderSPtr s);
+	~Material();
 
-	ShaderSPtr getShader();
+	Pass* addPass(const std::string& name, Pass* p);
+	Pass* getPass(const std::string& name);
+	std::map<std::string, Pass*> getPassList() const;
 
-	virtual void bind() {}
-	virtual void unbind() {}
+protected:					// protected ou private => tout dépendra si on fait des material qui dérivent et qui en ont besoin
 
-protected:
-
-	ShaderSPtr mShader;
+	std::string m_name;
+	std::map<std::string, Pass*> m_passList;
 
 };
-
-typedef std::shared_ptr<Material> MaterialSPtr;
 
 #endif

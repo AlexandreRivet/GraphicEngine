@@ -1,80 +1,45 @@
 #ifndef _SHADER_H_
 #define _SHADER_H_
 
-#include <memory>
-
 #include "GL/glew.h"
 #include "prerequisites.h"
-#include "Materials/Texture.h"
 
-#include "Math/Vector3.h"
-#include "Math/Matrix3.h"
-#include "Math/Matrix4.h"
-
-struct ShaderData
+enum ShaderType
 {
-	uint nData;
-	uint sizeOfBuffer;
-	void* buffer;
-
-	virtual ~ShaderData()
-	{}
-};
-
-template<typename T>
-struct GenericShaderData : public ShaderData
-{
-	std::vector<T> data;
-
-	void updateShaderData()
-	{
-		nData = data.size();
-		sizeOfBuffer = nData * sizeof(T);
-		buffer = data.data();
-	}
+	VERTEX,
+	FRAGMENT,
+	GEOMETRY,
+	COMPUTE
 };
 
 class Shader
 {
 public:
 
-	Shader(GLuint prog, GLuint vs, GLuint fs, GLuint gs);
+	Shader(const std::string& name, ShaderType type, const std::string& code = std::string());
 	~Shader();
 
-	void bind() const;
-	void unbind() const;
+	std::string getName() const;
+	ShaderType getType() const;
 
-	GLint attribute(const std::string& name);
-	GLint uniform(const std::string& name);
+	void setCode(const std::string& code = std::string());
+	std::string getCode() const;
 
-	bool hasAttribute(const std::string& name);
-	bool hasUniform(const std::string& name);
+	bool isCompiled() const;
 
-	void setUniform(const std::string& name, Texture& tex);
-	void setUniform(const std::string& name, int val);
-	void setUniform(const std::string& name, float f);
-	void setUniform(const std::string& name, float f1, float f2);
-	void setUniform(const std::string& name, float f1, float f2, float f3);
-	void setUniform(const std::string& name, float* ptr, uint size);
-	void setUniform(const std::string& name, const Vector3& v);
-	void setUniform(const std::string& name, const Matrix3& m);
-	void setUniform(const std::string& name, const Matrix4& m);
-	void setUniform(const std::string& name, bool b);
+	GLuint getOpenGLShader() const;
+
+	bool compile();
 
 private:
 
-	GLuint mProgramId;
-	GLuint mVertexShaderId;
-	GLuint mFragmentShaderId;
-	GLuint mGeometryShaderId;
-	/*Not implemented yet*/
-	GLuint mComputeShaderId;
-	GLuint mTesselationShaderId;
+	std::string m_name;
+	ShaderType m_type;
+	std::string m_code;
 
-	std::map<std::string, GLint> mUniforms;
-	std::map<std::string, GLint> mAttributes;
+	bool m_isCompiled;
+
+	GLuint m_OpenGLShader;
 };
-
-typedef std::shared_ptr<Shader> ShaderSPtr;
 
 #endif

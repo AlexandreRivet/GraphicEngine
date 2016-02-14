@@ -3,32 +3,28 @@
 
 #include "Objects/Geometry.h"
 #include "Materials/Material.h"
+#include "Objects/OpenGLBuffer.h"
+
 
 class Mesh
 {
 public:
 
 	Mesh();
-	Mesh(Geometry geo, MaterialSPtr mat, bool useVBO = true);
+	Mesh(Geometry geo, Material* mat);
 	~Mesh();
 
 	void initBuffers();
 	Geometry& getGeometry();
-	MaterialSPtr& getMaterial();
-
-	GLuint mVBO;
-	GLuint mVAO;
-	GLuint mIBO;
+	Material* getMaterial();
+	OpenGLBuffer& getBuffers();
 
 protected:
 
 	Geometry mGeometry;
-	MaterialSPtr mMaterial;
+	Material* mMaterial;
+	OpenGLBuffer mBuffers;
 
-	bool mUseVBO;
-
-	bool mHasNormals;
-	bool mHasUvs;
 };
 
 typedef std::shared_ptr<Mesh> MeshSPtr;

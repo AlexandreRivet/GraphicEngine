@@ -15,6 +15,7 @@ class Object3D
 public:
 	
 	Object3D();
+	Object3D(const std::string& name);
 	Object3D(const std::string& name, MeshSPtr m);
 
 	const std::string& Object3D::getName() const;
@@ -62,16 +63,19 @@ public:
 	Matrix4& getWorldMatrix();
 
 	void updateMatrix();
+	void notifyUpdate(bool mustUpdateLocalMatrix = false);
 	void updateWorldMatrix(bool force = false);
 
 	void setVisible(bool visible, bool cascade = true);
 	bool isVisble() const;
 
-	void setActive(bool active);
-	bool isActive() const;
+	void refreshAbsoluteVisible();
+	bool isAbsoluteVisible() const;
 
-	GLenum getRenderMode();
-	void setRenderMode(GLenum mode);
+	void flipVisibility(bool cascade = true);
+
+	int getRenderGroupIndex() const;
+	void setRenderGroupIndex(int index);
 
 protected:
 
@@ -83,19 +87,22 @@ protected:
 	Quaternion mRotation;
 	Vector3 mScale;
 
+	Vector3 mDerivedPosition;
+	Quaternion mDerivedOrientation;
+	Vector3 mDerivedScale;
+
 	Object3D* mParent;
 	std::vector<Object3D*> mChildren;
 
 	Matrix4 mMatrix;
 	Matrix4 mWorldMatrix;
+	bool mMatrixNeedsUpdate;
 	bool mWorldMatrixNeedsUpdate;
 
-	bool mHasMesh;
 	bool mVisible;
-	bool mActive;
+	bool mAbsoluteVisible;
 
-	GLenum mRenderMode;
-
+	uint mRenderGroupIndex;
 };
 
 typedef std::shared_ptr<Object3D> Object3DSPtr;

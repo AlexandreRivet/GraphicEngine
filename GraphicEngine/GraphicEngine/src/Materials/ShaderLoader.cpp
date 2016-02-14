@@ -1,4 +1,5 @@
 #include "Materials/ShaderLoader.h"
+/*
 
 std::map<std::string, ShaderSPtr> ShaderLoader::mShaders;
 
@@ -204,3 +205,5 @@ ShaderSPtr ShaderLoader::getShader(const std::string& name)
 {
 	return mShaders[name];
 }
+
+*/
