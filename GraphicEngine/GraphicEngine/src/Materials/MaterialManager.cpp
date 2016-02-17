@@ -46,7 +46,7 @@ void MaterialManager::loadFromFile(const std::string& filename)
 	bool isCommented = false;
 	bool bracketOpened = false, bracketClosed = false;
 
-	std::vector<std::string> lines( Utils::split(contentMaterial, '\n') );
+	std::vector<std::string> lines(Utils::split(contentMaterial, '\n'));
 	uint nbLines = lines.size();
 	for (uint i = 0; i < nbLines; ++i)
 	{
@@ -87,6 +87,7 @@ void MaterialManager::loadFromFile(const std::string& filename)
 				else
 				{
 					lines[i] = line.substr(0, splitIndex + 2);
+					isCommented = true;
 				}
 			}
 		}
@@ -157,7 +158,7 @@ void MaterialManager::loadFromFile(const std::string& filename)
 			tmp->parent = currentBloc;
 			currentBloc->children.push_back(tmp);
 			currentBloc = tmp;
-			std::string name = Utils::trim(line.substr(18));
+			std::string name = Utils::trim(line.substr(20));
 			if (name.length() != 0)
 				currentBloc->name = name;
 
@@ -249,12 +250,12 @@ Material* MaterialManager::_addMaterial(Bloc* b)
 		return m->second;
 
 	Material* mat = new Material(b->name);
-	
+
 	// On parcourt toutes les pass
 	for (uint i = 0; i < b->children.size(); ++i)
 	{
 		Bloc* passBloc = b->children[i];
-		
+
 		Pass* pass = new Pass(passBloc->name);
 
 		// On ajoute les paramètres
@@ -304,7 +305,7 @@ Material* MaterialManager::_addMaterial(Bloc* b)
 
 		mat->addPass(passBloc->name, pass);
 	}
-	
+
 	m_materials.insert(std::pair<std::string, Material*>(b->name, mat));
 
 	return mat;
@@ -350,7 +351,7 @@ ShaderProgram* MaterialManager::_addShaderProgram(Bloc* b)
 		std::pair<std::string, std::string> param = b->parameters[i];
 		if (param.first == "source")
 			continue;
-		
+
 		std::vector<std::string> parameters = Utils::split(param.second, ' ');
 
 		std::vector<std::string> additionalValues;
@@ -461,10 +462,10 @@ void MaterialManager::initPassParamDef()
 	// SCENE BLEND
 	PassParamDef ppd = PassParamDef(
 		std::vector<std::string>({ "zero", "one", "dest_color", "src_color", "one_minus_src_color",
-									"one_minus_dest_color", "src_alpha", "dest_alpha", "one_minus_src_alpha", 
-									"one_minus_dest_alpha", "src_alpha_saturate"
-		}),
-		[](const std::vector<std::string>& values) {
+		"one_minus_dest_color", "src_alpha", "dest_alpha", "one_minus_src_alpha",
+		"one_minus_dest_alpha", "src_alpha_saturate"
+	}),
+	[](const std::vector<std::string>& values) {
 
 		GLuint sFactor = GL_ONE;
 		GLuint dFactor = GL_ZERO;
@@ -481,7 +482,7 @@ void MaterialManager::initPassParamDef()
 				else if (value == "one")								//Multiplies all colors by 1.
 					validFactor.push_back(GL_ONE);
 				else if (value == "dest_color")							//Multiply by destination color value.
-					validFactor.push_back(GL_DST_COLOR);				
+					validFactor.push_back(GL_DST_COLOR);
 				else if (value == "src_color")							//Multiply by source color value.
 					validFactor.push_back(GL_SRC_COLOR);
 				else if (value == "one_minus_src_color")				//Multiply by 1 minus each color value.
@@ -498,7 +499,7 @@ void MaterialManager::initPassParamDef()
 					validFactor.push_back(GL_ONE_MINUS_DST_ALPHA);
 				else if (value == "src_alpha_saturate")					//Multiply by the smaller of either source or destination alpha value.
 					validFactor.push_back(GL_SRC_ALPHA_SATURATE);
-				
+
 				// On a trouvé les facteurs voulus
 				if (validFactor.size() >= 2)
 					break;
@@ -587,7 +588,7 @@ void MaterialManager::initPassParamDef()
 
 	// DEPTH TEST
 	ppd = PassParamDef(
-		std::vector<std::string>({"on", "off"}),
+		std::vector<std::string>({ "on", "off" }),
 		[](const std::vector<std::string>& values) {
 
 		if (values.size() == 0)
@@ -608,7 +609,7 @@ void MaterialManager::initPassParamDef()
 	ppd = PassParamDef(
 		std::vector<std::string>({ "always_fail", "always_pass", "less", "less_equal", "equal", "not_equal", "greater_equal", "greater" }),
 		[](const std::vector<std::string>& values) {
-			
+
 		if (values.size() == 0)
 			return;
 
@@ -752,7 +753,7 @@ void MaterialManager::initPassParamDef()
 		{
 			haveCullFace = false;
 		}
-		
+
 		if (haveCullFace)
 		{
 			glEnable(GL_CULL_FACE);
@@ -828,63 +829,63 @@ void MaterialManager::initPassParamDef()
 void MaterialManager::initShaderProgramParametersAutoDef()
 {
 	/* *************
-	
+
 	ATTRIBUTES CONNUS
-	
+
 	************* */
 
 	// POSITION
 	AttributeAuto aa = AttributeAuto(
 		[](GLuint program, const std::string& name) {
-			return MaterialManager::_initShaderProgramAttributeAuto(program, name);
-		},
+		return MaterialManager::_initShaderProgramAttributeAuto(program, name);
+	},
 		[](GLuint program, GLint location, OpenGLBuffer buffer) {
-			MaterialManager::_renderShaderProgramAttributeAuto(program, location, "POSITION", buffer);
-		}		
+		MaterialManager::_renderShaderProgramAttributeAuto(program, location, "POSITION", buffer);
+	}
 	);
 	m_attributesAuto.insert(std::pair<std::string, AttributeAuto>("POSITION", aa));
-	
+
 	// NORMAL
 	aa = AttributeAuto(
 		[](GLuint program, const std::string& name) {
-			return MaterialManager::_initShaderProgramAttributeAuto(program, name);
-		},
+		return MaterialManager::_initShaderProgramAttributeAuto(program, name);
+	},
 		[](GLuint program, GLint location, OpenGLBuffer buffer) {
-			MaterialManager::_renderShaderProgramAttributeAuto(program, location, "NORMAL", buffer);
-		}
+		MaterialManager::_renderShaderProgramAttributeAuto(program, location, "NORMAL", buffer);
+	}
 	);
 	m_attributesAuto.insert(std::pair<std::string, AttributeAuto>("NORMAL", aa));
 
 	// TANGENT
 	aa = AttributeAuto(
 		[](GLuint program, const std::string& name) {
-			return MaterialManager::_initShaderProgramAttributeAuto(program, name);
-		},
+		return MaterialManager::_initShaderProgramAttributeAuto(program, name);
+	},
 		[](GLuint program, GLint location, OpenGLBuffer buffer) {
-			MaterialManager::_renderShaderProgramAttributeAuto(program, location, "TANGENT", buffer);
-		}
+		MaterialManager::_renderShaderProgramAttributeAuto(program, location, "TANGENT", buffer);
+	}
 	);
 	m_attributesAuto.insert(std::pair<std::string, AttributeAuto>("TANGENT", aa));
 
 	// BINORMAL
 	aa = AttributeAuto(
 		[](GLuint program, const std::string& name) {
-			return MaterialManager::_initShaderProgramAttributeAuto(program, name);
-		},
+		return MaterialManager::_initShaderProgramAttributeAuto(program, name);
+	},
 		[](GLuint program, GLint location, OpenGLBuffer buffer) {
-			MaterialManager::_renderShaderProgramAttributeAuto(program, location, "BINORMAL", buffer);
-		}
+		MaterialManager::_renderShaderProgramAttributeAuto(program, location, "BINORMAL", buffer);
+	}
 	);
 	m_attributesAuto.insert(std::pair<std::string, AttributeAuto>("BINORMAL", aa));
 
 	// VERTEXCOLOR
 	aa = AttributeAuto(
 		[](GLuint program, const std::string& name) {
-			return MaterialManager::_initShaderProgramAttributeAuto(program, name);
-		},
+		return MaterialManager::_initShaderProgramAttributeAuto(program, name);
+	},
 		[](GLuint program, GLint location, OpenGLBuffer buffer) {
-			MaterialManager::_renderShaderProgramAttributeAuto(program, location, "VERTEXCOLOR", buffer);
-		}
+		MaterialManager::_renderShaderProgramAttributeAuto(program, location, "VERTEXCOLOR", buffer);
+	}
 	);
 	m_attributesAuto.insert(std::pair<std::string, AttributeAuto>("VERTEXCOLOR", aa));
 
@@ -902,44 +903,44 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 	// TEXCOORD1
 	aa = AttributeAuto(
 		[](GLuint program, const std::string& name) {
-			return MaterialManager::_initShaderProgramAttributeAuto(program, name);
-		},
+		return MaterialManager::_initShaderProgramAttributeAuto(program, name);
+	},
 		[](GLuint program, GLint location, OpenGLBuffer buffer) {
-			MaterialManager::_renderShaderProgramAttributeAuto(program, location, "TEXCOORD1", buffer);
-		}
+		MaterialManager::_renderShaderProgramAttributeAuto(program, location, "TEXCOORD1", buffer);
+	}
 	);
 	m_attributesAuto.insert(std::pair<std::string, AttributeAuto>("TEXCOORD1", aa));
 
 	// TEXCOORD2
 	aa = AttributeAuto(
 		[](GLuint program, const std::string& name) {
-			return MaterialManager::_initShaderProgramAttributeAuto(program, name);
-		},
+		return MaterialManager::_initShaderProgramAttributeAuto(program, name);
+	},
 		[](GLuint program, GLint location, OpenGLBuffer buffer) {
-			MaterialManager::_renderShaderProgramAttributeAuto(program, location, "TEXCOORD2", buffer);
-		}
+		MaterialManager::_renderShaderProgramAttributeAuto(program, location, "TEXCOORD2", buffer);
+	}
 	);
 	m_attributesAuto.insert(std::pair<std::string, AttributeAuto>("TEXCOORD2", aa));
 
 	// TEXCOORD3
 	aa = AttributeAuto(
 		[](GLuint program, const std::string& name) {
-			return MaterialManager::_initShaderProgramAttributeAuto(program, name);
-		},
+		return MaterialManager::_initShaderProgramAttributeAuto(program, name);
+	},
 		[](GLuint program, GLint location, OpenGLBuffer buffer) {
-			MaterialManager::_renderShaderProgramAttributeAuto(program, location, "TEXCOORD3", buffer);
-		}
+		MaterialManager::_renderShaderProgramAttributeAuto(program, location, "TEXCOORD3", buffer);
+	}
 	);
 	m_attributesAuto.insert(std::pair<std::string, AttributeAuto>("TEXCOORD3", aa));
 
 	// TEXCOORD4
 	aa = AttributeAuto(
 		[](GLuint program, const std::string& name) {
-			return MaterialManager::_initShaderProgramAttributeAuto(program, name);
-		},
+		return MaterialManager::_initShaderProgramAttributeAuto(program, name);
+	},
 		[](GLuint program, GLint location, OpenGLBuffer buffer) {
-			MaterialManager::_renderShaderProgramAttributeAuto(program, location, "TEXCOORD4", buffer);
-		}
+		MaterialManager::_renderShaderProgramAttributeAuto(program, location, "TEXCOORD4", buffer);
+	}
 	);
 	m_attributesAuto.insert(std::pair<std::string, AttributeAuto>("TEXCOORD4", aa));
 
@@ -953,109 +954,121 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 	// WORLD MATRIX
 	UniformAuto ua = UniformAuto(
 		[](GLuint program, const std::string& name) {
-			return MaterialManager::_initShaderProgramUniformAuto(program, name);
-		},
+		return MaterialManager::_initShaderProgramUniformAuto(program, name);
+	},
 		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
-			MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "world_matrix", s, obj, cam);
-		}
+		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "world_matrix", s, obj, cam);
+	}
 	);
 	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("world_matrix", ua));
 
 	// VIEW MATRIX
 	ua = UniformAuto(
 		[](GLuint program, const std::string& name) {
-			return MaterialManager::_initShaderProgramUniformAuto(program, name);
-		},
+		return MaterialManager::_initShaderProgramUniformAuto(program, name);
+	},
 		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
-			MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "view_matrix", s, obj, cam);
-		}
+		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "view_matrix", s, obj, cam);
+	}
 	);
 	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("view_matrix", ua));
 
 	// PROJ MATRIX
 	ua = UniformAuto(
 		[](GLuint program, const std::string& name) {
-			return MaterialManager::_initShaderProgramUniformAuto(program, name);
-		},
+		return MaterialManager::_initShaderProgramUniformAuto(program, name);
+	},
 		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
-			MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "proj_matrix", s, obj, cam);
-		}
+		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "proj_matrix", s, obj, cam);
+	}
 	);
 	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("proj_matrix", ua));
 
 	// VIEWPROJ MATRIX
 	ua = UniformAuto(
 		[](GLuint program, const std::string& name) {
-			return MaterialManager::_initShaderProgramUniformAuto(program, name);
-		},
+		return MaterialManager::_initShaderProgramUniformAuto(program, name);
+	},
 		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
-			MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "viewproj_matrix", s, obj, cam);
-		}
+		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "viewproj_matrix", s, obj, cam);
+	}
 	);
 	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("viewproj_matrix", ua));
 
 	// WORLD VIEW MATRIX
 	ua = UniformAuto(
 		[](GLuint program, const std::string& name) {
-			return MaterialManager::_initShaderProgramUniformAuto(program, name);
-		},
+		return MaterialManager::_initShaderProgramUniformAuto(program, name);
+	},
 		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
-			MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "worldview_matrix", s, obj, cam);
-		}
+		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "worldview_matrix", s, obj, cam);
+	}
 	);
 	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("worldview_matrix", ua));
 
 	// WORLDVIEWPROJ MATRIX
 	ua = UniformAuto(
 		[](GLuint program, const std::string& name) {
-			return MaterialManager::_initShaderProgramUniformAuto(program, name);
-		},
+		return MaterialManager::_initShaderProgramUniformAuto(program, name);
+	},
 		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
-			MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "worldviewproj_matrix", s, obj, cam);
-		}
+		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "worldviewproj_matrix", s, obj, cam);
+	}
 	);
 	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("worldviewproj_matrix", ua));
 
 	// CAMERA POSITION
 	ua = UniformAuto(
 		[](GLuint program, const std::string& name) {
-			return MaterialManager::_initShaderProgramUniformAuto(program, name);
-		},
+		return MaterialManager::_initShaderProgramUniformAuto(program, name);
+	},
 		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
-			MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "camera_position", s, obj, cam);
-		}
+		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "camera_position", s, obj, cam);
+	}
 	);
 	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("camera_position", ua));
-	
 
-	// LIGHTS
+
+	// DIRECTIONAL LIGHT
 	ua = UniformAuto(
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramUniformAuto(program, name);
 	},
-	[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
-		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "lights", s, obj, cam);
+		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+		MaterialManager::_renderShaderProgramUniformAuto(program, 0, paramName, "directionlight", s, obj, cam);	// pour biaiser le système on force avec un 0
 	}
 	);
-	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("lights", ua));
+	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("directionlight", ua));
 
+	// POINT LIGHTS
+	ua = UniformAuto(
+		[](GLuint program, const std::string& name) {
+		return MaterialManager::_initShaderProgramUniformAuto(program, name);
+	},
+		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+		MaterialManager::_renderShaderProgramUniformAuto(program, 0, paramName, "pointlights", s, obj, cam);	// pour biaiser le système on force avec un 0
+	}
+	);
+	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("pointlights", ua));
+
+	
 	// LIGHTS COUNT
 	ua = UniformAuto(
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramUniformAuto(program, name);
 	},
-	[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
-		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "light_count", s, obj, cam);
+		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "pointlights_count", s, obj, cam);
 	}
 	);
-	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("light_count", ua));
+	m_uniformsAuto.insert(std::pair<std::string, UniformAuto>("pointlights_count", ua));
 
 	// SHADOWMAP
 	ua = UniformAuto(
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramUniformAuto(program, name);
 	},
-	[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
 		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "shadow_map", s, obj, cam, numSampler);
 	}
 	);
@@ -1071,11 +1084,11 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 	************* */
 	Sampler s = Sampler(
 		[](GLuint program, const std::string& name) {
-			return MaterialManager::_initShaderProgramUniformAuto(program, name);
-		},
+		return MaterialManager::_initShaderProgramUniformAuto(program, name);
+	},
 		[](GLuint program, GLint location, Pass* pass, const std::string& textureName, int numSampler) {
-			MaterialManager::_renderShaderProgramSampler(program, location, pass, textureName, numSampler);
-		}
+		MaterialManager::_renderShaderProgramSampler(program, location, pass, textureName, numSampler);
+	}
 	);
 	m_samplers.insert(std::pair<std::string, Sampler>("sampler", s));
 }
@@ -1135,14 +1148,16 @@ void MaterialManager::_renderShaderProgramUniformAuto(GLuint program, GLint loca
 	Matrix4 mat_tmp = Matrix4::IDENTITY;
 	float real = 0.f;
 	Vector3 vec3 = Vector3::ZERO;
-	std::vector<Light*> lights;
+	std::vector<PointLight*> pointlights;
+	Light* directionalLight = nullptr;
 
 	enum TypeData
 	{
 		MATRIX4,
 		REAL,
 		VECTOR3,
-		LIGHT,
+		DIRECTIONALLIGHT,
+		POINTLIGHTS,
 		SHADOWMAP
 	};
 
@@ -1167,139 +1182,127 @@ void MaterialManager::_renderShaderProgramUniformAuto(GLuint program, GLint loca
 		vec3 = cam->getWorldPosition();
 		t = TypeData::VECTOR3;
 	}
-	else if (paramUniformName == "lights")
+	else if (paramUniformName == "pointlights")
 	{
-		lights = s->getLights();
-		real = lights.size();
-
-		t = TypeData::LIGHT;
+		pointlights = s->getPointLights();
+		real = pointlights.size();
+		t = TypeData::POINTLIGHTS;
 	}
-	else if (paramUniformName == "light_count")
+	else if (paramUniformName == "pointlights_count")
 	{
-		real = s->getLights().size();
+		real = s->getPointLights().size();
 		t = TypeData::REAL;
+	}
+	else if (paramUniformName == "directionlight")
+	{
+		directionalLight = s->getDirectionalLight();
+		t = TypeData::DIRECTIONALLIGHT;
 	}
 	else if (paramUniformName == "shadow_map")
 	{
-		lights = s->getLights();
-		real = lights.size();
+		directionalLight = s->getDirectionalLight();
 		t = TypeData::SHADOWMAP;
 	}
 
-	// TODO Rajouter tout ce qu'il manque: la gestion du temps, les lights, etc.
-
 	switch (t)
 	{
-		case TypeData::MATRIX4:
-		{
-			float arr[16];
-			mat_tmp.toArray(arr);
-			glUniformMatrix4fv(location, 1, GL_FALSE, arr);
-			break;
-		}
-		case TypeData::VECTOR3:
-		{
-			glUniform3f(location, vec3.x, vec3.y, vec3.z);
-			break;
-		}
-		case TypeData::REAL:
-		{
-			glUniform1f(location, real);
-			break;
-		}
-		case TypeData::LIGHT:
-		{
-			// Un uniform buffer object aurait été pratique pour ce problème
-			// Cela va être très moche mais faut faire vite
-			int i = 0;
-			for (auto it = lights.begin(); it != lights.end(); ++it)
-			{
-				Light* l = *it;
-				Matrix4 view = l->getWorldMatrix();
-				Matrix4 proj = l->getProjectionLight();
-				Color c = l->getColor();
-				float intensity = l->getIntensity();
-				float shininess = l->getShininess();
-				bool blinn = l->isBlinn();
-
-				float arr[16];
-
-				// On va acquérir à chaque frame les location comme on n'a pas prévu cela en amont
-				// D'abord on construit la chaine (dégueu :P)
-				std::string base = paramName;
-				base = base.append("[" + std::to_string(i) + "]");
-
-				// Là on connait ce que l'on possède dans une light donc on envoit
-
-				// view
-				view.toArray(arr);
-				glUniformMatrix4fv(glGetUniformLocation(program, (base + ".viewMatrix").c_str()), 1, GL_FALSE, arr);
-
-				// proj
-				proj.toArray(arr);
-				glUniformMatrix4fv(glGetUniformLocation(program, (base + ".projMatrix").c_str()), 1, GL_FALSE, arr);
-
-				// light pos
-				Vector3 lightPos = l->getWorldPosition();
-				glUniform3f(glGetUniformLocation(program, (base + ".lightPos").c_str()), lightPos.x, lightPos.y, lightPos.z);
-
-				// color
-				glUniform3f(glGetUniformLocation(program, (base + ".color").c_str()), c.getRed(), c.getGreen(), c.getBlue());
-
-				// intensity
-				glUniform1f(glGetUniformLocation(program, (base + ".intensity").c_str()), intensity);
-
-				// shininess
-				glUniform1f(glGetUniformLocation(program, (base + ".shininess").c_str()), shininess);
-
-				// blinn
-				glUniform1i(glGetUniformLocation(program, (base + ".blinn").c_str()), blinn);
-
-				i++;
-			}
-								
-			break;
-		}
-		case TypeData::SHADOWMAP:
-			
-			if (numSampler < 0 || !obj->canReceiveShadow())
-				return;
-
-			int i = 0;
-			for (auto it = lights.begin(); it != lights.end(); ++it)
-			{
-				Light* l = *it;
-				Matrix4 view = l->getWorldMatrix();
-				Matrix4 proj = l->getProjectionLight();
-				Color c = l->getColor();
-				float intensity = l->getIntensity();
-				float shininess = l->getShininess();
-				bool blinn = l->isBlinn();
-				GLuint depthMap = l->getDepthMapTexture();
-
-				// On va acquérir à chaque frame les location comme on n'a pas prévu cela en amont
-				// D'abord on construit la chaine (dégueu :P)
-				std::string base = paramName;
-				// base = base.append("[" + std::to_string(i) + "]");
-
-				// Là on connait ce que l'on possède dans une light donc on envoie
-				// Calcul du LightSpaceMatrix
-				float arr[16];
-				Matrix4 lightSpaceMatrix = l->getProjectionLight() * l->getWorldMatrix().inverse();
-				static Matrix4 biasMatrix = Matrix4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);
-				Matrix4 depthBiasMatrix = biasMatrix * lightSpaceMatrix;
-				depthBiasMatrix.toArray(arr);
-				glUniformMatrix4fv(glGetUniformLocation(program, "uDepthBiasMatrix"), 1, GL_FALSE, arr);
-
-				// On envoie cette fois-ci le sampler de la depthMap
-				GLint location_tmp = glGetUniformLocation(program, base.c_str());
-				_renderSampler(location_tmp, depthMap, numSampler);
-
-				i++;
-			}
-
-			break;
+	case TypeData::MATRIX4:
+	{
+		float arr[16];
+		mat_tmp.toArray(arr);
+		glUniformMatrix4fv(location, 1, GL_FALSE, arr);
+		break;
 	}
+	case TypeData::VECTOR3:
+	{
+		glUniform3f(location, vec3.x, vec3.y, vec3.z);
+		break;
+	}
+	case TypeData::REAL:
+	{
+		glUniform1f(location, real);
+		break;
+	}
+	case TypeData::DIRECTIONALLIGHT:
+	{
+		if (directionalLight == nullptr)
+		{
+			glUniform1i(glGetUniformLocation(program, "uHasDirectionalLight"), false);
+			break;
+		}
+
+		glUniform1i(glGetUniformLocation(program, "uHasDirectionalLight"), true);
+
+		Vector3 pos = directionalLight->getWorldPosition();
+		Color ambient = directionalLight->m_ambient;
+		Color diffuse = directionalLight->m_diffuse;
+		Color specular = directionalLight->m_specular;
+
+		// Position
+		glUniform3f(glGetUniformLocation(program, (paramName + ".position").c_str()), pos.x, pos.y, pos.z);
+
+		// Light color
+		glUniform3f(glGetUniformLocation(program, (paramName + ".ambient").c_str()), ambient.getRed(), ambient.getGreen(), ambient.getBlue());
+		glUniform3f(glGetUniformLocation(program, (paramName + ".diffuse").c_str()), diffuse.getRed(), diffuse.getGreen(), diffuse.getBlue());
+		glUniform3f(glGetUniformLocation(program, (paramName + ".specular").c_str()), specular.getRed(), specular.getGreen(), specular.getBlue());
+
+		break;
+	}
+	case TypeData::POINTLIGHTS:
+	{
+		int i = 0;
+		for (auto it = pointlights.begin(); it != pointlights.end(); ++it)
+		{
+			PointLight* pl = *it;
+
+			Vector3 pos = pl->getWorldPosition();
+			Color ambient = pl->m_ambient;
+			Color diffuse = pl->m_diffuse;
+			Color specular = pl->m_specular;
+			float constant = pl->m_constant;
+			float linear = pl->m_linear;
+			float quadratic = pl->m_quadratic;
+
+			// Position
+			glUniform3f(glGetUniformLocation(program, (paramName + "[" + std::to_string(i) + "].position").c_str()), pos.x, pos.y, pos.z);
+
+			// Light color
+			glUniform3f(glGetUniformLocation(program, (paramName + "[" + std::to_string(i) + "].ambient").c_str()), ambient.getRed(), ambient.getGreen(), ambient.getBlue());
+			glUniform3f(glGetUniformLocation(program, (paramName + "[" + std::to_string(i) + "].diffuse").c_str()), diffuse.getRed(), diffuse.getGreen(), diffuse.getBlue());
+			glUniform3f(glGetUniformLocation(program, (paramName + "[" + std::to_string(i) + "].specular").c_str()), specular.getRed(), specular.getGreen(), specular.getBlue());
+			
+			// Light variable
+			glUniform1f(glGetUniformLocation(program, (paramName + "[" + std::to_string(i) + "].constant").c_str()), constant);
+			glUniform1f(glGetUniformLocation(program, (paramName + "[" + std::to_string(i) + "].linear").c_str()), linear);
+			glUniform1f(glGetUniformLocation(program, (paramName + "[" + std::to_string(i) + "].quadratic").c_str()), quadratic);
+
+			++i;
+		}
+
+		break;
+	}
+	case TypeData::SHADOWMAP:
+	{
+		if (directionalLight == nullptr || numSampler < 0 || !obj->canReceiveShadow())
+			return;
+
+		GLint spaceLocation = glGetUniformLocation(program, "uLightSpaceMatrix");
+		GLint samplerShadowLocation = glGetUniformLocation(program, paramName.c_str());
+
+		float arr[16];
+
+		// On envoit la depth map
+		_renderSampler(samplerShadowLocation, directionalLight->getDepthMapTexture(), numSampler);
+
+		// On envoit le reste des uniforms
+		Matrix4 lightProjMat = directionalLight->getProjectionLight();
+		Matrix4 spaceMatrix = lightProjMat * Matrix4().lookAt(directionalLight->getWorldPosition(), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 1.0, 0.0));
+		spaceMatrix.toArray(arr);
+		glUniformMatrix4fv(spaceLocation, 1, GL_FALSE, arr);
+
+		break;
+	}
+}
 }
 
 void MaterialManager::_renderShaderProgramSampler(GLuint program, GLint location, Pass* pass, const std::string& textureName, int numSampler)
@@ -1351,5 +1354,5 @@ void MaterialManager::_renderShaderProgramUniformNoAuto(GLuint program, GLint lo
 		glUniform1fv(location, values.size(), values.data());
 	}
 
-		
+
 }

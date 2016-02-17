@@ -215,9 +215,6 @@ template <typename T> void Renderer::_renderPassList(T start, T end,Scene* s, Ca
 		if (!p->checkLinked())
 			continue;
 
-		if (obj->getName() == "Ground")
-			int k = 0;
-
 		// Reset des valeurs GL
 		glBlendFunc(GL_ONE, GL_ZERO);
 		glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ONE, GL_ZERO);
@@ -327,93 +324,85 @@ void Renderer::_renderShaderProgram(ShaderProgram* sp, Pass* p, Scene* s, Object
 
 bool Renderer::_renderShadowMap(Scene* s, Camera* c)
 {
-	std::vector<Light*> lights = s->getLights();
+	Light* light = s->getDirectionalLight();
+
+	if (light == nullptr || ((light != nullptr) && !light->canCastShadow()))
+		return true;
+
 	std::vector<Object3D*> objects = s->getObjects();
 
-	glBlendFunc(GL_ONE, GL_ZERO);
-	glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ONE, GL_ZERO);
-	glDisable(GL_BLEND);
+	Material* mat = MaterialManager::getMaterial("ShadowMapMaterial");
+	Pass* pass = mat->getPass("FirstPass");
+
+	if (!pass->checkLinked())
+		return false;
+
+	// On utilise toujours le même programme
+	glUseProgram(pass->m_OpenGLProgram);
+	
+	// On crée une caméra ortho qui sera toujours la même
+	OrthographicCamera* ortho = new OrthographicCamera(-(mViewportWidth / 2.f), (mViewportWidth / 2.f), (mViewportHeight / 2.f), -(mViewportHeight / 2.f), 0.1f, 500.f);
+
+	// On acquiert les différentes location
+	GLint worldLocation = glGetUniformLocation(pass->m_OpenGLProgram, "uWorldMatrix");
+	GLint spaceLocation = glGetUniformLocation(pass->m_OpenGLProgram, "uLightSpaceMatrix");
+	GLint positionLocation = glGetAttribLocation(pass->m_OpenGLProgram, "aPosition");
+
+	float arr[16];
+
+	light->setShadowCamera(ortho);
+
+	glViewport(0, 0, light->getShadowMapWidth(), light->getShadowMapHeight());
+		
+	glBindFramebuffer(GL_FRAMEBUFFER, light->getDepthMapFBO());
+		
+	glClear(GL_DEPTH_BUFFER_BIT);
+
 	glEnable(GL_CULL_FACE);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-	glDepthMask(GL_TRUE);
-	glDepthRange(0.f, 1.f);
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
+	glFrontFace(GL_CW);
 
-	// On parcourt chaque light
-	for (auto it = lights.begin(); it != lights.end(); ++it)
+	// On bind les matrices pour la light
+	Matrix4 lightProjMat = light->getProjectionLight();
+	Matrix4 spaceMatrix = lightProjMat * Matrix4().lookAt(light->getWorldPosition(), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 1.0, 0.0));
+	spaceMatrix.toArray(arr);
+	glUniformMatrix4fv(spaceLocation, 1, GL_FALSE, arr);
+
+	// On parcourt chaque objets dans la scène
+	for (auto jt = objects.begin(); jt != objects.end(); ++jt)
 	{
-		Light* l = *it;
+		Object3D* obj = *jt;
 
-		if (!l->canCastShadow())
+		if (!obj->isAbsoluteVisible() || !obj->hasMesh() || !obj->canCastShadow())
 			continue;
 
-		OrthographicCamera* ortho = new OrthographicCamera(-(mViewportWidth / 2.f), (mViewportWidth / 2.f), -(mViewportHeight / 2.f), (mViewportHeight / 2.f), 0.1f, 30000.f);
-		// OrthographicCamera* ortho = new OrthographicCamera(0.f, mViewportWidth, 0.f, mViewportHeight);
-		l->setShadowCamera(ortho);
+		MeshSPtr mesh = obj->getMesh();
+		OpenGLBuffer buffers = mesh->getBuffers();
 
-		glViewport(0, 0, l->getShadowMapWidth(), l->getShadowMapHeight());
-		glBindFramebuffer(GL_FRAMEBUFFER, l->getDepthMapFBO());
-		glClear(GL_COLOR_BUFFER_BIT);
+		// World
+		obj->getWorldMatrix().toArray(arr);
+		glUniformMatrix4fv(worldLocation, 1, GL_FALSE, arr);
+			
+		// Vertex buffer
+		glBindBuffer(GL_ARRAY_BUFFER, buffers.mVertexBuffer->id);
+		glVertexAttribPointer(positionLocation, buffers.mVertexBuffer->itemSize, GL_FLOAT, false, 0, 0);
+		glEnableVertexAttribArray(positionLocation);
 
-		// On parcourt chaque objets dans la scène
-		for (auto jt = objects.begin(); jt != objects.end(); ++jt)
+		if (buffers.mIndexBuffer != nullptr && buffers.mIndexBuffer->numItems > 0)
 		{
-			Object3D* obj = *jt;
-
-			if (!obj->isAbsoluteVisible() || !obj->hasMesh() || !obj->canCastShadow())
-				continue;
-
-			// ici on est sûr des noms c'est dépendant du moteur
-			Material* mat = MaterialManager::getMaterial("ShadowMapMaterial");
-			Pass* pass = mat->getPass("FirstPass");
-
-			if (!pass->checkLinked())
-				return false;
-
-			MeshSPtr mesh = obj->getMesh();
-			OpenGLBuffer buffers = mesh->getBuffers();
-
-			glUseProgram(pass->m_OpenGLProgram);
-
-			// On envoit toutes les infos simples
-			float arr[16];
-
-			// World
-			obj->getWorldMatrix().toArray(arr);
-			glUniformMatrix4fv(glGetUniformLocation(pass->m_OpenGLProgram, "uWorldMatrix"), 1, GL_FALSE, arr);
-
-			// LightSpaceMatrix
-			Matrix4 lightSpaceMatrix = l->getProjectionLight() * l->getWorldMatrix().inverse();
-			lightSpaceMatrix.toArray(arr);
-			glUniformMatrix4fv(glGetUniformLocation(pass->m_OpenGLProgram, "uLightSpaceMatrix"), 1, GL_FALSE, arr);
-			
-			// Vertex buffer
-			glBindBuffer(GL_ARRAY_BUFFER, buffers.mVertexBuffer->id);
-			GLuint location = glGetAttribLocation(pass->m_OpenGLProgram, "aPosition");
-			glVertexAttribPointer(location, buffers.mVertexBuffer->itemSize, GL_FLOAT, false, 0, 0);
-			glEnableVertexAttribArray(location);
-
-			if (buffers.mIndexBuffer != nullptr && buffers.mIndexBuffer->numItems > 0)
-			{
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers.mIndexBuffer->id);
-				glDrawElements(GL_TRIANGLES, mesh->getGeometry().getNbIndices(), GL_UNSIGNED_INT, 0);
-			}
-			else
-			{
-				glDrawArrays(GL_TRIANGLES, 0, mesh->getGeometry().getNbVertices());
-			}
-			
-
-			glUseProgram(0);
-
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers.mIndexBuffer->id);
+			glDrawElements(GL_TRIANGLES, mesh->getGeometry().getNbIndices(), GL_UNSIGNED_INT, 0);
+		}
+		else
+		{
+			glDrawArrays(GL_TRIANGLES, 0, mesh->getGeometry().getNbVertices());
 		}
 
-		l->setShadowCamera(nullptr);
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 	}
+
+	light->setShadowCamera(nullptr);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	glUseProgram(0);
 
 	// On remet le viewport correctement
 	glViewport(0, 0, mViewportWidth, mViewportHeight);

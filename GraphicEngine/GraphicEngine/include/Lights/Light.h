@@ -10,11 +10,9 @@ class Light : public Object3D
 {
 public:
 
-	Light(const Color& color, Camera* = nullptr);
+	Light(const std::string& name);
 	~Light();
 
-	void setColor(Color& c);
-	
 	void castShadow(bool withShadow);
 	void setShadowCamera(Camera* c);
 	void setShadowBias(float value);
@@ -25,21 +23,16 @@ public:
 	GLuint getDepthMapFBO() const;
 	GLuint getDepthMapTexture() const;
 
-	Color getColor() const;
-	bool isBlinn() const;
-	float getIntensity() const;
-	float getShininess() const;
 	Matrix4 getProjectionLight() const;
 
 	void updateDepthMapObject();
 
+	Color m_ambient;
+	Color m_diffuse;
+	Color m_specular;
+	bool m_isBlinn;
 
 protected:
-
-	Color m_color;
-	bool m_isBlinn;
-	float m_intensity;
-	float m_shininess;
 
 	// For shadows
 	Camera* m_shadowCamera;

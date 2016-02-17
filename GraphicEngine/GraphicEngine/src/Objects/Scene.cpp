@@ -16,14 +16,24 @@ void Scene::add(Object3D* obj, Object3D* parent)
 	needUpdate();
 }
 
-void Scene::add(Light* obj, Object3D* parent)
+void Scene::addLight(Light* obj, Object3D* parent)
 {
 	if (parent == nullptr)
 		mRoot->addChild(obj);
 	else
 		parent->addChild(obj);
 
-	mLights.push_back(obj);
+	mDirectionalLight = obj;
+}
+
+void Scene::addLight(PointLight* obj, Object3D* parent)
+{
+	if (parent == nullptr)
+		mRoot->addChild(obj);
+	else
+		parent->addChild(obj);
+
+	mPointLights.push_back(obj);
 }
 
 void Scene::remove(Object3D* obj)
@@ -50,9 +60,14 @@ std::vector<Object3D*>& Scene::getObjects()
 	return mObjects;
 }
 
-std::vector<Light*> Scene::getLights()
+Light* Scene::getDirectionalLight() const
 {
-	return mLights;
+	return mDirectionalLight;
+}
+
+std::vector<PointLight*> Scene::getPointLights() const
+{
+	return mPointLights;
 }
 
 void Scene::autoUpdate(bool update)

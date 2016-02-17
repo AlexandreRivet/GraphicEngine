@@ -336,6 +336,7 @@ Matrix4& Object3D::getWorldMatrix()
 
 void Object3D::updateWorldMatrix(bool force)
 {
+
 	if (mWorldMatrixNeedsUpdate || force)
 	{
 		if (mParent == nullptr)
@@ -344,7 +345,7 @@ void Object3D::updateWorldMatrix(bool force)
 		}
 		else
 		{
-			mWorldMatrix = mParent->getWorldMatrix() * mMatrix;
+			mWorldMatrix = mMatrix * mParent->getWorldMatrix();
 		}
 
 		Matrix4 m = mWorldMatrix;

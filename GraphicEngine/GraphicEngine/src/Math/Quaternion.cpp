@@ -9,11 +9,8 @@ const float Quaternion::msEpsilon = 1e-03f;
 const Quaternion Quaternion::ZERO(0, 0, 0, 0);
 const Quaternion Quaternion::IDENTITY(1, 0, 0, 0);
 
-//-----------------------------------------------------------------------
 void Quaternion::FromRotationMatrix(const Matrix3& kRot)
 {
-	// Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
-	// article "Quaternion Calculus and Fast Animation".
 
 	float fTrace = kRot[0][0] + kRot[1][1] + kRot[2][2];
 	float fRoot;
@@ -49,7 +46,8 @@ void Quaternion::FromRotationMatrix(const Matrix3& kRot)
 		*apkQuat[k] = (kRot[k][i] + kRot[i][k])*fRoot;
 	}
 }
-//-----------------------------------------------------------------------
+
+
 void Quaternion::ToRotationMatrix(Matrix3& kRot) const
 {
 	float fTx = x + x;
@@ -75,14 +73,10 @@ void Quaternion::ToRotationMatrix(Matrix3& kRot) const
 	kRot[2][1] = fTyz + fTwx;
 	kRot[2][2] = 1.0f - (fTxx + fTyy);
 }
-//-----------------------------------------------------------------------
+
 void Quaternion::FromAngleAxis(const float& rfAngle,
 	const Vector3& rkAxis)
 {
-	// assert:  axis[] is unit length
-	//
-	// The quaternion representing the rotation is
-	//   q = cos(A/2)+sin(A/2)*(x*i+y*j+z*k)
 
 	float fHalfAngle(0.5f*rfAngle);
 	float fSin = std::sin(fHalfAngle);
@@ -91,11 +85,9 @@ void Quaternion::FromAngleAxis(const float& rfAngle,
 	y = fSin*rkAxis.y;
 	z = fSin*rkAxis.z;
 }
-//-----------------------------------------------------------------------
+
 void Quaternion::ToAngleAxis(float& rfAngle, Vector3& rkAxis) const
 {
-	// The quaternion representing the rotation is
-	//   q = cos(A/2)+sin(A/2)*(x*i+y*j+z*k)
 
 	float fSqrLength = x*x + y*y + z*z;
 	if (fSqrLength > 0.0)
@@ -108,14 +100,13 @@ void Quaternion::ToAngleAxis(float& rfAngle, Vector3& rkAxis) const
 	}
 	else
 	{
-		// angle is 0 (mod 2*pi), so any axis will do
 		rfAngle = 0.0;
 		rkAxis.x = 1.0;
 		rkAxis.y = 0.0;
 		rkAxis.z = 0.0;
 	}
 }
-//-----------------------------------------------------------------------
+
 void Quaternion::FromAxes(const Vector3* akAxis)
 {
 	Matrix3 kRot;
@@ -129,7 +120,7 @@ void Quaternion::FromAxes(const Vector3* akAxis)
 
 	FromRotationMatrix(kRot);
 }
-//-----------------------------------------------------------------------
+
 void Quaternion::FromAxes(const Vector3& xaxis, const Vector3& yaxis, const Vector3& zaxis)
 {
 	Matrix3 kRot;
@@ -149,7 +140,7 @@ void Quaternion::FromAxes(const Vector3& xaxis, const Vector3& yaxis, const Vect
 	FromRotationMatrix(kRot);
 
 }
-//-----------------------------------------------------------------------
+
 void Quaternion::ToAxes(Vector3* akAxis) const
 {
 	Matrix3 kRot;
@@ -163,7 +154,7 @@ void Quaternion::ToAxes(Vector3* akAxis) const
 		akAxis[iCol].z = kRot[2][iCol];
 	}
 }
-//-----------------------------------------------------------------------
+
 Vector3 Quaternion::xAxis(void) const
 {
 	//float fTx  = 2.0*x;
@@ -178,7 +169,7 @@ Vector3 Quaternion::xAxis(void) const
 
 	return Vector3(1.0f - (fTyy + fTzz), fTxy + fTwz, fTxz - fTwy);
 }
-//-----------------------------------------------------------------------
+
 Vector3 Quaternion::yAxis(void) const
 {
 	float fTx = 2.0f*x;
@@ -193,7 +184,7 @@ Vector3 Quaternion::yAxis(void) const
 
 	return Vector3(fTxy - fTwz, 1.0f - (fTxx + fTzz), fTyz + fTwx);
 }
-//-----------------------------------------------------------------------
+
 Vector3 Quaternion::zAxis(void) const
 {
 	float fTx = 2.0f*x;
@@ -208,7 +199,7 @@ Vector3 Quaternion::zAxis(void) const
 
 	return Vector3(fTxz + fTwy, fTyz - fTwx, 1.0f - (fTxx + fTyy));
 }
-//-----------------------------------------------------------------------
+
 void Quaternion::ToAxes(Vector3& xaxis, Vector3& yaxis, Vector3& zaxis) const
 {
 	Matrix3 kRot;
@@ -237,22 +228,19 @@ Quaternion& Quaternion::operator= (const Quaternion& rkQ)
 	return *this;
 }
 
-//-----------------------------------------------------------------------
+
 Quaternion Quaternion::operator+ (const Quaternion& rkQ) const
 {
 	return Quaternion(w + rkQ.w, x + rkQ.x, y + rkQ.y, z + rkQ.z);
 }
-//-----------------------------------------------------------------------
+
 Quaternion Quaternion::operator- (const Quaternion& rkQ) const
 {
 	return Quaternion(w - rkQ.w, x - rkQ.x, y - rkQ.y, z - rkQ.z);
 }
-//-----------------------------------------------------------------------
+
 Quaternion Quaternion::operator* (const Quaternion& rkQ) const
 {
-	// NOTE:  Multiplication is not generally commutative, so in most
-	// cases p*q != q*p.
-
 	return Quaternion
 		(
 		w * rkQ.w - x * rkQ.x - y * rkQ.y - z * rkQ.z,
@@ -261,33 +249,33 @@ Quaternion Quaternion::operator* (const Quaternion& rkQ) const
 		w * rkQ.z + z * rkQ.w + x * rkQ.y - y * rkQ.x
 		);
 }
-//-----------------------------------------------------------------------
+
 Quaternion Quaternion::operator* (float fScalar) const
 {
 	return Quaternion(fScalar*w, fScalar*x, fScalar*y, fScalar*z);
 }
-//-----------------------------------------------------------------------
+
 Quaternion operator* (float fScalar, const Quaternion& rkQ)
 {
 	return Quaternion(fScalar*rkQ.w, fScalar*rkQ.x, fScalar*rkQ.y,
 		fScalar*rkQ.z);
 }
-//-----------------------------------------------------------------------
+
 Quaternion Quaternion::operator- () const
 {
 	return Quaternion(-w, -x, -y, -z);
 }
-//-----------------------------------------------------------------------
+
 float Quaternion::Dot(const Quaternion& rkQ) const
 {
 	return w*rkQ.w + x*rkQ.x + y*rkQ.y + z*rkQ.z;
 }
-//-----------------------------------------------------------------------
+
 float Quaternion::Norm() const
 {
 	return w*w + x*x + y*y + z*z;
 }
-//-----------------------------------------------------------------------
+
 Quaternion Quaternion::Inverse() const
 {
 	float fNorm = w*w + x*x + y*y + z*z;
@@ -298,22 +286,17 @@ Quaternion Quaternion::Inverse() const
 	}
 	else
 	{
-		// return an invalid result to flag the error
 		return ZERO;
 	}
 }
-//-----------------------------------------------------------------------
+
 Quaternion Quaternion::UnitInverse() const
 {
-	// assert:  'this' is unit length
 	return Quaternion(w, -x, -y, -z);
 }
-//-----------------------------------------------------------------------
+
 Quaternion Quaternion::Exp() const
 {
-	// If q = A*(x*i+y*j+z*k) where (x,y,z) is unit length, then
-	// exp(q) = cos(A)+sin(A)*(x*i+y*j+z*k).  If sin(A) is near zero,
-	// use exp(q) = cos(A)+A*(x*i+y*j+z*k) since A/sin(A) has limit 1.
 
 	float fAngle(std::sqrt(x*x + y*y + z*z));
 	float fSin = std::sin(fAngle);
@@ -337,13 +320,9 @@ Quaternion Quaternion::Exp() const
 
 	return kResult;
 }
-//-----------------------------------------------------------------------
+
 Quaternion Quaternion::Log() const
 {
-	// If q = cos(A)+sin(A)*(x*i+y*j+z*k) where (x,y,z) is unit length, then
-	// log(q) = A*(x*i+y*j+z*k).  If sin(A) is near zero, use log(q) =
-	// sin(A)*(x*i+y*j+z*k) since sin(A)/A has limit 1.
-
 	Quaternion kResult;
 	kResult.w = 0.0;
 
@@ -367,10 +346,9 @@ Quaternion Quaternion::Log() const
 
 	return kResult;
 }
-//-----------------------------------------------------------------------
+
 Vector3 Quaternion::operator* (const Vector3& v) const
 {
-	// nVidia SDK implementation
 	Vector3 uv, uuv;
 	Vector3 qvec(x, y, z);
 	uv = qvec.crossProduct(v);
@@ -381,7 +359,7 @@ Vector3 Quaternion::operator* (const Vector3& v) const
 	return v + uv + uuv;
 
 }
-//-----------------------------------------------------------------------
+
 bool Quaternion::equals(const Quaternion& rhs, const float& tolerance) const
 {
 	float fCos = Dot(rhs);
@@ -392,14 +370,13 @@ bool Quaternion::equals(const Quaternion& rhs, const float& tolerance) const
 
 
 }
-//-----------------------------------------------------------------------
+
 Quaternion Quaternion::Slerp(float fT, const Quaternion& rkP,
 	const Quaternion& rkQ, bool shortestPath)
 {
 	float fCos = rkP.Dot(rkQ);
 	Quaternion rkT;
 
-	// Do we need to invert rotation?
 	if (fCos < 0.0f && shortestPath)
 	{
 		fCos = -fCos;
@@ -412,7 +389,6 @@ Quaternion Quaternion::Slerp(float fT, const Quaternion& rkP,
 
 	if (std::abs(fCos) < 1 - msEpsilon)
 	{
-		// Standard case (slerp)
 		float fSin = std::sqrt(1 - Math::Sqr(fCos));
 		float fAngle = std::atan2(fSin, fCos);
 		float fInvSin = 1.0f / fSin;
@@ -422,19 +398,12 @@ Quaternion Quaternion::Slerp(float fT, const Quaternion& rkP,
 	}
 	else
 	{
-		// There are two situations:
-		// 1. "rkP" and "rkQ" are very close (fCos ~= +1), so we can do a linear
-		//    interpolation safely.
-		// 2. "rkP" and "rkQ" are almost inverse of each other (fCos ~= -1), there
-		//    are an infinite number of possibilities interpolation. but we haven't
-		//    have method to fix this case, so just use linear interpolation here.
 		Quaternion t = (1.0f - fT) * rkP + fT * rkT;
-		// taking the complement requires renormalisation
 		t.normalise();
 		return t;
 	}
 }
-//-----------------------------------------------------------------------
+
 Quaternion Quaternion::SlerpExtraSpins(float fT,
 	const Quaternion& rkP, const Quaternion& rkQ, int iExtraSpins)
 {
@@ -451,12 +420,11 @@ Quaternion Quaternion::SlerpExtraSpins(float fT,
 	float fCoeff1 = std::sin(fT*fAngle + fPhase)*fInvSin;
 	return fCoeff0*rkP + fCoeff1*rkQ;
 }
-//-----------------------------------------------------------------------
+
 void Quaternion::Intermediate(const Quaternion& rkQ0,
 	const Quaternion& rkQ1, const Quaternion& rkQ2,
 	Quaternion& rkA, Quaternion& rkB)
 {
-	// assert:  q0, q1, q2 are unit quaternions
 
 	Quaternion kQ0inv = rkQ0.UnitInverse();
 	Quaternion kQ1inv = rkQ1.UnitInverse();
@@ -468,7 +436,7 @@ void Quaternion::Intermediate(const Quaternion& rkQ0,
 	rkA = rkQ1*kArg.Exp();
 	rkB = rkQ1*kMinusArg.Exp();
 }
-//-----------------------------------------------------------------------
+
 Quaternion Quaternion::Squad(float fT,
 	const Quaternion& rkP, const Quaternion& rkA,
 	const Quaternion& rkB, const Quaternion& rkQ, bool shortestPath)
@@ -478,7 +446,7 @@ Quaternion Quaternion::Squad(float fT,
 	Quaternion kSlerpQ = Slerp(fT, rkA, rkB);
 	return Slerp(fSlerpT, kSlerpP, kSlerpQ);
 }
-//-----------------------------------------------------------------------
+
 float Quaternion::normalise(void)
 {
 	float len = Norm();
@@ -486,22 +454,17 @@ float Quaternion::normalise(void)
 	*this = *this * factor;
 	return len;
 }
-//-----------------------------------------------------------------------
+
 float Quaternion::getRoll(bool reprojectAxis) const
 {
 	if (reprojectAxis)
 	{
-		// roll = atan2(localx.y, localx.x)
-		// pick parts of xAxis() implementation that we need
-		//			float fTx  = 2.0*x;
 		float fTy = 2.0f*y;
 		float fTz = 2.0f*z;
 		float fTwz = fTz*w;
 		float fTxy = fTy*x;
 		float fTyy = fTy*y;
 		float fTzz = fTz*z;
-
-		// Vector3(1.0-(fTyy+fTzz), fTxy+fTwz, fTxz-fTwy);
 
 		return std::atan2(fTxy + fTwz, 1.0f - (fTyy + fTzz));
 
@@ -511,37 +474,30 @@ float Quaternion::getRoll(bool reprojectAxis) const
 		return std::atan2(2 * (x*y + w*z), w*w + x*x - y*y - z*z);
 	}
 }
-//-----------------------------------------------------------------------
+
 float Quaternion::getPitch(bool reprojectAxis) const
 {
 	if (reprojectAxis)
 	{
-		// pitch = atan2(localy.z, localy.y)
-		// pick parts of yAxis() implementation that we need
 		float fTx = 2.0f*x;
-		//			float fTy  = 2.0f*y;
 		float fTz = 2.0f*z;
 		float fTwx = fTx*w;
 		float fTxx = fTx*x;
 		float fTyz = fTz*y;
 		float fTzz = fTz*z;
 
-		// Vector3(fTxy-fTwz, 1.0-(fTxx+fTzz), fTyz+fTwx);
 		return std::atan2(fTyz + fTwx, 1.0f - (fTxx + fTzz));
 	}
 	else
 	{
-		// internal version
 		return std::atan2(2 * (y*z + w*x), w*w - x*x - y*y + z*z);
 	}
 }
-//-----------------------------------------------------------------------
+
 float Quaternion::getYaw(bool reprojectAxis) const
 {
 	if (reprojectAxis)
 	{
-		// yaw = atan2(localz.x, localz.z)
-		// pick parts of zAxis() implementation that we need
 		float fTx = 2.0f*x;
 		float fTy = 2.0f*y;
 		float fTz = 2.0f*z;
@@ -550,18 +506,15 @@ float Quaternion::getYaw(bool reprojectAxis) const
 		float fTxz = fTz*x;
 		float fTyy = fTy*y;
 
-		// Vector3(fTxz+fTwy, fTyz-fTwx, 1.0-(fTxx+fTyy));
-
 		return std::atan2(fTxz + fTwy, 1.0f - (fTxx + fTyy));
 
 	}
 	else
 	{
-		// internal version
 		return std::asin(-2 * (x*z - w*y));
 	}
 }
-//-----------------------------------------------------------------------
+
 Quaternion Quaternion::nlerp(float fT, const Quaternion& rkP,
 	const Quaternion& rkQ, bool shortestPath)
 {

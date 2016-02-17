@@ -12,12 +12,12 @@ class ObjectLoader
 {
 public:
 
-	static Object3D load(const std::string& filename);
+	static Object3D load(const std::string& filename, bool mergeObjects = false);
 
 protected:
 
-	static Object3D _loadOBJ(const std::string&);
-	static Object3D _loadFBX(const std::string&);
+	static Object3D _loadOBJ(const std::string& filename, bool mergeObjects);
+	static Object3D _loadFBX(const std::string& filename, bool mergeObjects);
 
 
 private:

@@ -65,6 +65,7 @@
     <ClCompile Include="src\Cameras\OrthographicCamera.cpp" />
     <ClCompile Include="src\Cameras\PerspectiveCamera.cpp" />
     <ClCompile Include="src\Lights\Lights.cpp" />
+    <ClCompile Include="src\Lights\PointLight.cpp" />
     <ClCompile Include="src\Materials\Material.cpp" />
     <ClCompile Include="src\Materials\MaterialManager.cpp" />
     <ClCompile Include="src\Materials\Pass.cpp" />

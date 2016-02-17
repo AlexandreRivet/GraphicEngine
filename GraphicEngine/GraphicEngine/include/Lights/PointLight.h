@@ -7,12 +7,13 @@ class PointLight : public Light
 {
 public:
 
-private:
+	PointLight(const std::string& name);
 
-	float m_intensity;
-	float m_distance;
-	float m_decay;					// 
+	float m_constant;
+	float m_linear;
+	float m_quadratic;
 
+private: 
 
 };
 

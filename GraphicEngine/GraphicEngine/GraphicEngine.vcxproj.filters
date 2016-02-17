@@ -335,5 +335,8 @@
     <ClCompile Include="src\Materials\ShaderProgram.cpp">
       <Filter>Fichiers sources\Materials</Filter>
     </ClCompile>
+    <ClCompile Include="src\Lights\PointLight.cpp">
+      <Filter>Fichiers sources\Lights</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
