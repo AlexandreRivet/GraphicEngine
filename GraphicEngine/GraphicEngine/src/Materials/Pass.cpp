@@ -9,7 +9,8 @@ Pass::Pass(const std::string& name)
 	m_useGeometryProgram(false),
 	m_useComputeProgram(false),
 	m_isLinked(false),
-	m_isTransparent(false)
+	m_isTransparent(false),
+	m_renderMethod(GL_TRIANGLES)
 {
 	m_OpenGLProgram = glCreateProgram();
 }
@@ -22,6 +23,19 @@ Pass::~Pass()
 void Pass::setParameter(const std::string& name, const std::string& value)
 {
 	// TODO: checker au niveau du material manager avant d'appeler cette fonction (histoire de gérer les cas non valides)
+	if (name == "render_method") {
+
+		static std::map<std::string, GLenum> _renderMethod = {
+			{ "points", GL_POINTS },
+			{ "lines", GL_LINES},
+			{ "triangles", GL_TRIANGLES}
+		};
+		
+		m_renderMethod = _renderMethod[value];
+
+		return;
+	}
+
 	m_parameters.insert(std::pair<std::string, std::string>(name, value));
 
 	if ((name == "scene_blend" || name == "separate_scene_blend") && (value.find("alpha_blend") != std::string::npos || value.find("one_minus_src_alpha") != std::string::npos))
@@ -234,4 +248,9 @@ bool Pass::_checkComputeProgramAttached()
 bool Pass::isTransparent() const
 {
 	return m_isTransparent;
+}
+
+GLuint Pass::getRenderMethod() const
+{
+	return m_renderMethod;
 }

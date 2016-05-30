@@ -249,11 +249,11 @@ template <typename T> void Renderer::_renderPassList(T start, T end,Scene* s, Ca
 		if (buffers.mIndexBuffer != nullptr && buffers.mIndexBuffer->numItems > 0)
 		{
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers.mIndexBuffer->id); 
-			glDrawElements(GL_TRIANGLES, mesh->getGeometry().getNbIndices(), GL_UNSIGNED_INT, 0);			
+			glDrawElements(p->getRenderMethod(), mesh->getGeometry().getNbIndices(), GL_UNSIGNED_INT, 0);			
 		}
 		else
 		{
-			glDrawArrays(GL_TRIANGLES, 0, mesh->getGeometry().getNbVertices());
+			glDrawArrays(p->getRenderMethod(), 0, mesh->getGeometry().getNbVertices());
 		}		
 
 		glUseProgram(0);

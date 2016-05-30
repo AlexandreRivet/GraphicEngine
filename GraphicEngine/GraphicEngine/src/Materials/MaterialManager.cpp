@@ -810,20 +810,6 @@ void MaterialManager::initPassParamDef()
 
 	m_passParamDef.insert(std::pair<std::string, PassParamDef>("cull_hardware", ppd));
 
-	// POLYGON MODE
-	ppd = PassParamDef(
-		std::vector<std::string>({ "solid", "wireframe", "points" }),
-		[](const std::vector<std::string>& values) {
-
-		if (values.size() == 0)
-			return;
-
-		// TODO: GERER CELA
-
-	});
-
-	m_passParamDef.insert(std::pair<std::string, PassParamDef>("polygon_mode", ppd));
-
 }
 
 void MaterialManager::initShaderProgramParametersAutoDef()

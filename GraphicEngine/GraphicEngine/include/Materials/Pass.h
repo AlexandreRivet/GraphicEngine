@@ -33,6 +33,7 @@ public:
 	bool _checkComputeProgramAttached();
 
 	bool isTransparent() const;
+	GLuint getRenderMethod() const;
 
 	GLuint m_OpenGLProgram;
 	ShaderProgram* m_vertexProgram;
@@ -50,6 +51,8 @@ private:
 	bool m_useComputeProgram;
 	bool m_isLinked;
 	bool m_isTransparent;
+
+	GLuint m_renderMethod;
 
 };
 
