@@ -17,6 +17,10 @@ namespace UI
 
 	enum MouseButton{BUTTON_LEFT, BUTTON_MIDDLE, BUTTON_RIGHT};
 
+	enum HorizontalAnchor{HOR_LEFT, HOR_RIGHT};
+
+	enum VerticalAnchor{VERT_TOP, VERT_BOTTOM};
+
 	struct RefValue
 	{
 		float value;
@@ -35,6 +39,8 @@ namespace UI
 		Element(const Rect<RefValue>& localRect);		
 
         virtual bool Element::setStyle(std::string style);		// non const because of clean up the string
+		void setHorizontalAnchor(HorizontalAnchor ha);
+		void setVerticalAnchor(VerticalAnchor va);
         void computePosition(float w, float h);					// TODO: change when we will have context for OpenGL App
 		virtual void computeState();
 
@@ -76,7 +82,10 @@ namespace UI
 		std::vector<Element*> mChildren;			// List of element children of this
 
 		bool mNeedUpdate;							// Have to recompute viewport rect
-		bool mVisible;								// Draw or not this element and children 
+		bool mVisible;								// Draw or not this element and children
+
+		HorizontalAnchor mHorAnchor;
+		VerticalAnchor mVertAnchor;
 
 		// List of style
 		ColorStruct mBackgroundColor;

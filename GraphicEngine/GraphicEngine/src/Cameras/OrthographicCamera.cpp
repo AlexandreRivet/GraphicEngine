@@ -7,15 +7,27 @@ OrthographicCamera::OrthographicCamera(float left, float right, float bottom, fl
 	mBottom(bottom),
 	mTop(top),
 	mNear(near),
-	mFar(far)
+	mFar(far),
+	mSize(1.f)
 {
 	updateProjectionMatrix();
 }
 
+void OrthographicCamera::setSize(float s) 
+{
+	mSize = s;
+	updateProjectionMatrix();
+}
+
+float OrthographicCamera::getSize() const
+{
+	return mSize;
+}
+
 void OrthographicCamera::updateProjectionMatrix()
 {
-	float w = mRight - mLeft;
-	float h = mTop - mBottom;
+	float w = (mRight - mLeft) * mSize;
+	float h = (mTop - mBottom) * mSize;
 	float d = mFar - mNear;
 
 	mProjectionMatrix = Matrix4(

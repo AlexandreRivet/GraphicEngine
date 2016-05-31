@@ -20,11 +20,13 @@ Vector3& Renderer::getClearColor()
 	return mClearColor;
 }
 
-void Renderer::setViewport(uint w, uint h)
+void Renderer::setViewport(uint x, uint y, uint w, uint h)
 {
 	mViewportWidth = w;
 	mViewportHeight = h;
-	glViewport(0, 0, mViewportWidth, mViewportHeight);
+	mViewportOffsetX = x;
+	mViewportOffsetY = y;
+	glViewport(x, y, mViewportWidth, mViewportHeight);
 }
 
 uint Renderer::getWidth() const
@@ -61,15 +63,20 @@ void Renderer::render(const std::function<void()>& renderFunction, UI::UIManager
 	Sleep(1);
 }
 
+void Renderer::clearAll() const
+{
+	glClearColor(mClearColor.x, mClearColor.y, mClearColor.z, 1.0f);
+	glClearDepth(1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
 void Renderer::render(Scene& s, Camera& c, UI::UIManager& uiManager)
 {
 	glDepthMask(GL_TRUE);
 	
 	if (mAutoClear)
 	{
-		glClearColor(mClearColor.x, mClearColor.y, mClearColor.z, 1.0f);
-		glClearDepth(1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		clearAll();
 	}
 
 	// rend la scène 3D
@@ -79,7 +86,7 @@ void Renderer::render(Scene& s, Camera& c, UI::UIManager& uiManager)
 	render(uiManager);
 
 	// Inversion des buffers
-	glutSwapBuffers();
+	// glutSwapBuffers();
 
 	// Trick chelou
 	Sleep(1);
@@ -100,6 +107,9 @@ void Renderer::render(UI::UIManager& uiManager)
 
 	// Dessin
     uiManager.render();
+
+	// Little hack for what ?!
+	glDepthMask(GL_TRUE);
 }
 
 void Renderer::render(Scene& s, Camera& c)

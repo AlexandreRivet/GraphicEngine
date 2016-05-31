@@ -60,7 +60,7 @@ public:
 	void setClearColor(const Vector3& color);
 	Vector3& getClearColor();
 
-	void setViewport(uint w, uint h);
+	void setViewport(uint x, uint y, uint w, uint h);
 	uint getWidth() const;
 	uint getHeight() const;
 
@@ -74,6 +74,7 @@ public:
 
 	void setAutoClear(bool clear);
 	bool autoClear() const;
+	void clearAll() const;
 
 	void setAutoUpdate(bool update);
 	bool autoUpdate() const;
@@ -88,6 +89,8 @@ private:
 	
 	uint mViewportWidth;
 	uint mViewportHeight;
+	uint mViewportOffsetX;
+	uint mViewportOffsetY;
 
 	bool mAutoClear;
 	bool mAutoUpdate;

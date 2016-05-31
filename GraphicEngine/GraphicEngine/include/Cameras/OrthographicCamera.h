@@ -9,6 +9,8 @@ public:
 
 	OrthographicCamera(float left, float right, float bottom, float top, float near = 0.1f, float far = 30000.0f);
 
+	void setSize(float s);
+	float getSize() const;
 	void updateProjectionMatrix();
 
 private:
@@ -19,6 +21,8 @@ private:
 	float mTop;
 	float mNear;
 	float mFar;
+
+	float mSize;
 };
 
 #endif

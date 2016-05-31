@@ -11,7 +11,9 @@ namespace UI
         mParent(nullptr),
 		mBackgroundColor(1.0, 1.0, 1.0, 1.0),
 		mNeedUpdate(true),
-		mVisible(true)
+		mVisible(true),
+		mHorAnchor(HOR_LEFT),
+		mVertAnchor(VERT_TOP)
     {}
 
 	Element::Element(const Rect<RefValue>& localRect)
@@ -19,7 +21,9 @@ namespace UI
 		mViewportRect(0, 0, 0, 0),
 		mParent(nullptr),
 		mBackgroundColor(1.0, 1.0, 1.0, 1.0),
-		mVisible(true)
+		mVisible(true),
+		mHorAnchor(HOR_LEFT),
+		mVertAnchor(VERT_TOP)
 	{}
 
 	bool Element::setStyle(std::string style)
@@ -100,11 +104,22 @@ namespace UI
 
 	}
 
+	void Element::setHorizontalAnchor(HorizontalAnchor ha) {
+
+		mHorAnchor = ha;
+
+	}
+
+	void Element::setVerticalAnchor(VerticalAnchor va) {
+
+		mVertAnchor = va;
+
+	}
+
 	void Element::setNeedUpdate(bool update)
 	{
 		mNeedUpdate = update;
 	}
-
 
 	void Element::computePosition(float w, float h)			// au cas où pour gérer
 	{
@@ -129,6 +144,18 @@ namespace UI
 				mViewportRect.y = ((mLocalRect.y.ref == PERCENT) ? h_p * mLocalRect.y.value / 100.0f : mLocalRect.y.value) + y_p;
 				mViewportRect.w = ((mLocalRect.w.ref == PERCENT) ? w_p * mLocalRect.w.value / 100.0f : mLocalRect.w.value);
 				mViewportRect.h = ((mLocalRect.h.ref == PERCENT) ? h_p * mLocalRect.h.value / 100.0f : mLocalRect.h.value);
+			}
+
+			if (mHorAnchor == HOR_RIGHT) {
+
+				mViewportRect.x = w - mViewportRect.x;
+
+			}
+
+			if (mVertAnchor == VERT_BOTTOM) {
+
+				mViewportRect.y = h - mViewportRect.y;
+
 			}
 
 			computeState();
