@@ -77,8 +77,8 @@ void Object3D::setScale(const Vector3& v)
 void Object3D::translateOnAxis(float distance, const Vector3& axis)
 {
 	Vector3 v1;
-	v1 = mRotation * axis;
-	mPosition += v1 * distance;
+	v1 = axis * distance;
+	mPosition += v1;
 	notifyUpdate(true);
 }
 
