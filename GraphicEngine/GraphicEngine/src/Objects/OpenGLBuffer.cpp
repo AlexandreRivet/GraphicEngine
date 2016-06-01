@@ -1,12 +1,11 @@
 #include "Objects/OpenGLBuffer.h"
 
-void deleteBuffer(BufferInfo* bi)
+void deleteBuffer(std::shared_ptr<BufferInfo> bi)
 {
 	if (bi == nullptr || bi->numItems == 0)
 		return;
 
 	glDeleteBuffers(1, &(bi->id));
-	delete bi;
 }
 
 OpenGLBuffer::OpenGLBuffer(const floatVector& vertices, const uintVector& indices, const std::vector<floatVector>& uvs, const floatVector& colors,
@@ -31,14 +30,16 @@ OpenGLBuffer::~OpenGLBuffer()
 	deleteBuffer(mColorBuffer);
 	deleteBuffer(mTangentBuffer);
 	deleteBuffer(mBinormalBuffer);
+	
 	for (auto& b : mUvsBuffer)
 		deleteBuffer(b);
+
 	mUvsBuffer.clear();
 }
 
-template <typename T> BufferInfo* createBuffer(GLuint type, T data, uint itemSize, uint numItems)
+template <typename T> std::shared_ptr<BufferInfo> createBuffer(GLuint type, T data, uint itemSize, uint numItems)
 {
-	BufferInfo* bi = new BufferInfo();
+	std::shared_ptr<BufferInfo> bi = std::make_shared<BufferInfo>();
 	bi->itemSize = itemSize;
 	bi->numItems = numItems;
 

@@ -41,18 +41,18 @@ public:
 		const floatVector& normals = floatVector(), const floatVector& tangents = floatVector(), const floatVector& binormals = floatVector());
 	~OpenGLBuffer();
 
-	BufferInfo* mVertexBuffer;
-	BufferInfo* mIndexBuffer;
-	BufferInfo* mColorBuffer;
-	BufferInfo* mNormalBuffer;
-	BufferInfo* mTangentBuffer;
-	BufferInfo* mBinormalBuffer;
-	std::vector<BufferInfo*> mUvsBuffer;
+	std::shared_ptr<BufferInfo> mVertexBuffer;
+	std::shared_ptr<BufferInfo> mIndexBuffer;
+	std::shared_ptr<BufferInfo> mColorBuffer;
+	std::shared_ptr<BufferInfo> mNormalBuffer;
+	std::shared_ptr<BufferInfo> mTangentBuffer;
+	std::shared_ptr<BufferInfo> mBinormalBuffer;
+	std::vector<std::shared_ptr<BufferInfo>> mUvsBuffer;
 
 private:
 	
 };
 
-template <typename T> BufferInfo* createBuffer(GLuint type, T data, uint itemSize, uint numItems);
+template <typename T> std::shared_ptr<BufferInfo> createBuffer(GLuint type, T data, uint itemSize, uint numItems);
 
 #endif

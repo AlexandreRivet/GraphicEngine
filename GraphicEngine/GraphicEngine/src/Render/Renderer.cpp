@@ -238,7 +238,7 @@ template <typename T> void Renderer::_renderPassList(T start, T end,Scene* s, Ca
 		glFrontFace(GL_CCW);
 
 		MeshSPtr mesh = obj->getMesh();
-		OpenGLBuffer buffers = mesh->getBuffers();
+		OpenGLBuffer& buffers = mesh->getBuffers();
 
 		glUseProgram(p->m_OpenGLProgram);
 
@@ -276,7 +276,7 @@ void Renderer::_renderShaderProgram(ShaderProgram* sp, Pass* p, Scene* s, Object
 		return;
 
 	MeshSPtr mesh = obj->getMesh();
-	OpenGLBuffer buffers = mesh->getBuffers();
+	OpenGLBuffer& buffers = mesh->getBuffers();
 
 	// On envoie les attributes à la CG
 	for (auto jt = sp->m_attributes_auto.begin(); jt != sp->m_attributes_auto.end(); ++jt)
@@ -386,7 +386,7 @@ bool Renderer::_renderShadowMap(Scene* s, Camera* c)
 			continue;
 
 		MeshSPtr mesh = obj->getMesh();
-		OpenGLBuffer buffers = mesh->getBuffers();
+		OpenGLBuffer& buffers = mesh->getBuffers();
 
 		// World
 		obj->getWorldMatrix().toArray(arr);

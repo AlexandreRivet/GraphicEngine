@@ -48,9 +48,9 @@ struct PassParamDef
 struct AttributeAuto
 {
 	std::function<GLint(GLuint program, const std::string& name)> init;
-	std::function<void(GLuint program, GLint location, OpenGLBuffer buffer)> render;
+	std::function<void(GLuint program, GLint location, OpenGLBuffer& buffer)> render;
 
-	AttributeAuto(const std::function<GLint(GLuint program, const std::string& name)>& _init, const std::function<void(GLuint program, GLint location, OpenGLBuffer buffer)>& _render)
+	AttributeAuto(const std::function<GLint(GLuint program, const std::string& name)>& _init, const std::function<void(GLuint program, GLint location, OpenGLBuffer& buffer)>& _render)
 		: init(_init),
 		render(_render)
 	{
@@ -118,7 +118,7 @@ public:
 
 	// Attribute auto
 	static GLint _initShaderProgramAttributeAuto(GLuint program, const std::string& name);
-	static void _renderShaderProgramAttributeAuto(GLuint program, GLint location, const std::string& paramAutoName, OpenGLBuffer buffer);
+	static void _renderShaderProgramAttributeAuto(GLuint program, GLint location, const std::string& paramAutoName, OpenGLBuffer& buffer);
 
 	// Uniform auto
 	static GLint _initShaderProgramUniformAuto(GLuint program, const std::string& name);

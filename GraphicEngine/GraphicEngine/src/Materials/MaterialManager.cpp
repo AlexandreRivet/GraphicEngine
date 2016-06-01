@@ -334,7 +334,7 @@ ShaderProgram* MaterialManager::_addShaderProgram(Bloc* b)
 	std::string shaderName = "";
 	for (uint i = 0; i < b->parameters.size(); ++i)
 	{
-		std::pair<std::string, std::string> param = b->parameters[i];
+		std::pair<std::string, std::string>& param = b->parameters[i];
 		if (param.first == "source")
 		{
 			shaderName = param.second;
@@ -348,7 +348,7 @@ ShaderProgram* MaterialManager::_addShaderProgram(Bloc* b)
 
 	for (uint i = 0; i < b->parameters.size(); ++i)
 	{
-		std::pair<std::string, std::string> param = b->parameters[i];
+		std::pair<std::string, std::string>& param = b->parameters[i];
 		if (param.first == "source")
 			continue;
 
@@ -401,7 +401,7 @@ Texture* MaterialManager::_addTextureUnit(Bloc* textureUnit)
 	std::string textureName = "";
 	for (uint i = 0; i < textureUnit->parameters.size(); ++i)
 	{
-		std::pair<std::string, std::string> param = textureUnit->parameters[i];
+		std::pair<std::string, std::string>& param = textureUnit->parameters[i];
 		if (param.first == "texture")
 		{
 			textureName = param.second;
@@ -825,7 +825,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramAttributeAuto(program, name);
 	},
-		[](GLuint program, GLint location, OpenGLBuffer buffer) {
+		[](GLuint program, GLint location, OpenGLBuffer& buffer) {
 		MaterialManager::_renderShaderProgramAttributeAuto(program, location, "POSITION", buffer);
 	}
 	);
@@ -836,7 +836,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramAttributeAuto(program, name);
 	},
-		[](GLuint program, GLint location, OpenGLBuffer buffer) {
+		[](GLuint program, GLint location, OpenGLBuffer& buffer) {
 		MaterialManager::_renderShaderProgramAttributeAuto(program, location, "NORMAL", buffer);
 	}
 	);
@@ -847,7 +847,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramAttributeAuto(program, name);
 	},
-		[](GLuint program, GLint location, OpenGLBuffer buffer) {
+		[](GLuint program, GLint location, OpenGLBuffer& buffer) {
 		MaterialManager::_renderShaderProgramAttributeAuto(program, location, "TANGENT", buffer);
 	}
 	);
@@ -858,7 +858,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramAttributeAuto(program, name);
 	},
-		[](GLuint program, GLint location, OpenGLBuffer buffer) {
+		[](GLuint program, GLint location, OpenGLBuffer& buffer) {
 		MaterialManager::_renderShaderProgramAttributeAuto(program, location, "BINORMAL", buffer);
 	}
 	);
@@ -869,7 +869,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramAttributeAuto(program, name);
 	},
-		[](GLuint program, GLint location, OpenGLBuffer buffer) {
+		[](GLuint program, GLint location, OpenGLBuffer& buffer) {
 		MaterialManager::_renderShaderProgramAttributeAuto(program, location, "VERTEXCOLOR", buffer);
 	}
 	);
@@ -880,7 +880,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramAttributeAuto(program, name);
 	},
-		[](GLuint program, GLint location, OpenGLBuffer buffer) {
+		[](GLuint program, GLint location, OpenGLBuffer& buffer) {
 		MaterialManager::_renderShaderProgramAttributeAuto(program, location, "TEXCOORD0", buffer);
 	}
 	);
@@ -891,7 +891,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramAttributeAuto(program, name);
 	},
-		[](GLuint program, GLint location, OpenGLBuffer buffer) {
+		[](GLuint program, GLint location, OpenGLBuffer& buffer) {
 		MaterialManager::_renderShaderProgramAttributeAuto(program, location, "TEXCOORD1", buffer);
 	}
 	);
@@ -902,7 +902,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramAttributeAuto(program, name);
 	},
-		[](GLuint program, GLint location, OpenGLBuffer buffer) {
+		[](GLuint program, GLint location, OpenGLBuffer& buffer) {
 		MaterialManager::_renderShaderProgramAttributeAuto(program, location, "TEXCOORD2", buffer);
 	}
 	);
@@ -913,7 +913,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramAttributeAuto(program, name);
 	},
-		[](GLuint program, GLint location, OpenGLBuffer buffer) {
+		[](GLuint program, GLint location, OpenGLBuffer& buffer) {
 		MaterialManager::_renderShaderProgramAttributeAuto(program, location, "TEXCOORD3", buffer);
 	}
 	);
@@ -924,7 +924,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramAttributeAuto(program, name);
 	},
-		[](GLuint program, GLint location, OpenGLBuffer buffer) {
+		[](GLuint program, GLint location, OpenGLBuffer& buffer) {
 		MaterialManager::_renderShaderProgramAttributeAuto(program, location, "TEXCOORD4", buffer);
 	}
 	);
@@ -1084,9 +1084,9 @@ GLint MaterialManager::_initShaderProgramAttributeAuto(GLuint program, const std
 	return glGetAttribLocation(program, name.c_str());
 }
 
-void MaterialManager::_renderShaderProgramAttributeAuto(GLuint program, GLint location, const std::string& paramAutoName, OpenGLBuffer buffer)
+void MaterialManager::_renderShaderProgramAttributeAuto(GLuint program, GLint location, const std::string& paramAutoName, OpenGLBuffer& buffer)
 {
-	BufferInfo* bi = nullptr;
+	std::shared_ptr<BufferInfo> bi(nullptr);
 
 	if (paramAutoName == "POSITION")
 		bi = buffer.mVertexBuffer;
