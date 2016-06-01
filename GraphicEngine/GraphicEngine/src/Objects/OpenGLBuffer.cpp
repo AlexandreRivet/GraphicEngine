@@ -1,5 +1,14 @@
 #include "Objects/OpenGLBuffer.h"
 
+void deleteBuffer(BufferInfo* bi)
+{
+	if (bi == nullptr || bi->numItems == 0)
+		return;
+
+	glDeleteBuffers(1, &(bi->id));
+	delete bi;
+}
+
 OpenGLBuffer::OpenGLBuffer(const floatVector& vertices, const uintVector& indices, const std::vector<floatVector>& uvs, const floatVector& colors,
 	const floatVector& normals, const floatVector& tangents, const floatVector& binormals)
 {
@@ -14,6 +23,19 @@ OpenGLBuffer::OpenGLBuffer(const floatVector& vertices, const uintVector& indice
 
 }
 
+OpenGLBuffer::~OpenGLBuffer()
+{
+	deleteBuffer(mVertexBuffer);
+	deleteBuffer(mIndexBuffer);
+	deleteBuffer(mNormalBuffer);
+	deleteBuffer(mColorBuffer);
+	deleteBuffer(mTangentBuffer);
+	deleteBuffer(mBinormalBuffer);
+	for (auto& b : mUvsBuffer)
+		deleteBuffer(b);
+	mUvsBuffer.clear();
+}
+
 template <typename T> BufferInfo* createBuffer(GLuint type, T data, uint itemSize, uint numItems)
 {
 	BufferInfo* bi = new BufferInfo();
@@ -23,12 +45,6 @@ template <typename T> BufferInfo* createBuffer(GLuint type, T data, uint itemSiz
 	if (numItems == 0) {
 		return bi;
 	}
-
-	/*
-	std::cout << "NEW" << std::endl;
-	std::cout << (sizeof(data)* itemSize) << std::endl;
-	std::cout << (sizeof(uint)* data.size()) << std::endl;
-	*/
 
 	glGenBuffers(1, &bi->id);
 	glBindBuffer(type, bi->id);

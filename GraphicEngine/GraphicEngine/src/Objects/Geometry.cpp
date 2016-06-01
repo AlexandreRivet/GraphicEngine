@@ -13,7 +13,6 @@ Geometry::Geometry(const floatVector& vertices, const uintVector& indices, const
 {
 }
 
-
 const floatVector& Geometry::getVertices() const
 {
 	return mVertices;
@@ -45,6 +44,41 @@ const floatVector& Geometry::getTangents() const
 }
 
 const floatVector& Geometry::getBinormals() const
+{
+	return mBinormals;
+}
+
+floatVector& Geometry::getVertices() 
+{
+	return mVertices;
+};
+
+uintVector& Geometry::getIndices() 
+{
+	return mIndices;
+}
+
+std::vector<floatVector>& Geometry::getUvs() 
+{
+	return mUvs;
+}
+
+floatVector& Geometry::getNormals() 
+{
+	return mNormals;
+}
+
+floatVector& Geometry::getColors() 
+{
+	return mColors;
+}
+
+ floatVector& Geometry::getTangents() 
+{
+	return mTangents;
+}
+
+floatVector& Geometry::getBinormals()
 {
 	return mBinormals;
 }

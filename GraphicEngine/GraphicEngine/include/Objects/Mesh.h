@@ -14,7 +14,12 @@ public:
 	Mesh(Geometry geo, Material* mat);
 	~Mesh();
 
-	void initBuffers();
+	void addPoint(const Vector3& p);
+	void removePoint(uint index);
+	void updatePoint(uint index, const Vector3& p);
+	Vector3 getPointAt(uint index);
+
+	void update();
 	Geometry& getGeometry();
 	Material* getMaterial();
 	OpenGLBuffer& getBuffers();

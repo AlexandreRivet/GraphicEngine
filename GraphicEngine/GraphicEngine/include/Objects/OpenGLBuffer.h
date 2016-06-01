@@ -39,6 +39,7 @@ public:
 	
 	OpenGLBuffer(const floatVector& vertices, const uintVector& indices, const std::vector<floatVector>& uvs = std::vector<floatVector>(), const floatVector& colors = floatVector(),
 		const floatVector& normals = floatVector(), const floatVector& tangents = floatVector(), const floatVector& binormals = floatVector());
+	~OpenGLBuffer();
 
 	BufferInfo* mVertexBuffer;
 	BufferInfo* mIndexBuffer;

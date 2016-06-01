@@ -17,6 +17,8 @@ public:
 	void setNormals(const std::vector<float>& normals);
 	*/
 
+	void update(); //update des buffer
+
 	const floatVector& getVertices() const;
 	const uintVector& getIndices() const;
 	const std::vector<floatVector>& getUvs() const;
@@ -24,6 +26,14 @@ public:
 	const floatVector& getColors() const;
 	const floatVector& getTangents() const;
 	const floatVector& getBinormals() const;
+
+	floatVector& getVertices();
+	uintVector& getIndices();
+	std::vector<floatVector>& getUvs();
+	floatVector& getNormals();
+	floatVector& getColors();
+	floatVector& getTangents();
+	floatVector& getBinormals();
 
 	uint getNbVertices() const;
 	uint getNbIndices() const;

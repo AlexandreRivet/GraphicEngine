@@ -14,6 +14,13 @@ Mesh::~Mesh()
 
 }
 
+void Mesh::update()
+{
+	OpenGLBuffer tmp(mGeometry.getVertices(), mGeometry.getIndices(), mGeometry.getUvs(), mGeometry.getColors(), mGeometry.getNormals(), mGeometry.getTangents(), mGeometry.getBinormals());
+	
+	std::swap(tmp, mBuffers);
+}
+
 Geometry& Mesh::getGeometry()
 {
 	return mGeometry;
@@ -27,6 +34,37 @@ Material* Mesh::getMaterial()
 OpenGLBuffer& Mesh::getBuffers()
 {
 	return mBuffers;
+}
+
+void Mesh::addPoint(const Vector3& p)
+{
+	auto& v = mGeometry.getVertices();
+	v.push_back(p.x);
+	v.push_back(p.y);
+	v.push_back(p.z);
+	update();
+}
+
+void Mesh::removePoint(uint index)
+{
+	auto& v = mGeometry.getVertices();
+	v.erase(v.begin() + index * 3, v.begin() + (index + 1) * 3);
+	update();
+}
+
+void Mesh::updatePoint(uint index, const Vector3& p)
+{
+	auto& v = mGeometry.getVertices();
+	v[index * 3] = p.x;
+	v[index * 3 + 1] = p.y;
+	v[index * 3 + 2] = p.z;
+	update();
+}
+
+Vector3 Mesh::getPointAt(uint index)
+{
+	auto& v = mGeometry.getVertices();
+	return Vector3(v[index], v[index + 1], v[index + 2]);
 }
 
 /*
