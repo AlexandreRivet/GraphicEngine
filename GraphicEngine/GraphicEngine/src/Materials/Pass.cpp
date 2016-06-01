@@ -94,7 +94,7 @@ bool Pass::checkLinked()
 	GLint infoLen;
 
 	glGetProgramiv(m_OpenGLProgram, GL_LINK_STATUS, &isLink);
-	m_isLinked = isLink;
+	m_isLinked = (isLink == GL_TRUE);
 
 	if (!m_isLinked)
 	{
@@ -156,6 +156,8 @@ bool Pass::checkShaderProgramAttached(ShaderType type)
 		return _checkComputeProgramAttached();
 		break;
 	}
+
+	return false;
 }
 
 bool Pass::_checkVertexProgramAttached()

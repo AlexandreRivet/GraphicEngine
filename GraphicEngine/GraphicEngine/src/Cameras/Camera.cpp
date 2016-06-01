@@ -45,7 +45,7 @@ void Camera::setDirection(const Vector3& direction, bool yawFixed)
 
 		if ((axes[2] + zAdjustVec).squaredLength() < 0.00005f)
 		{
-			rotQuat.FromAngleAxis(M_PI, axes[1]);
+			rotQuat.FromAngleAxis((float)M_PI, axes[1]);
 		}
 		else
 		{

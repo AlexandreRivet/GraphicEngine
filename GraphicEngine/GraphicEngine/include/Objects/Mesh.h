@@ -20,6 +20,7 @@ public:
 	Vector3 getPointAt(uint index);
 
 	void update();
+	void setGeometry(const Geometry& geo);
 	Geometry& getGeometry();
 	Material* getMaterial();
 	OpenGLBuffer& getBuffers();

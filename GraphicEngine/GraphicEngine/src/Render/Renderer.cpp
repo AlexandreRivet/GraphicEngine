@@ -6,7 +6,8 @@
 
 Renderer::Renderer()
 	: mClearColor(Vector3::ZERO),
-	mAutoClear(true)
+	mAutoClear(true),
+	mAutoUpdate(true)
 {
 }
 
@@ -105,7 +106,7 @@ void Renderer::render(UI::UIManager& uiManager)
 	glDepthMask(GL_FALSE);
 
 	// On calcule les positions finales
-	uiManager.computePosition(mViewportWidth, mViewportHeight);
+	uiManager.computePosition((float)mViewportWidth, (float)mViewportHeight);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -340,7 +341,7 @@ void Renderer::_renderShaderProgram(ShaderProgram* sp, Pass* p, Scene* s, Object
 	}
 }
 
-bool Renderer::_renderShadowMap(Scene* s, Camera* c)
+bool Renderer::_renderShadowMap(Scene* s, Camera*)
 {
 	Light* light = s->getDirectionalLight();
 

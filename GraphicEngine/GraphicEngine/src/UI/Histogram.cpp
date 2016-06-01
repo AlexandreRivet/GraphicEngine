@@ -105,7 +105,7 @@ namespace UI
 				// Text
 				std::string text = (*it).first;
 				int sizeText = getSizeBetweenTwoPosInString(text);
-				Rect<float> textRect(mViewportRect.x + i * bar_bg_width + offset_border + (bar_bg_width - sizeText) / 2.0f, mViewportRect.y + offset_border + height, sizeText, offset_border);
+				Rect<float> textRect((float)(mViewportRect.x + i * bar_bg_width + offset_border + (bar_bg_width - sizeText) / 2.0f), (float)(mViewportRect.y + offset_border + height), (float)sizeText, offset_border);
 				mTexts[(*it).first] = textRect;
 
 				i++;
@@ -159,7 +159,7 @@ namespace UI
 
 	}
 
-	void Histogram::onMouseClick(MouseButton button, MouseState state, int x, int y)
+	void Histogram::onMouseClick(MouseButton button, MouseState, int, int)
 	{
 		if (button == BUTTON_LEFT)
 		{

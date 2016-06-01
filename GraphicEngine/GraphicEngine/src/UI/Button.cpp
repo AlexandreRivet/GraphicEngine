@@ -98,12 +98,12 @@ namespace UI
         }
     }
 
-	void Button::onMouseEnter(const Vector2& mousePosition)
+	void Button::onMouseEnter(const Vector2&)
 	{
 		mIsHightlighted = true;
 	}
 
-	void Button::onMouseExit(const Vector2& mousePosition)
+	void Button::onMouseExit(const Vector2&)
 	{
 		mIsHightlighted = false;
 	}

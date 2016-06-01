@@ -90,7 +90,7 @@ void drawLine(Vector2 start, Vector2 end, ColorStruct color, int thickness, int 
 	if (dashed > 0)
 	{
 		float distance = start.distance(end);
-		int numberDash = distance / ((float)dashed * 2.0f);	// nombre de paires dash + dash vide
+		int numberDash = (int)(distance / ((float)dashed * 2.0f));	// nombre de paires dash + dash vide
 		Vector2 start_end = (end - start);
 		Vector2 step;
 		for (int i = 0; i < numberDash; ++i)
@@ -198,8 +198,8 @@ void drawCircle(Vector2 center, float radius, ColorStruct color, float step)
 
 	for (float i = 0; i < 360; i += step)		// 360 degrés
 	{
-		float x = radius * cos(i / 180.0f * M_PI);
-		float y = radius * sin(i / 180.0f * M_PI);
+		float x = radius * cos(i / 180.0f * (float)M_PI);
+		float y = radius * sin(i / 180.0f * (float)M_PI);
 		points.push_back(Vector2(x, y) + center);
 	}
 
@@ -210,7 +210,7 @@ int getXCoordInString(std::string label, Vector2 origin, int posChar)
 { 
 	std::string subLabel = label.substr(0, posChar);
 
-	return origin.x + glutBitmapLength(GLUT_BITMAP_HELVETICA_12, (unsigned char*)subLabel.c_str());
+	return (int)origin.x + glutBitmapLength(GLUT_BITMAP_HELVETICA_12, (unsigned char*)subLabel.c_str());
 }
 
 int getSizeBetweenTwoPosInString(std::string label, int start, int end)
@@ -225,7 +225,8 @@ int getSizeBetweenTwoPosInString(std::string label, int start, int end)
 
 int getPosInString(std::string label, int x_start, int x_current)
 {
-	uint cursor = -1;
+	int cursor = -1;
+	int labelSize = (int)label.size();
 
 	do
 	{
@@ -237,7 +238,7 @@ int getPosInString(std::string label, int x_start, int x_current)
 
 		cursor++;
 
-	} while (cursor != label.size());
+	} while (cursor != labelSize);
 
 	return cursor;
 }

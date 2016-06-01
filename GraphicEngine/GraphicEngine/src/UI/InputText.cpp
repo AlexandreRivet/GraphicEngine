@@ -62,7 +62,7 @@ namespace UI
 
 				int cursorX = getXCoordInString(mText, Vector2(mViewportRect.x + 2, mViewportRect.y), mPosCursor);
 
-				drawLine(Vector2(static_cast<float>(cursorX), mViewportRect.y + 2), Vector2(cursorX, mViewportRect.y + mViewportRect.h - 4), lblColor, 1.0);
+				drawLine(Vector2(static_cast<float>(cursorX), mViewportRect.y + 2.f), Vector2((float)cursorX, mViewportRect.y + mViewportRect.h - 4.f), lblColor, 1.0f);
 			}
 			
 		}
@@ -93,9 +93,9 @@ namespace UI
 		{
 			mSelected = true;
 			if (otherPos < mPosCursor)
-				mSelection = Vector2(otherPos, mPosCursor);
+				mSelection = Vector2((float)otherPos, (float)mPosCursor);
 			else
-				mSelection = Vector2(mPosCursor, otherPos);
+				mSelection = Vector2((float)mPosCursor, (float)otherPos);
 		}
 	}
 
@@ -133,7 +133,7 @@ namespace UI
 		}		
 	}
 
-	void InputText::keyReleased(const char c)
+	void InputText::keyReleased(const char)
 	{
 
 	}
@@ -158,11 +158,11 @@ namespace UI
 
 		if (mPosCursor < 0)
 			mPosCursor = 0;
-		else if (mPosCursor > mText.size())
-			mPosCursor = mText.size();
+		else if ((size_t)mPosCursor > mText.size())
+			mPosCursor = (int)mText.size();
 	}
 
-	void InputText::specialReleased(const char c)
+	void InputText::specialReleased(const char)
 	{
 
 	}

@@ -76,7 +76,7 @@ bool Shader::compile()
 	GLint isCompiled;
 	glGetShaderiv(m_OpenGLShader, GL_COMPILE_STATUS, &isCompiled);
 
-	m_isCompiled = isCompiled;
+	m_isCompiled = (isCompiled == GL_TRUE);
 
 	if (!m_isCompiled)
 	{

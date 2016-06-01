@@ -73,7 +73,7 @@ bool ShaderProgram::setParameter(const std::string& name, const std::string& typ
 
 		for (uint i = 0; i < values.size(); ++i)						// On convertit
 			fp.addData(std::atof(values.at(i).c_str()));
-		for (uint i = values.size(); i < nbFloat; ++i)					// On complète
+		for (int i = (int)values.size(); i < nbFloat; ++i)					// On complète
 			fp.addData(0.f);
 		for (uint i = nbFloat, end = fp.values.size(); i < end; ++i)	// On enlève s'il y en a trop
 			fp.popData();

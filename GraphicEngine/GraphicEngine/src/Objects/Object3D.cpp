@@ -151,7 +151,7 @@ void Object3D::scaleZ(float scale)
 	scaleOnAxis(scale, Vector3::UNIT_Z);
 }
 
-void Object3D::lookAt(const Vector3& target, bool yawFixed)
+void Object3D::lookAt(const Vector3& target, bool)
 {
 	Matrix4 m1 = mMatrix.lookAt(mPosition, target, Vector3::UNIT_Y);
 	Matrix3 m2;

@@ -14,6 +14,8 @@ Object3D ObjectLoader::load(const std::string& filename, bool mergeObjects)
 		return _loadOBJ(filename, mergeObjects);
 	else if (extension == "fbx")
 		return _loadFBX(filename, mergeObjects);
+
+	return Object3D();
 }
 
 Object3D ObjectLoader::_loadOBJ(const std::string& filename, bool mergeObjects)
@@ -123,7 +125,7 @@ Object3D ObjectLoader::_loadOBJ(const std::string& filename, bool mergeObjects)
 	return root;
 }
 
-Object3D ObjectLoader::_loadFBX(const std::string& filename, bool mergeObjects)
+Object3D ObjectLoader::_loadFBX(const std::string&, bool)
 {
 	return Object3D();
 }

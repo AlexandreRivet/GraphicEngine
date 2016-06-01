@@ -41,7 +41,7 @@ void MaterialManager::loadFromFile(const std::string& filename)
 	// Supprime toutes les tabulations
 	contentMaterial.erase(std::remove(contentMaterial.begin(), contentMaterial.end(), '\t'), contentMaterial.end());
 
-	size_t splitIndex = -1, splitIndex2 = -1;
+	size_t splitIndex = 0, splitIndex2 = 0;
 	Bloc* currentBloc = nullptr;
 	bool isCommented = false;
 	bool bracketOpened = false, bracketClosed = false;
@@ -239,8 +239,6 @@ void MaterialManager::loadFromFile(const std::string& filename)
 
 	std::cout << "Material: " << currentBloc->name << " successfully loaded." << std::endl;
 
-	int i = 0;
-
 }
 
 Material* MaterialManager::_addMaterial(Bloc* b)
@@ -259,7 +257,6 @@ Material* MaterialManager::_addMaterial(Bloc* b)
 		Pass* pass = new Pass(passBloc->name);
 
 		// On ajoute les paramètres
-		std::size_t first;
 		std::string key, values;
 		for (uint j = 0; j < passBloc->parameters.size(); ++j)
 		{
@@ -942,7 +939,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramUniformAuto(program, name);
 	},
-		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int) {
 		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "world_matrix", s, obj, cam);
 	}
 	);
@@ -953,7 +950,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramUniformAuto(program, name);
 	},
-		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int) {
 		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "view_matrix", s, obj, cam);
 	}
 	);
@@ -964,7 +961,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramUniformAuto(program, name);
 	},
-		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int) {
 		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "proj_matrix", s, obj, cam);
 	}
 	);
@@ -975,7 +972,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramUniformAuto(program, name);
 	},
-		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int) {
 		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "viewproj_matrix", s, obj, cam);
 	}
 	);
@@ -986,7 +983,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramUniformAuto(program, name);
 	},
-		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int) {
 		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "worldview_matrix", s, obj, cam);
 	}
 	);
@@ -997,7 +994,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramUniformAuto(program, name);
 	},
-		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int) {
 		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "worldviewproj_matrix", s, obj, cam);
 	}
 	);
@@ -1008,7 +1005,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramUniformAuto(program, name);
 	},
-		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int) {
 		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "camera_position", s, obj, cam);
 	}
 	);
@@ -1020,7 +1017,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramUniformAuto(program, name);
 	},
-		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+		[](GLuint program, GLint, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int) {
 		MaterialManager::_renderShaderProgramUniformAuto(program, 0, paramName, "directionlight", s, obj, cam);	// pour biaiser le système on force avec un 0
 	}
 	);
@@ -1031,7 +1028,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramUniformAuto(program, name);
 	},
-		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+		[](GLuint program, GLint, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int) {
 		MaterialManager::_renderShaderProgramUniformAuto(program, 0, paramName, "pointlights", s, obj, cam);	// pour biaiser le système on force avec un 0
 	}
 	);
@@ -1043,7 +1040,7 @@ void MaterialManager::initShaderProgramParametersAutoDef()
 		[](GLuint program, const std::string& name) {
 		return MaterialManager::_initShaderProgramUniformAuto(program, name);
 	},
-		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int numSampler) {
+		[](GLuint program, GLint location, const std::string& paramName, Scene* s, Object3D* obj, Camera* cam, int) {
 		MaterialManager::_renderShaderProgramUniformAuto(program, location, paramName, "pointlights_count", s, obj, cam);
 	}
 	);
@@ -1084,7 +1081,7 @@ GLint MaterialManager::_initShaderProgramAttributeAuto(GLuint program, const std
 	return glGetAttribLocation(program, name.c_str());
 }
 
-void MaterialManager::_renderShaderProgramAttributeAuto(GLuint program, GLint location, const std::string& paramAutoName, OpenGLBuffer& buffer)
+void MaterialManager::_renderShaderProgramAttributeAuto(GLuint, GLint location, const std::string& paramAutoName, OpenGLBuffer& buffer)
 {
 	std::shared_ptr<BufferInfo> bi(nullptr);
 
@@ -1291,7 +1288,7 @@ void MaterialManager::_renderShaderProgramUniformAuto(GLuint program, GLint loca
 }
 }
 
-void MaterialManager::_renderShaderProgramSampler(GLuint program, GLint location, Pass* pass, const std::string& textureName, int numSampler)
+void MaterialManager::_renderShaderProgramSampler(GLuint, GLint location, Pass* pass, const std::string& textureName, int numSampler)
 {
 	Texture* t = pass->getTexture(textureName);
 
@@ -1318,7 +1315,7 @@ void MaterialManager::_renderSampler(GLint location, GLuint idTexture, int numSa
 	glUniform1i(location, numSampler);
 }
 
-void MaterialManager::_renderShaderProgramUniformNoAuto(GLuint program, GLint location, const std::vector<float>& values)
+void MaterialManager::_renderShaderProgramUniformNoAuto(GLuint, GLint location, const std::vector<float>& values)
 {
 	switch (values.size())
 	{

@@ -18,12 +18,17 @@ void Mesh::update()
 {
 	OpenGLBuffer tmp(mGeometry.getVertices(), mGeometry.getIndices(), mGeometry.getUvs(), mGeometry.getColors(), mGeometry.getNormals(), mGeometry.getTangents(), mGeometry.getBinormals());
 	
-	std::swap(tmp, mBuffers);
+	std::swap(mBuffers, tmp);
 }
 
 Geometry& Mesh::getGeometry()
 {
 	return mGeometry;
+}
+
+void Mesh::setGeometry(const Geometry& geo)
+{
+	mGeometry = Geometry(geo.getVertices(), geo.getIndices(), geo.getUvs(), geo.getColors(), geo.getNormals(), geo.getTangents(), geo.getBinormals());
 }
 
 Material* Mesh::getMaterial()
