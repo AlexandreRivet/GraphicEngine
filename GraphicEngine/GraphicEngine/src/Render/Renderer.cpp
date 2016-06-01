@@ -50,6 +50,14 @@ void Renderer::render(const std::function<void()>& renderFunction, UI::UIManager
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
+	glDepthMask(GL_FALSE);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, mViewportWidth, mViewportHeight, 0, 0, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
 	// rend la scène 3D
 	renderFunction();
 
@@ -57,7 +65,7 @@ void Renderer::render(const std::function<void()>& renderFunction, UI::UIManager
 	render(uiManager);
 
 	// Inversion des buffers
-	glutSwapBuffers();
+	// glutSwapBuffers();
 
 	// Trick chelou
 	Sleep(1);
