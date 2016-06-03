@@ -43,6 +43,8 @@ void Scene::remove(Object3D* obj)
 
 	obj->getParent()->removeChild(obj);
 
+	needUpdate();
+
 }
 
 Object3D* Scene::getRoot()

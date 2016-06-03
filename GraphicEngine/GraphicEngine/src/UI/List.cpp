@@ -24,7 +24,15 @@ namespace UI
 
 	void List::removeItem(uint index)
 	{
+		// Quand on supprime le dernier et qu'il y a plus d'item que la liste peut afficher en même temps
+		if (index == items.size() - 1 && items.size() > numberItemsInList)
+		{
+			scrollUp();
+		}
+
 		items.erase(items.begin() + index);
+
+		
 	}
 
 	void List::setMultiple(bool _multiple)
