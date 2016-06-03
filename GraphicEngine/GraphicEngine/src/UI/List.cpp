@@ -17,6 +17,18 @@ namespace UI
 		items.push_back(item);
 	}
 
+	const std::string& List::getItem(uint index) const
+	{
+		//TODO secu
+		return items[index];
+	}
+
+	std::string& List::getItem(uint index)
+	{
+		//TODO secu
+		return items[index];
+	}
+
 	void List::editItem(uint index, const std::string& item)
 	{
 		items[index] = item;
@@ -31,8 +43,14 @@ namespace UI
 		}
 
 		items.erase(items.begin() + index);
+	}
 
-		
+	void List::removeAll()
+	{
+		for (size_t i = 0, end = items.size(); i < end; ++i)
+		{
+			removeItem(0);
+		}
 	}
 
 	void List::setMultiple(bool _multiple)

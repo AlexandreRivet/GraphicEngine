@@ -14,8 +14,13 @@ namespace UI
 		void draw();
 
 		void addItem(const std::string& item);
+		
+		const std::string& getItem(uint index) const;
+		std::string& getItem(uint index);
+
 		void editItem(uint index, const std::string& item);
 		void removeItem(uint index);
+		void removeAll();
 		void setMultiple(bool _multiple);
 		bool getMultiple() const;
 
